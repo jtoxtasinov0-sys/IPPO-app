@@ -1,0 +1,54 @@
+# === Paketlar ===
+node_modules/
+
+# === Build natijalari ===
+dist/
+build/
+.vite/
+coverage/
+
+# === Maxfiy sozlamalar (tokenlar, parollar, DATABASE_URL) ===
+.env
+.env.local
+.env.*.local
+.env.development
+# .env.example va admin/miniapp .env.production (faqat ochiq API manzil) repo'da qoladi
+
+# === Loglar ===
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# === Yuklangan fayllar (boshlang'ich mahsulot rasmlari repo'da qoladi) ===
+backend/uploads/_thumbs/
+backend/uploads/receipts/*
+backend/uploads/broadcast/*
+backend/uploads/stories/*
+backend/uploads/**/custom-*
+!backend/uploads/**/.gitkeep
+
+# === Prisma lokal baza fayllari ===
+*.db
+*.db-journal
+
+# === OS fayllari ===
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# === Muharrir / IDE ===
+.vscode/*
+!.vscode/extensions.json
+.idea/
+*.swp
+*.swo
+
+# === Claude Code lokal sozlamalari ===
+.claude/settings.local.json
+
+# === Vaqtinchalik fayllar ===
+*.tmp
+tmp/
+.cache/

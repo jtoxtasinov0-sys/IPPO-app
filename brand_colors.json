@@ -1,0 +1,39 @@
+{
+  "brand": "IPPO by Fotima Zuhra shop",
+  "colors": {
+    "background": {
+      "hex": "#1E1006",
+      "rgb": "30,16,6",
+      "use": "Asosiy fon (logodagi to'q jigarrang-qora)"
+    },
+    "background_dark": {
+      "hex": "#190A02",
+      "rgb": "25,10,2",
+      "use": "Eng to'q fon, header/footer"
+    },
+    "gold": {
+      "hex": "#D1A955",
+      "rgb": "209,169,85",
+      "use": "Asosiy oltin rang - tugmalar, IPPO yozuvi"
+    },
+    "gold_light": {
+      "hex": "#EAC87A",
+      "rgb": "234,200,122",
+      "use": "Yorqin oltin - hover, gradient boshi, urg'u"
+    },
+    "gold_muted": {
+      "hex": "#9D804C",
+      "rgb": "157,128,76",
+      "use": "Xira oltin - ikkinchi darajali matn, chiziqlar"
+    },
+    "bronze_dark": {
+      "hex": "#58401B",
+      "rgb": "88,64,27",
+      "use": "To'q bronza - kartochka chegarasi, soya"
+    }
+  },
+  "gradient_gold": "linear-gradient(135deg, #EAC87A 0%, #D1A955 50%, #9D804C 100%)",
+  "text_on_dark": "#EAC87A",
+  "text_on_gold": "#1E1006",
+  "font_suggestion": "Logodagi yozuv serif shriftga o'xshash: Cinzel yoki Playfair Display (Google Fonts)"
+}

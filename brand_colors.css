@@ -1,0 +1,10 @@
+/* IPPO by Fotima Zuhra - brend ranglari (logodan olingan) */
+:root{
+  --ippo-bg: #1E1006;          /* asosiy fon */
+  --ippo-bg-dark: #190A02;     /* eng to'q fon */
+  --ippo-gold: #D1A955;        /* asosiy oltin (tugmalar, sarlavha) */
+  --ippo-gold-light: #EAC87A;  /* yorqin oltin (hover, urg'u) */
+  --ippo-gold-muted: #9D804C;  /* xira oltin (ikkinchi darajali matn) */
+  --ippo-bronze: #58401B;      /* to'q bronza (chegara, soya) */
+  --ippo-gradient: linear-gradient(135deg,#EAC87A 0%,#D1A955 50%,#9D804C 100%);
+}

@@ -1,0 +1,282 @@
+{
+  "shop": {
+    "name": "IPPO by Fotima Zuhra",
+    "logo": "logo/ippo_logo_512.png",
+    "telegram_channel": "t.me/korea_fotima_zuhra_shop",
+    "admin": "t.me/fotimazuhrashop",
+    "instagram": "instagram.com/ippo_by_fotimazuhra",
+    "currency": "KRW"
+  },
+  "categories": [
+    {
+      "id": 1,
+      "key": "jenshen",
+      "name": "Jenshen",
+      "emoji": "🌿",
+      "folder": "products/01_jenshen",
+      "count": 4
+    },
+    {
+      "id": 2,
+      "key": "kollagen",
+      "name": "Kollagen",
+      "emoji": "🍎",
+      "folder": "products/02_kollagen",
+      "count": 3
+    },
+    {
+      "id": 3,
+      "key": "vitaminlar",
+      "name": "Vitaminlar",
+      "emoji": "💊",
+      "folder": "products/03_vitaminlar",
+      "count": 3
+    },
+    {
+      "id": 4,
+      "key": "soch_parvarishi",
+      "name": "Soch parvarishi",
+      "emoji": "💆‍♀️",
+      "folder": "products/04_soch_parvarishi",
+      "count": 3
+    },
+    {
+      "id": 5,
+      "key": "yuz_parvarishi",
+      "name": "Yuz parvarishi (kosmetika)",
+      "emoji": "✨",
+      "folder": "products/05_yuz_parvarishi",
+      "count": 5
+    },
+    {
+      "id": 6,
+      "key": "parfyumeriya",
+      "name": "Parfyumeriya",
+      "emoji": "🌸",
+      "folder": "products/06_parfyumeriya",
+      "count": 2
+    }
+  ],
+  "products": [
+    {
+      "id": 1,
+      "name": "Punggi Red Ginseng Extract Gold (6 yillik)",
+      "category": "jenshen",
+      "category_name": "Jenshen",
+      "price_krw": 165000,
+      "currency": "KRW",
+      "image": "products/01_jenshen/01_punggi_red_ginseng_extract_gold_6_yillik.jpg",
+      "description": "풍기 홍삼정골드 6-yillik Punggi Red Ginseng Extract Gold Ushbu mahsulotdagi asosiy faol komponent — ginsenosidlar. 🛡️ Immunitetni qo‘llab-quvvatlaydi 💪 Charchoqni kamaytirishga yordam beradi 🧠 Xotira va kognitiv faoliyatni qo‘llab-quvvatlaydi 🩸 Qon aylanishini qo‘llab-quvvatlaydi ✨ Antioksidant himoyani qo‘llab-quvvatlaydi ⚡ Umumiy tetiklik va quvvatni qo‘llab-quvvatlaydi ✅Qandli diabet va davleniya holatlarida ham istemol qilish mumkin Ginsonasight",
+      "source_post": "https://t.me/korea_fotima_zuhra_shop/6120"
+    },
+    {
+      "id": 2,
+      "name": "Punggi 100% jenshen ekstrakti",
+      "category": "jenshen",
+      "category_name": "Jenshen",
+      "price_krw": null,
+      "currency": "KRW",
+      "image": "products/01_jenshen/02_punggi_100_jenshen_ekstrakti.jpg",
+      "description": "100% lik Punggi Jenshen — bu Koreyaning Punggi hududida yetishtirilgan haqiqiy Koreya jensheni (Panax ginseng) degani.🌿 Punggi jenshen nima?Punggi ginsengKoreyaning eng mashhur jenshen yetishtiriladigan joyi — PunggiTuprog‘i va iqlimi sababli juda sifatli jenshen chiqadiKo‘pincha “premium” mahsulotlar shu joydan bo‘ladi💥 “100%” degani nimani anglatadi?Ichida aralashma yo‘qFaqat haqiqiy jenshen ekstrakti yoki ildiziSun’iy qo‘shimcha yoki boshqa ",
+      "source_post": "https://t.me/korea_fotima_zuhra_shop/5669"
+    },
+    {
+      "id": 3,
+      "name": "Qora jenshen Royal Gold seti (4 dona)",
+      "category": "jenshen",
+      "category_name": "Jenshen",
+      "price_krw": 65000,
+      "currency": "KRW",
+      "image": "products/01_jenshen/03_qora_jenshen_royal_gold_seti_4_dona.jpg",
+      "description": "Admin: @fotimazuhrashop🇰🇷",
+      "source_post": "https://t.me/korea_fotima_zuhra_shop/4909"
+    },
+    {
+      "id": 4,
+      "name": "Qizil jenshen stiklari",
+      "category": "jenshen",
+      "category_name": "Jenshen",
+      "price_krw": null,
+      "currency": "KRW",
+      "image": "products/01_jenshen/04_qizil_jenshen_stiklari.jpg",
+      "description": "Admin: @fotimazuhrashop🇰🇷",
+      "source_post": "https://t.me/korea_fotima_zuhra_shop/4898"
+    },
+    {
+      "id": 5,
+      "name": "Red Apple Collagen (qizil olma kollageni)",
+      "category": "kollagen",
+      "category_name": "Kollagen",
+      "price_krw": 40000,
+      "currency": "KRW",
+      "image": "products/02_kollagen/05_red_apple_collagen_qizil_olma_kollageni.jpg",
+      "description": "Red apple collagen qizil olma ekstraktli baliq collageni tarkibi suniy ranglarsiz va kimyoviy qoshimchalarsiz jelly stik ko’rinishida bo’lib homilador va emizikli hamda kista miomasi bor ayollar ham istemol qilish mumkin! Ozdiruvchi xususiyatga ega metabolismni qo’llab quvvatlaydi, soch, tirnoq va teri salomatligi uchun muhim vitaminlardan biri hisoblanadi. bitta qutida 30 ta jelly stik bir kunda bitta stik ertalab och qoringa istemol qilinadi. N",
+      "source_post": "https://t.me/korea_fotima_zuhra_shop/6119"
+    },
+    {
+      "id": 6,
+      "name": "Green Apple Collagen (yashil olma kollageni)",
+      "category": "kollagen",
+      "category_name": "Kollagen",
+      "price_krw": null,
+      "currency": "KRW",
+      "image": "products/02_kollagen/06_green_apple_collagen_yashil_olma_kollage.jpg",
+      "description": "Yashil olma kollagen (Green Apple Collagen) — odatda kollagen peptidlari + yashil olma ekstrakti asosidagi go‘zallik va sog‘liq qo‘shimchasi hisoblanadi.Foydalari🍏 Teri uchunTerining namligini saqlashga yordam beradi.Elastiklik va taranglikni qo‘llab-quvvatlaydi.Quruq va xiralashgan terining ko‘rinishini yaxshilashga yordam berishi mumkin.💅 Soch va tirnoqlar uchunSoch tolalarining mustahkamligini qo‘llab-quvvatlashi mumkin.Tirnoqlar mo‘rtlashis",
+      "source_post": "https://t.me/korea_fotima_zuhra_shop/5707"
+    },
+    {
+      "id": 7,
+      "name": "Anorli kollagen (Pomegranate Collagen)",
+      "category": "kollagen",
+      "category_name": "Kollagen",
+      "price_krw": null,
+      "currency": "KRW",
+      "image": "products/02_kollagen/07_anorli_kollagen_pomegranate_collagen.jpg",
+      "description": "Anorli kollagen (Pomegranate Collagen) — kollagen peptidlari va anor ekstrakti birlashtirilgan oziq-ovqat qo‘shimchasi bo‘lib, teri, soch va tirnoqlarni qo‘llab-quvvatlash uchun qo‘llaniladi.Asosiy foydalari✨ Terining elastikligini qo‘llab-quvvatlaydi va ajinlar ko‘rinishini kamaytirishga yordam berishi mumkin.💧 Terining namligini saqlashga ko‘maklashadi.🌺 Anor ekstrakti antioksidantlarga boy bo‘lib, terini erkin radikallar ta’siridan himoya qi",
+      "source_post": "https://t.me/korea_fotima_zuhra_shop/5713"
+    },
+    {
+      "id": 8,
+      "name": "Kalsiy + Magniy + Vitamin D + Sink kompleksi",
+      "category": "vitaminlar",
+      "category_name": "Vitaminlar",
+      "price_krw": null,
+      "currency": "KRW",
+      "image": "products/03_vitaminlar/08_kalsiy_magniy_vitamin_d_sink_kompleksi.jpg",
+      "description": "🎉 3+1 AKSIYA! Kalsiy + Magniy + Vitamin D + Sink kompleksidan 3 ta xarid qiling +1 tasini BEPUL oling! ✨Suyaklar, tishlar, mushaklar va immunitetni qo’llab-quvvatlash uchun ajoyib tanlov. Aksiyadan foydalanishga shoshiling!",
+      "source_post": "https://t.me/korea_fotima_zuhra_shop/5817"
+    },
+    {
+      "id": 9,
+      "name": "Zinc (Sink) vitaminlari",
+      "category": "vitaminlar",
+      "category_name": "Vitaminlar",
+      "price_krw": null,
+      "currency": "KRW",
+      "image": "products/03_vitaminlar/09_zinc_sink_vitaminlari.jpg",
+      "description": "Zinc vitaminlar ham keldi zakaz berganlar aloqaga chiqing Zakaz uchun👉: @fotimazuhrashop🇰🇷",
+      "source_post": "https://t.me/korea_fotima_zuhra_shop/5061"
+    },
+    {
+      "id": 10,
+      "name": "Lacto-Fit probiotik",
+      "category": "vitaminlar",
+      "category_name": "Vitaminlar",
+      "price_krw": null,
+      "currency": "KRW",
+      "image": "products/03_vitaminlar/10_lacto_fit_probiotik.jpg",
+      "description": "Lactofit sariq va pushti ozdiruvchi yana pavtor keldi✅ Zakaz uchun direct yozing: @fotimazuhrashop🇰🇷",
+      "source_post": "https://t.me/korea_fotima_zuhra_shop/5058"
+    },
+    {
+      "id": 11,
+      "name": "K-Ginseng jenshen shampuni",
+      "category": "soch_parvarishi",
+      "category_name": "Soch parvarishi",
+      "price_krw": null,
+      "currency": "KRW",
+      "image": "products/04_soch_parvarishi/11_k_ginseng_jenshen_shampuni.jpg",
+      "description": "Shikastlangan sochlar va soch tokilishida samarali yechim",
+      "source_post": "https://t.me/korea_fotima_zuhra_shop/6097"
+    },
+    {
+      "id": 12,
+      "name": "Jenshenli shampun (yangi)",
+      "category": "soch_parvarishi",
+      "category_name": "Soch parvarishi",
+      "price_krw": null,
+      "currency": "KRW",
+      "image": "products/04_soch_parvarishi/12_jenshenli_shampun_yangi.jpg",
+      "description": "Yangi jenshenli shampunimiz haqida batafsil ma’lumot🥰😍",
+      "source_post": "https://t.me/korea_fotima_zuhra_shop/4553"
+    },
+    {
+      "id": 13,
+      "name": "Aromatica Rosemary soch spreyi",
+      "category": "soch_parvarishi",
+      "category_name": "Soch parvarishi",
+      "price_krw": null,
+      "currency": "KRW",
+      "image": "products/04_soch_parvarishi/13_aromatica_rosemary_soch_spreyi.jpg",
+      "description": "Rosmarin spreyi soch ildizlarini mustahkalmaydi, sochga soğlom nur baxsh etadi. 🌹",
+      "source_post": "https://t.me/korea_fotima_zuhra_shop/5521"
+    },
+    {
+      "id": 14,
+      "name": "345 Krem",
+      "category": "yuz_parvarishi",
+      "category_name": "Yuz parvarishi (kosmetika)",
+      "price_krw": null,
+      "currency": "KRW",
+      "image": "products/05_yuz_parvarishi/14_345_krem.jpg",
+      "description": "✨ 345 KREM — YUZINGIZ UCHUN G‘AMXO‘RLIK! ✨ Yuz teringizga namlik, parvarish va yanada sog‘lom ko‘rinish berishni istaysizmi? 💕 345 Cream — kundalik parvarishingizga ajoyib qo‘shimcha! 🌿 💧 Terini namlantirishga yordam beradi ✨ Teri ko‘rinishini yanada silliq va parvarishlangan qiladi 🌸 Quruq va charchagan teriga yoqimli parvarish beradi 💖 Yuzga yumshoq va mayin his qoldiradi O‘zingiz uchun munosib parvarishni tanlang! 🥰 📍 D o‘konimizda sizn",
+      "source_post": "https://t.me/korea_fotima_zuhra_shop/6018"
+    },
+    {
+      "id": 15,
+      "name": "Dr.IPPO yuz parvarish seti",
+      "category": "yuz_parvarishi",
+      "category_name": "Yuz parvarishi (kosmetika)",
+      "price_krw": null,
+      "currency": "KRW",
+      "image": "products/05_yuz_parvarishi/15_dr_ippo_yuz_parvarish_seti.jpg",
+      "description": "🌸 DR.IPPO YUZ PARVARISH SETI 🌸 ✨ Yuzingiz uchun kompleks va kundalik parvarish! 🤍 Terini chuqur tozalashga 💧 Namlik bilan ta’minlashga ✨ Yuzni yanada silliq va yorqin ko‘rinishga 🌿 Teri parvarishini yaxshilashga yordam beradi. 💎 Teringizga mos set tanlashda yordam beramiz! 📌 Bizda yuz diagnostikasi BEPUL! 🥰",
+      "source_post": "https://t.me/korea_fotima_zuhra_shop/5970"
+    },
+    {
+      "id": 16,
+      "name": "ANUA PDRN Hyaluronic Acid Mist",
+      "category": "yuz_parvarishi",
+      "category_name": "Yuz parvarishi (kosmetika)",
+      "price_krw": null,
+      "currency": "KRW",
+      "image": "products/05_yuz_parvarishi/16_anua_pdrn_hyaluronic_acid_mist.jpg",
+      "description": "ANUA PDRN Hyaluronic Acid Mist — bu yuz uchun namlovchi sprey (mist) bo‘lib, terini tez namlantirish va tinchlantirish uchun mo‘ljallangan.Asosiy tarkibiPDRN – terining tiklanish jarayonini qo‘llab-quvvatlashga yordam beradigan komponent. Kosmetik mahsulotlarda qo‘llaniladigan PDRN terini parvarish qilish maqsadida ishlatiladi.Gialuron kislotasi (Hyaluronic Acid) – terida namlikni ushlab turishga yordam beradi.Namlagichlar va tinchlantiruvchi kom",
+      "source_post": "https://t.me/korea_fotima_zuhra_shop/5710"
+    },
+    {
+      "id": 17,
+      "name": "Royal Glow Eye Cream (ko'z atrofi kremi)",
+      "category": "yuz_parvarishi",
+      "category_name": "Yuz parvarishi (kosmetika)",
+      "price_krw": null,
+      "currency": "KRW",
+      "image": "products/05_yuz_parvarishi/17_royal_glow_eye_cream_ko_z_atrofi_kremi.jpg",
+      "description": "Admin: @fotimazuhrashop🇰🇷",
+      "source_post": "https://t.me/korea_fotima_zuhra_shop/4859"
+    },
+    {
+      "id": 18,
+      "name": "24K Gold kosmetika seti",
+      "category": "yuz_parvarishi",
+      "category_name": "Yuz parvarishi (kosmetika)",
+      "price_krw": 25000,
+      "currency": "KRW",
+      "image": "products/05_yuz_parvarishi/18_24k_gold_kosmetika_seti.jpg",
+      "description": "Superrrr taklif! 🎉🎉🎉Super imkoniyat!!!💐💐💐Original 24k 8 talik Gold nabor Xech qaerdan topib bo’lmaydiganmaxsus narxlarda keldi🚚🚚🚚Ajoyib Narx: 25.000₩ ✅✅✅ Faqat bugun amal qiladi shoshilingMade in Korea🇰🇷🇰🇷Skitka narxda olish uchun : 👇👇@fotimazuhrashop yozing",
+      "source_post": "https://t.me/korea_fotima_zuhra_shop/5871"
+    },
+    {
+      "id": 19,
+      "name": "Chanel Allure Homme",
+      "category": "parfyumeriya",
+      "category_name": "Parfyumeriya",
+      "price_krw": null,
+      "currency": "KRW",
+      "image": "products/06_parfyumeriya/19_chanel_allure_homme.jpg",
+      "description": "🖤 CHANEL ALLURE HOMME — HAQIQIY ERKAKLAR IFORI! 🖤 Kuchli xarakter, nafislik va o‘ziga xos jozibani birlashtirgan betakror atir ✨ 🔥 Erkakona va jozibali aroma 💎 Nafis va klassik ifor 🌿 Har kuni va maxsus uchrashuvlar uchun mos 🖤 O‘ziga ishongan, didli erkaklar tanlovi CHANEL ALLURE HOMME — kirib kelganingizda emas, ketganingizdan keyin ham esda qoladigan ifor. ✨ 📍 Do‘konimizda sizni kutamiz! 🛍️",
+      "source_post": "https://t.me/korea_fotima_zuhra_shop/6015"
+    },
+    {
+      "id": 20,
+      "name": "Hamyonbop atirchalar",
+      "category": "parfyumeriya",
+      "category_name": "Parfyumeriya",
+      "price_krw": null,
+      "currency": "KRW",
+      "image": "products/06_parfyumeriya/20_hamyonbop_atirchalar.jpg",
+      "description": "Nafis, hushboʻy iforga ega hamyonbop atirchalar keldi.",
+      "source_post": "https://t.me/korea_fotima_zuhra_shop/5511"
+    }
+  ]
+}

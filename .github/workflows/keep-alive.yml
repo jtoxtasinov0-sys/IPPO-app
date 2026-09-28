@@ -1,0 +1,17 @@
+# Render bepul rejada server 15 daqiqada uxlaydi — har 10 daqiqada uyg'otib turamiz
+name: keep-alive
+
+on:
+  schedule:
+    - cron: '*/10 * * * *'
+  workflow_dispatch:
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ping backend
+        env:
+          # GitHub → Settings → Secrets and variables → Actions → Variables → BACKEND_URL
+          BACKEND_URL: ${{ vars.BACKEND_URL || 'https://ippo-backend.onrender.com' }}
+        run: curl -fsS --max-time 60 "$BACKEND_URL/api/health" || true

@@ -1,0 +1,104 @@
+// IPPO by Fotima Zuhra — baza jadvallari
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// Botdan / Mini App'dan foydalangan har bir odam
+model User {
+  id         Int      @id @default(autoincrement())
+  telegramId String   @unique // raqam yoki "web_..." (Telegramsiz brauzer)
+  firstName  String?
+  lastName   String?
+  username   String?
+  phone      String?
+  lang       String   @default("uz")
+  seenIntro  Boolean  @default(false)
+  isAdmin    Boolean  @default(false) // botda "/admin PAROL" yozgan
+  isBlocked  Boolean  @default(false) // botni bloklagan
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  orders     Order[]
+}
+
+model Product {
+  id            Int      @id @default(autoincrement())
+  article       String   @unique
+  name          String
+  nameRu        String?
+  brand         String?
+  description   String?  @db.Text
+  descriptionRu String?  @db.Text
+  category      String
+  tag           String? // new | hit | sale | set
+  volume        String? // "50 ml", "30 stik"
+  images        String[]
+  imageFrames   Json? // har rasm uchun {z, x, y} — kartochkada joylashuv
+  imageVariants Json? // har rasm qaysi turga tegishli: ["Sariq", null, ...]
+  variants      String[] // mahsulot turlari: Sariq, Pushti ...
+  price         Int      @default(0) // ₩; 0 = narx kiritilmagan ("narxini so'rang")
+  oldPrice      Int? // chizilgan eski narx
+  stock         Int? // null = cheklanmagan
+  isActive      Boolean  @default(true)
+  isFeatured    Boolean  @default(false)
+  sortOrder     Int      @default(0)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+}
+
+model Order {
+  id            Int       @id @default(autoincrement())
+  userId        Int?
+  user          User?     @relation(fields: [userId], references: [id], onDelete: SetNull)
+  items         Json // [{productId, article, name, image, variant, qty, unitPrice, lineTotal}]
+  totalQty      Int
+  subtotal      Int
+  deliveryFee   Int       @default(0)
+  total         Int
+  customerName  String
+  phone         String
+  region        String
+  address       String
+  comment       String?
+  paymentMethod String // cash | card
+  paymentStatus String    @default("unpaid") // unpaid | pending | paid | rejected
+  receiptUrl    String?
+  receiptAt     DateTime?
+  status        String    @default("new") // new | confirmed | shipped | delivered | cancelled
+  stockReturned Boolean   @default(false)
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  @@index([userId])
+  @@index([status])
+}
+
+model Story {
+  id        Int      @id @default(autoincrement())
+  title     String
+  titleRu   String?
+  image     String
+  productId Int?
+  isActive  Boolean  @default(true)
+  sortOrder Int      @default(0)
+  createdAt DateTime @default(now())
+}
+
+// Admin paneldan o'zgaradigan sozlamalar (karta, yetkazish narxi ...)
+model Setting {
+  key   String @id
+  value String @db.Text
+}
+
+// Yuklangan rasmlarning zaxirasi (Render diski o'chsa — shu yerdan tiklanadi)
+model StoredFile {
+  path      String   @id
+  mime      String
+  data      Bytes
+  createdAt DateTime @default(now())
+}

@@ -1,0 +1,32 @@
+# Render Blueprint — Render → New → Blueprint orqali bir bosishda yaratish uchun
+services:
+  - type: web
+    name: ippo-backend
+    runtime: node
+    region: ohio # Neon baza us-east-2 (Ohio) da — yaqin bo'lsa tezroq
+    plan: free
+    rootDir: backend
+    buildCommand: npm install --include=dev && npx prisma db push && npm run db:seed
+    startCommand: npm start
+    healthCheckPath: /api/health
+    envVars:
+      - key: NODE_VERSION
+        value: '20'
+      - key: DATABASE_URL
+        sync: false
+      - key: BOT_TOKEN
+        sync: false
+      - key: ADMIN_CHAT_IDS
+        sync: false
+      - key: MINIAPP_URL
+        sync: false
+      - key: ADMIN_URL
+        sync: false
+      - key: ADMIN_USERNAME
+        value: admin
+      - key: ADMIN_PASSWORD
+        sync: false
+      - key: JWT_SECRET
+        generateValue: true
+      - key: COMPANY_PHONE
+        sync: false
