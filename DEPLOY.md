@@ -91,7 +91,7 @@ Avval **manzilni yozing**: `miniapp/.env.production` va `admin/.env.production` 
 
 ### Admin panel
 Xuddi shunday, lekin **Project Name**: `ippo-admin`, **Root Directory**: `admin`.
-Manzil: `https://ippo-admin.vercel.app`.
+Manzil: `https://ippo-admin-six.vercel.app`.
 
 ---
 
@@ -100,7 +100,7 @@ Manzil: `https://ippo-admin.vercel.app`.
 Render → `ippo-backend` → **Environment**:
 
 - `MINIAPP_URL` = `https://ippo-miniapp.vercel.app`
-- `ADMIN_URL` = `https://ippo-admin.vercel.app`
+- `ADMIN_URL` = `https://ippo-admin-six.vercel.app`
 
 **Save** → server qayta ishga tushadi. Bot o'zi: webhook ulaydi, pastki **Menu** tugmasini do'konga qo'yadi.
 
