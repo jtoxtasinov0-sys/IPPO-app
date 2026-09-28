@@ -1,5 +1,5 @@
 // Admin API: JWT token, Telegram ichidan parolsiz kirish, qayta urinish
-const PROD_API_URL = 'https://ippo-backend.onrender.com';
+const PROD_API_URL = 'https://ippo-app.onrender.com';
 export const API_URL = (
   import.meta.env.VITE_API_URL || (import.meta.env.PROD ? PROD_API_URL : 'http://localhost:5000')
 ).replace(/\/+$/, '');

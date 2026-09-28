@@ -2,7 +2,7 @@
 import { isTelegram, initData } from './telegram';
 
 // Vercel build'da localhost qolib ketmasligi uchun zaxira manzil
-const PROD_API_URL = 'https://ippo-backend.onrender.com';
+const PROD_API_URL = 'https://ippo-app.onrender.com';
 export const API_URL = (
   import.meta.env.VITE_API_URL || (import.meta.env.PROD ? PROD_API_URL : 'http://localhost:5000')
 ).replace(/\/+$/, '');

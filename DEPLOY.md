@@ -46,7 +46,7 @@ git push -u origin main
 
 | Maydon | Qiymat |
 |---|---|
-| Name | `ippo-backend` |
+| Name | `ippo-app` |
 | Region | **Ohio (US East)** — Neon baza shu yerda, tez ishlaydi |
 | Root Directory | `backend` |
 | Runtime | Node |
@@ -72,15 +72,15 @@ git push -u origin main
 
 `PORT` va `PUBLIC_URL` **qo'ymang** — Render o'zi beradi.
 
-4. **Create Web Service**. 3–5 daqiqada manzil chiqadi, masalan: `https://ippo-backend.onrender.com`.
-   Tekshirish: `https://ippo-backend.onrender.com/api/health` → `{"ok":true}`.
+4. **Create Web Service**. 3–5 daqiqada manzil chiqadi, masalan: `https://ippo-app.onrender.com`.
+   Tekshirish: `https://ippo-app.onrender.com/api/health` → `{"ok":true}`.
 
 ---
 
 ## 3. Vercel — Mini App va Admin panel (ikkita loyiha)
 
 Avval **manzilni yozing**: `miniapp/.env.production` va `admin/.env.production` faylida
-`VITE_API_URL=` ga Render manzilini qo'ying (agar `ippo-backend.onrender.com` dan boshqa bo'lsa),
+`VITE_API_URL=` ga Render manzilini qo'ying (agar `ippo-app.onrender.com` dan boshqa bo'lsa),
 `miniapp/src/lib/api.js` va `admin/src/lib/api.js` dagi `PROD_API_URL` ni ham. Keyin GitHub'ga push qiling.
 
 ### Mini App
@@ -97,7 +97,7 @@ Manzil: `https://ippo-admin-six.vercel.app`.
 
 ## 4. Render'ga manzillarni yozish
 
-Render → `ippo-backend` → **Environment**:
+Render → `ippo-app` → **Environment**:
 
 - `MINIAPP_URL` = `https://ippo-miniapp.vercel.app`
 - `ADMIN_URL` = `https://ippo-admin-six.vercel.app`

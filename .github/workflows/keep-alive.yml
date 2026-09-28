@@ -13,5 +13,5 @@ jobs:
       - name: Ping backend
         env:
           # GitHub → Settings → Secrets and variables → Actions → Variables → BACKEND_URL
-          BACKEND_URL: ${{ vars.BACKEND_URL || 'https://ippo-backend.onrender.com' }}
+          BACKEND_URL: ${{ vars.BACKEND_URL || 'https://ippo-app.onrender.com' }}
         run: curl -fsS --max-time 60 "$BACKEND_URL/api/health" || true

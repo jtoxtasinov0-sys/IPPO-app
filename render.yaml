@@ -1,7 +1,7 @@
 # Render Blueprint — Render → New → Blueprint orqali bir bosishda yaratish uchun
 services:
   - type: web
-    name: ippo-backend
+    name: ippo-app
     runtime: node
     region: ohio # Neon baza us-east-2 (Ohio) da — yaqin bo'lsa tezroq
     plan: free
