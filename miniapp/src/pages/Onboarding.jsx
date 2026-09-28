@@ -1,12 +1,24 @@
 // 3 slayd: brend, qanday ishlaydi, yetkazish/to'lov — bir marta ko'rsatiladi
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Icon from '../components/Icon';
 import { useI18n } from '../lib/i18n';
-import { haptic } from '../lib/telegram';
+import { haptic, tg } from '../lib/telegram';
 
 export default function Onboarding({ onDone }) {
   const { t, lang, setLang } = useI18n();
   const [i, setI] = useState(0);
+
+  // Kirish ekrani och — Telegram sarlavhasi ham shu rangda, chiqqanda asl rangga qaytadi
+  useEffect(() => {
+    try {
+      tg?.setHeaderColor?.('#FBF6EC');
+    } catch {}
+    return () => {
+      try {
+        tg?.setHeaderColor?.('#1E1006');
+      } catch {}
+    };
+  }, []);
 
   const slides = [
     { title: t.intro1Title, text: t.intro1Text, hero: true },
@@ -22,9 +34,9 @@ export default function Onboarding({ onDone }) {
   }
 
   return (
-    <div className={`intro ${s.hero ? 'hero' : ''}`}>
+    <div className="intro">
       <div className="intro-top">
-        <div className="lang-switch dark">
+        <div className="lang-switch">
           {['uz', 'ru'].map((l) => (
             <button key={l} className={lang === l ? 'on' : ''} onClick={() => setLang(l)}>
               {l.toUpperCase()}
@@ -40,7 +52,9 @@ export default function Onboarding({ onDone }) {
 
       <div className="intro-visual" key={i}>
         {s.hero ? (
-          <img className="intro-logo" src="/logo.png" alt="IPPO by Fotima Zuhra" />
+          <div className="intro-logo-wrap">
+            <img className="intro-logo" src="/logo.png" alt="IPPO by Fotima Zuhra" />
+          </div>
         ) : (
           <div className="intro-icons">
             {s.icons.map((n, k) => (

@@ -384,26 +384,29 @@ select.input {
   align-items: center;
   justify-content: center;
   padding: 20px;
-  background: radial-gradient(120% 80% at 80% 0%, #3b2615 0%, var(--espresso) 60%, #140a03 100%);
+  /* Och krem fon + logodagi oltin nur */
+  background:
+    radial-gradient(90% 60% at 100% 0%, rgba(234, 200, 122, 0.4) 0%, rgba(234, 200, 122, 0) 70%),
+    radial-gradient(80% 50% at 0% 100%, rgba(209, 169, 85, 0.24) 0%, rgba(209, 169, 85, 0) 70%),
+    #fbf6ec;
 }
 .login-card {
   width: 100%;
   max-width: 360px;
   background: var(--card);
+  border: 1px solid rgba(201, 160, 78, 0.3);
   border-radius: 22px;
   padding: 28px 24px;
   display: flex;
   flex-direction: column;
   gap: 12px;
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+  box-shadow: 0 20px 50px rgba(157, 128, 76, 0.18);
 }
 .login-logo {
-  width: 170px;
+  width: 190px;
   margin: 0 auto 4px;
-  padding: 14px 18px;
-  border-radius: 16px;
-  background: var(--espresso);
-  box-sizing: content-box;
+  /* Och oltin oq fonda xira ko'rinmasin: biroz to'qroq + soya */
+  filter: brightness(0.86) saturate(1.2) drop-shadow(0 4px 10px rgba(122, 90, 38, 0.25));
 }
 .login-card h1 {
   font-family: var(--serif);

@@ -1890,38 +1890,81 @@ a {
   border: 2px solid #fff;
 }
 
-/* ——— Onboarding ——— */
+/* ——— Onboarding (och krem fon + logodagi oltin) ——— */
 .intro {
+  --intro-bg: #fbf6ec;
+  --intro-ink: #3a2812;
+  --intro-text: #6f5a3e;
+  --intro-accent: #a67c32;
+  --intro-title: linear-gradient(135deg, #c2974a 0%, #a67c32 45%, #7a5a26 100%);
   min-height: 100vh;
   display: flex;
   flex-direction: column;
   padding: 16px 20px calc(20px + var(--safe-b));
-  background: radial-gradient(120% 70% at 80% 0%, #3b2615 0%, var(--espresso) 55%, #140a03 100%);
-  color: #e9dcc2;
+  background:
+    radial-gradient(90% 55% at 100% 0%, rgba(234, 200, 122, 0.38) 0%, rgba(234, 200, 122, 0) 70%),
+    radial-gradient(80% 45% at 0% 100%, rgba(209, 169, 85, 0.22) 0%, rgba(209, 169, 85, 0) 70%),
+    var(--intro-bg);
+  color: var(--intro-ink);
   position: relative;
   overflow: hidden;
 }
-.intro.hero {
-  /* Logo kesilmasin: kenglik bo'yicha to'liq, qolgan joy fon rangi */
-  background: #140a03 url('/splash.jpg') center top / 100% auto no-repeat;
-}
-.intro.hero::before {
+/* Logodagi kabi nozik oltin lentalar (burchaklarda) */
+.intro::before,
+.intro::after {
   content: '';
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(180deg, rgba(20, 10, 3, 0) 40%, rgba(20, 10, 3, 0.9) 78%);
+  /* fixed — konteyner ichida scroll hosil qilmaydi (tugma bosilganda ekran siljimaydi) */
+  position: fixed;
+  border-radius: 50%;
+  pointer-events: none;
+}
+.intro::before {
+  width: 150vw;
+  height: 150vw;
+  max-width: 760px;
+  max-height: 760px;
+  top: -62%;
+  right: -78%;
+  border: 1.5px solid rgba(201, 160, 78, 0.45);
+  box-shadow:
+    0 0 0 14px rgba(255, 255, 255, 0),
+    0 0 0 15.5px rgba(201, 160, 78, 0.22);
+}
+.intro::after {
+  width: 120vw;
+  height: 120vw;
+  max-width: 600px;
+  max-height: 600px;
+  bottom: -52%;
+  left: -70%;
+  border: 1.5px solid rgba(201, 160, 78, 0.38);
+  box-shadow:
+    0 0 0 12px rgba(255, 255, 255, 0),
+    0 0 0 13.5px rgba(201, 160, 78, 0.18);
 }
 .intro > * {
   position: relative;
+  z-index: 1;
 }
 .intro-top {
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
+.intro .lang-switch {
+  background: rgba(255, 255, 255, 0.75);
+  border-color: rgba(201, 160, 78, 0.35);
+  box-shadow: 0 2px 10px rgba(157, 128, 76, 0.12);
+}
+.intro .lang-switch button {
+  color: var(--intro-accent);
+}
+.intro .lang-switch button.on {
+  color: #2a180b;
+}
 .intro-skip {
-  color: #bca781;
-  font-weight: 600;
+  color: var(--intro-accent);
+  font-weight: 700;
   font-size: 14px;
 }
 .intro-visual {
@@ -1931,12 +1974,25 @@ a {
   justify-content: center;
   animation: fadeIn 0.4s ease;
 }
-.intro.hero .intro-logo {
-  opacity: 0;
+.intro-logo-wrap {
+  position: relative;
+  width: 84%;
+  max-width: 380px;
+  display: flex;
+  justify-content: center;
+}
+/* Logo ortida yumshoq oq nur — och fonda ham oltin yaxshi ko'rinadi */
+.intro-logo-wrap::before {
+  content: '';
+  position: absolute;
+  inset: -30% -12%;
+  background: radial-gradient(closest-side, rgba(255, 255, 255, 0.95), rgba(255, 255, 255, 0));
 }
 .intro-logo {
-  width: 78%;
-  max-width: 360px;
+  position: relative;
+  width: 100%;
+  /* Och oltin krem fonda xira ko'rinmasin: biroz to'qroq + soya */
+  filter: brightness(0.86) saturate(1.2) drop-shadow(0 6px 14px rgba(122, 90, 38, 0.28));
 }
 .intro-icons {
   display: flex;
@@ -1946,9 +2002,10 @@ a {
   width: 78px;
   height: 78px;
   border-radius: 24px;
-  border: 1px solid rgba(234, 200, 122, 0.35);
-  background: rgba(234, 200, 122, 0.08);
-  color: var(--gold-light);
+  border: 1px solid rgba(201, 160, 78, 0.4);
+  background: #fff;
+  color: var(--intro-accent);
+  box-shadow: 0 8px 22px rgba(157, 128, 76, 0.16);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1956,8 +2013,10 @@ a {
 }
 .intro-ic:nth-child(2) {
   background: var(--gold-grad);
-  color: var(--espresso);
+  border-color: transparent;
+  color: #2a180b;
   transform: translateY(-14px);
+  box-shadow: 0 12px 28px rgba(201, 160, 78, 0.4);
 }
 .intro-text {
   text-align: center;
@@ -1969,7 +2028,7 @@ a {
   font-size: 34px;
   line-height: 1.1;
   font-weight: 700;
-  background: var(--gold-grad);
+  background: var(--intro-title);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
@@ -1978,7 +2037,7 @@ a {
 .intro-text p {
   margin: 0 auto;
   max-width: 330px;
-  color: #cdbb97;
+  color: var(--intro-text);
   font-size: 15.5px;
 }
 .intro-dots {
@@ -1991,12 +2050,12 @@ a {
   width: 7px;
   height: 7px;
   border-radius: 99px;
-  background: rgba(234, 200, 122, 0.3);
+  background: rgba(157, 128, 76, 0.28);
   transition: all 0.25s;
 }
 .intro-dots span.on {
   width: 22px;
-  background: var(--gold-light);
+  background: var(--gold);
 }
 
 /* ——— Boshqa ——— */
