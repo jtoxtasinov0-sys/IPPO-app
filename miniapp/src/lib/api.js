@@ -53,35 +53,56 @@ function authHeaders() {
 }
 
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
-const DELAYS = [1500, 3000, 5000, 8000, 12000, 15000];
+// Render bepul reja uyg'onishi 1 daqiqadan oshishi mumkin — ~3 daqiqa urinib turamiz
+const RETRY_WINDOW = 180_000;
+const retryDelay = (n) => Math.min(10_000, 1500 * 1.5 ** n);
+// Osilib qolgan GET so'rovni to'xtatib, qayta yuboramiz (buyurtma ikki marta ketmasligi uchun faqat GET)
+const ATTEMPT_TIMEOUT = 30_000;
+
+async function fetchWithTimeout(url, opts, timeout) {
+  if (!timeout || typeof AbortController === 'undefined') return fetch(url, opts);
+  const ctrl = new AbortController();
+  const timer = setTimeout(() => ctrl.abort(), timeout);
+  try {
+    return await fetch(url, { ...opts, signal: ctrl.signal });
+  } finally {
+    clearTimeout(timer);
+  }
+}
 
 export async function request(path, { method = 'GET', body, form, auth = false } = {}) {
   if (auth) await ensureWebToken();
   let retried401 = false;
+  const started = Date.now();
+  const canRetry = () => Date.now() - started < RETRY_WINDOW;
   for (let attempt = 0; ; attempt++) {
     let res;
     try {
-      res = await fetch(API_URL + path, {
-        method,
-        headers: {
-          ...(body ? { 'Content-Type': 'application/json' } : {}),
-          ...(auth ? authHeaders() : {}),
+      res = await fetchWithTimeout(
+        API_URL + path,
+        {
+          method,
+          headers: {
+            ...(body ? { 'Content-Type': 'application/json' } : {}),
+            ...(auth ? authHeaders() : {}),
+          },
+          body: form || (body ? JSON.stringify(body) : undefined),
         },
-        body: form || (body ? JSON.stringify(body) : undefined),
-      });
+        method === 'GET' ? ATTEMPT_TIMEOUT : 0
+      );
     } catch (e) {
-      // Tarmoq xatosi — server uxlayotgan bo'lishi mumkin
-      if (attempt < DELAYS.length) {
+      // Tarmoq xatosi yoki javob kelmadi — server uxlayotgan bo'lishi mumkin
+      if (canRetry()) {
         setWaking(true);
-        await sleep(DELAYS[attempt]);
+        await sleep(retryDelay(attempt));
         continue;
       }
       setWaking(false);
       throw Object.assign(new Error('network'), { network: true });
     }
-    if ([502, 503, 504].includes(res.status) && attempt < DELAYS.length) {
+    if ([502, 503, 504].includes(res.status) && canRetry()) {
       setWaking(true);
-      await sleep(DELAYS[attempt]);
+      await sleep(retryDelay(attempt));
       continue;
     }
     setWaking(false);
