@@ -1,0 +1,1018 @@
+<!doctype html>
+<html lang="uz">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>IPPO — buyurtma berish videosi</title>
+<link rel="stylesheet" href="fonts/fonts.css">
+<style>
+/* ===== IPPO promo video: 1080x1920, faqat logo ranglari ===== */
+:root{
+  --esp:#1e1006; --esp2:#2a180b; --esp3:#3b2615;
+  --gold:#d1a955; --gold2:#c9a04e; --goldL:#eac87a; --goldS:#f6ead0; --goldM:#9d804c; --bronze:#58401b;
+  --cream:#faf6ef; --cream2:#f3eadb; --line:#ece3d4; --ink:#23160b; --ink2:#4a3a2b; --muted:#8c7b69;
+  --grad:linear-gradient(135deg,#eac87a 0%,#d1a955 50%,#9d804c 100%);
+  --sans:'Manrope',system-ui,sans-serif; --serif:'Playfair Display',Georgia,serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{background:#0d0703;overflow:hidden}
+body{font-family:var(--sans);color:var(--ink);-webkit-font-smoothing:antialiased}
+#fit{position:fixed;inset:0;display:flex;align-items:center;justify-content:center}
+#stage{position:relative;width:1080px;height:1920px;overflow:hidden;background:var(--cream);transform-origin:center}
+.abs{position:absolute}
+img{display:block}
+
+/* ---- fon ---- */
+#bg{position:absolute;inset:0;background:
+  radial-gradient(1200px 900px at 50% 40%,#fbf7f0 0%,#f5ecdc 70%,#efe2cb 100%)}
+#dots{position:absolute;inset:-40px;background-image:radial-gradient(rgba(157,128,76,.28) 1.6px,transparent 1.8px);background-size:38px 38px}
+.blob{position:absolute;border-radius:50%;filter:blur(90px)}
+#blob1{width:620px;height:620px;left:-180px;top:40px;background:rgba(234,200,122,.55)}
+#blob2{width:700px;height:700px;right:-260px;top:620px;background:rgba(201,160,78,.30)}
+#blob3{width:560px;height:560px;left:-120px;bottom:-160px;background:rgba(88,64,27,.16)}
+#sweep{position:absolute;top:-200px;left:0;width:260px;height:2400px;transform:rotate(18deg);
+  background:linear-gradient(90deg,transparent,rgba(255,244,214,.0) 20%,rgba(255,240,200,.75) 50%,rgba(255,244,214,0) 80%,transparent);opacity:0;mix-blend-mode:soft-light}
+.spark{position:absolute;width:34px;height:34px;color:var(--gold)}
+.spark svg{width:100%;height:100%}
+
+/* ---- intro ---- */
+#intro{position:absolute;inset:0}
+#appIcon{position:absolute;left:390px;top:640px;width:300px;height:300px;border-radius:74px;
+  background:radial-gradient(120% 120% at 30% 20%,#3b2615 0%,#1e1006 60%,#140903 100%);
+  box-shadow:0 40px 90px rgba(30,16,6,.35),inset 0 0 0 2px rgba(234,200,122,.35);overflow:hidden}
+#appIcon img{position:absolute;left:50%;top:50%;width:150px;transform:translate(-50%,-52%)}
+#iconShine{position:absolute;top:-60px;left:0;width:90px;height:420px;transform:rotate(25deg);
+  background:linear-gradient(90deg,transparent,rgba(255,236,190,.55),transparent)}
+#iconRing{position:absolute;left:340px;top:590px;width:400px;height:400px;border-radius:50%;border:3px solid var(--gold);opacity:0}
+#brand{position:absolute;left:0;right:0;top:1000px;text-align:center}
+#brandWord{font-family:var(--serif);font-weight:700;font-size:170px;letter-spacing:22px;color:var(--esp);line-height:1;padding-left:22px}
+#brandWord span{display:inline-block}
+#brandSub{font-family:var(--serif);font-style:italic;font-weight:600;font-size:40px;color:var(--goldM);margin-top:10px;letter-spacing:1px}
+#brandLine{width:170px;height:8px;border-radius:8px;background:var(--grad);margin:28px auto 0;transform-origin:center}
+#introTitle{position:absolute;left:60px;right:60px;top:1370px;text-align:center;font-family:var(--serif);font-weight:800;font-size:92px;line-height:1.08;color:var(--esp)}
+#introTitle .w{display:inline-block;margin:0 .12em}
+#introTitle .g{font-style:italic;background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent;padding-right:.08em}
+#introPill{position:absolute;left:50%;top:1630px;transform:translateX(-50%);background:#fff;border-radius:60px;padding:24px 48px;
+  font-weight:800;font-size:44px;color:var(--esp);box-shadow:0 18px 40px rgba(88,64,27,.16);white-space:nowrap;display:flex;align-items:center;gap:20px}
+#introPill i{width:18px;height:18px;border-radius:50%;background:var(--gold);display:block;box-shadow:0 0 0 0 rgba(209,169,85,.5)}
+
+/* ---- sarlavha (qadamlar) ---- */
+#head{position:absolute;left:0;right:0;top:0;height:680px}
+#prog{position:absolute;left:50%;top:290px;transform:translateX(-50%);display:flex;gap:18px}
+#prog .seg{width:104px;height:12px;border-radius:12px;background:rgba(157,128,76,.25);overflow:hidden}
+#prog .seg b{display:block;height:100%;width:0;background:var(--esp);border-radius:12px}
+#badge{position:absolute;left:50%;top:352px;transform:translateX(-50%);background:#fff;border-radius:60px;padding:14px 36px 14px 16px;
+  display:flex;align-items:center;gap:18px;box-shadow:0 14px 34px rgba(88,64,27,.14);white-space:nowrap}
+#badgeNum{width:58px;height:58px;border-radius:50%;background:var(--esp);color:var(--goldL);font-weight:800;font-size:32px;display:flex;align-items:center;justify-content:center;overflow:hidden;position:relative}
+#badgeNum span{position:absolute;left:0;right:0;text-align:center}
+#badgeTxt{font-weight:800;font-size:38px;letter-spacing:6px;color:var(--esp)}
+.stepT{position:absolute;left:40px;right:40px;top:450px;text-align:center}
+.stepT h1{font-family:var(--serif);font-weight:800;font-size:104px;line-height:1.02;color:var(--esp);white-space:nowrap}
+.stepT h1 .g{font-style:italic;background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent;padding-right:.08em}
+.stepT h1 span{display:inline-block}
+.stepT p{margin:22px auto 0;max-width:900px;font-size:38px;line-height:1.35;color:var(--ink2);font-weight:500}
+.stepT p b{color:var(--esp);font-weight:800}
+
+/* ---- telefon ---- */
+#phoneWrap{position:absolute;left:0;top:0;width:1080px;height:1920px;perspective:2200px}
+#disc{position:absolute;left:90px;top:900px;width:900px;height:900px;border-radius:50%;
+  background:radial-gradient(60% 60% at 50% 35%,#3b2615 0%,#1e1006 70%,#150a03 100%);box-shadow:0 50px 120px rgba(30,16,6,.35)}
+#discGlow{position:absolute;inset:0;border-radius:50%;background:radial-gradient(40% 40% at 50% 30%,rgba(234,200,122,.25),transparent 70%)}
+#ring{position:absolute;left:40px;top:850px;width:1000px;height:1000px}
+#phone{position:absolute;left:260px;top:690px;width:560px;height:1160px;border-radius:92px;
+  background:linear-gradient(145deg,#3b2615,#140903 60%,#2a180b);padding:14px;
+  box-shadow:0 60px 120px rgba(30,16,6,.45),0 0 0 3px rgba(234,200,122,.55),inset 0 0 0 2px rgba(255,255,255,.08);transform-style:preserve-3d}
+#screen{position:relative;width:532px;height:1132px;border-radius:78px;overflow:hidden;background:#fff}
+#island{position:absolute;left:50%;top:18px;width:150px;height:44px;border-radius:30px;background:#000;transform:translateX(-50%);z-index:50}
+#app{position:absolute;left:0;top:0;width:390px;height:830px;transform-origin:0 0;overflow:hidden;background:var(--cream);font-size:14px}
+
+/* status bar */
+.sbar{position:absolute;left:0;right:0;top:0;height:46px;display:flex;align-items:flex-end;justify-content:space-between;padding:0 30px 8px 40px;font-weight:700;font-size:15px;z-index:150}
+.sbar .ic{display:flex;gap:6px;align-items:center}
+
+/* ekranlar */
+.scr{position:absolute;inset:0;overflow:hidden}
+
+/* Telegram */
+#tg{background:#efe6d6}
+#tgPattern{position:absolute;inset:0;opacity:.5;background-image:
+  radial-gradient(circle at 20px 20px,rgba(157,128,76,.25) 2px,transparent 3px),
+  radial-gradient(circle at 60px 50px,rgba(157,128,76,.18) 1.5px,transparent 2.5px);background-size:80px 80px}
+.tgHead{position:absolute;left:0;right:0;top:0;height:104px;padding-top:50px;background:#fbf7f0;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:10px;padding-left:10px}
+.tgBack{color:var(--gold2);font-size:16px;font-weight:600;display:flex;align-items:center;gap:2px;width:70px}
+.ava{width:40px;height:40px;border-radius:50%;background:var(--esp);display:flex;align-items:center;justify-content:center;flex:none}
+.ava img{width:20px}
+.tgName b{display:block;font-size:16px}
+.tgName small{color:var(--muted);font-size:12.5px}
+.bubble{position:absolute;left:12px;max-width:300px;background:#fff;border-radius:18px 18px 18px 6px;padding:10px 14px 8px;box-shadow:0 1px 2px rgba(35,22,11,.08);font-size:14.5px;line-height:1.4;transform-origin:0 100%}
+.bubble .tm{display:block;text-align:right;font-size:11px;color:var(--muted);margin-top:2px}
+.bubble.me{left:auto;right:12px;background:#f6ead0;border-radius:18px 18px 6px 18px;transform-origin:100% 100%}
+.inlineBtn{position:absolute;left:12px;width:300px;height:44px;border-radius:12px;background:rgba(30,16,6,.72);color:#fff;font-weight:700;font-size:15px;display:flex;align-items:center;justify-content:center;gap:8px;backdrop-filter:blur(4px)}
+.tgInput{position:absolute;left:0;right:0;bottom:0;height:84px;background:#fbf7f0;border-top:1px solid var(--line);display:flex;align-items:flex-start;padding:10px 10px 0;gap:8px}
+.tgMenu{height:36px;padding:0 14px;border-radius:18px;background:var(--esp);color:var(--goldL);font-weight:700;display:flex;align-items:center;gap:6px;font-size:14px}
+.tgField{flex:1;height:36px;border-radius:18px;background:#fff;border:1px solid var(--line);color:var(--muted);display:flex;align-items:center;padding:0 14px}
+
+/* splash */
+#splash{background:radial-gradient(90% 60% at 50% 40%,#3b2615 0%,#1e1006 60%,#120802 100%);display:flex;flex-direction:column;align-items:center;justify-content:center}
+#splash .mk{width:120px;filter:drop-shadow(0 0 30px rgba(234,200,122,.45))}
+#splash .lg{width:240px;margin-top:22px}
+#splashBar{width:120px;height:4px;border-radius:4px;background:rgba(234,200,122,.18);margin-top:40px;overflow:hidden}
+#splashBar b{display:block;height:100%;width:0;background:var(--grad)}
+
+/* mini-app sarlavhasi */
+.maHead{position:absolute;left:0;right:0;top:0;height:98px;padding-top:48px;background:#fbf7f0;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;padding-left:16px;padding-right:16px;z-index:30}
+.maHead .x{color:var(--ink);font-weight:600;font-size:15px;width:80px}
+.maHead .mid{text-align:center;line-height:1.15}
+.maHead .mid b{font-size:15.5px;display:block}
+.maHead .mid small{font-size:12px;color:var(--muted)}
+.maHead .dots{width:80px;display:flex;justify-content:flex-end}
+.maHead .dots i{width:32px;height:32px;border-radius:50%;background:var(--cream2);display:flex;align-items:center;justify-content:center;font-style:normal;font-weight:800;letter-spacing:1px;font-size:13px}
+
+/* home */
+#home{background:var(--cream)}
+#homeScroll{position:absolute;left:0;right:0;top:98px}
+.hh{padding:14px 16px 6px}
+.hh .logo{height:40px}
+.hello{font-size:21px;margin-top:10px;color:var(--ink)}
+.hello b{font-weight:800}
+.search{margin-top:12px;height:44px;border-radius:14px;background:#fff;border:1px solid var(--line);display:flex;align-items:center;gap:8px;padding:0 14px;color:var(--muted)}
+.hero{margin:10px 16px 0;height:164px;border-radius:22px;background:radial-gradient(120% 120% at 100% 0%,#3b2615,#1e1006 60%);color:#fff;padding:18px;position:relative;overflow:hidden}
+.hero svg{position:absolute;right:-10px;top:0;width:230px;height:164px;opacity:.5}
+.hero .k{font-size:12px;color:var(--goldL);font-weight:700;letter-spacing:.5px}
+.hero h3{font-family:var(--serif);font-size:24px;line-height:1.12;margin-top:8px;max-width:230px;color:var(--goldS)}
+.hero .s{font-size:11.5px;color:rgba(246,234,208,.7);margin-top:6px}
+.hero .btn{position:absolute;left:18px;bottom:16px}
+.btn{height:36px;padding:0 16px;border-radius:12px;background:var(--grad);color:var(--esp);font-weight:800;font-size:13.5px;display:inline-flex;align-items:center;justify-content:center;gap:6px}
+.trust{display:flex;gap:6px;padding:12px 16px 0}
+.trust span{flex:1;background:#fff;border:1px solid var(--line);border-radius:12px;font-size:10.5px;font-weight:700;padding:8px 6px;text-align:center;color:var(--ink2)}
+.sec{padding:18px 16px 0}
+.sec h4{font-size:18px;font-weight:800;display:flex;justify-content:space-between;align-items:center}
+.sec h4 small{font-size:13px;color:var(--gold2);font-weight:700}
+.cats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:12px}
+.cat{background:#fff;border-radius:16px;border:1px solid var(--line);overflow:hidden}
+.cat .ci{height:74px;background-size:cover;background-position:center}
+.cat .cn{font-size:12px;font-weight:800;padding:7px 8px 0}
+.cat .cc{font-size:10.5px;color:var(--muted);padding:0 8px 7px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px}
+.pc{background:#fff;border-radius:18px;border:1px solid var(--line);overflow:hidden;position:relative}
+.pc .pi{height:150px;background-size:cover;background-position:center}
+.pc .pn{font-size:12.5px;font-weight:700;padding:8px 10px 0;line-height:1.3;height:42px;overflow:hidden}
+.pc .pp{font-size:15px;font-weight:800;padding:4px 10px 10px;color:var(--esp)}
+.pc .tag{position:absolute;left:8px;top:8px;background:var(--esp);color:var(--goldL);font-size:10px;font-weight:800;padding:4px 8px;border-radius:8px}
+.pc .add{position:absolute;right:8px;bottom:10px;width:30px;height:30px;border-radius:10px;background:var(--esp);color:var(--goldL);display:flex;align-items:center;justify-content:center;font-weight:800}
+
+/* pastki menyu */
+#nav{position:absolute;left:0;right:0;bottom:0;height:72px;background:rgba(255,255,255,.96);border-top:1px solid var(--line);display:flex;justify-content:space-around;padding-top:8px;z-index:25}
+#nav .ni{display:flex;flex-direction:column;align-items:center;gap:3px;font-size:11px;font-weight:700;color:var(--muted);width:70px;position:relative}
+#nav .ni.on{color:var(--esp)}
+#nav .ni svg{width:24px;height:24px}
+#cartBadge{position:absolute;left:40px;top:-4px;min-width:19px;height:19px;border-radius:10px;background:var(--gold);color:var(--esp);font-size:11px;font-weight:800;display:flex;align-items:center;justify-content:center;border:2px solid #fff;transform:scale(0)}
+
+/* sheet */
+.dim{position:absolute;inset:0;background:rgba(20,10,3,.45);opacity:0;z-index:60}
+.sheet{position:absolute;left:0;right:0;bottom:0;background:#fff;border-radius:26px 26px 0 0;z-index:61;overflow:hidden}
+.grab{width:40px;height:5px;border-radius:5px;background:var(--line);margin:8px auto 0}
+#psImg{height:300px;margin:10px 14px 0;border-radius:20px;background-size:cover;background-position:center}
+.ps{padding:14px 18px}
+.ps .chips{display:flex;gap:6px}
+.ps .chips span{font-size:11px;font-weight:800;padding:5px 9px;border-radius:8px;background:var(--goldS);color:var(--bronze)}
+.ps h2{font-size:20px;font-weight:800;margin-top:10px;line-height:1.25}
+.ps .price{font-size:26px;font-weight:800;color:var(--esp);margin-top:8px}
+.ps .desc{font-size:13px;color:var(--ink2);margin-top:8px;line-height:1.45}
+.psFoot{position:absolute;left:0;right:0;bottom:0;padding:12px 16px 26px;display:flex;gap:10px;background:#fff;border-top:1px solid var(--line)}
+.qty{height:52px;border-radius:14px;border:1px solid var(--line);display:flex;align-items:center;gap:16px;padding:0 14px;font-weight:800;font-size:17px}
+.qty i{font-style:normal;color:var(--gold2);font-size:22px}
+.bigBtn{flex:1;height:52px;border-radius:14px;background:var(--grad);color:var(--esp);font-weight:800;font-size:16px;display:flex;align-items:center;justify-content:center;gap:8px;position:relative;overflow:hidden}
+.bigBtn.dark{background:var(--esp);color:var(--goldL)}
+#flyImg{position:absolute;width:80px;height:80px;border-radius:16px;background-size:cover;background-position:center;z-index:80;opacity:0;box-shadow:0 10px 30px rgba(30,16,6,.35)}
+
+/* savatcha */
+#cartScr{background:var(--cream)}
+.pgTitle{font-size:26px;font-weight:800;padding:16px 16px 4px}
+.cItem{margin:10px 16px 0;background:#fff;border-radius:18px;border:1px solid var(--line);padding:10px;display:flex;gap:12px;align-items:center}
+.cItem .im{width:84px;height:84px;border-radius:14px;background-size:cover;background-position:center;flex:none}
+.cItem b{font-size:13.5px;line-height:1.3;display:block}
+.cItem .pr{font-weight:800;font-size:16px;margin-top:6px;color:var(--esp)}
+.sum{margin:12px 16px 0;background:#fff;border-radius:18px;border:1px solid var(--line);padding:6px 14px}
+.sum div{display:flex;justify-content:space-between;padding:9px 0;font-size:14px;color:var(--ink2)}
+.sum div+div{border-top:1px dashed var(--line)}
+.sum .tot{font-weight:800;font-size:17px;color:var(--esp)}
+.green{color:#2f7d4f;font-weight:700}
+.cartFoot{position:absolute;left:16px;right:16px;bottom:90px}
+
+/* checkout */
+#coBody{padding:6px 18px}
+.sheetTitle{font-size:21px;font-weight:800;margin:10px 0 8px}
+.fld{margin-top:10px}
+.fld .l{font-size:12.5px;font-weight:700;color:var(--ink2);margin-bottom:5px}
+.fld .in{height:46px;border-radius:13px;border:1.5px solid var(--line);background:var(--cream);display:flex;align-items:center;padding:0 13px;font-size:15px;font-weight:600;position:relative}
+.fld .in.focus{border-color:var(--gold);background:#fff;box-shadow:0 0 0 4px rgba(209,169,85,.18)}
+.fld .in .ph{color:#b9aa97;font-weight:500}
+.caret{display:inline-block;width:2px;height:20px;background:var(--gold2);margin-left:1px;vertical-align:middle}
+.pms{display:flex;flex-direction:column;gap:9px;margin-top:8px}
+.pm{height:62px;border-radius:15px;border:1.5px solid var(--line);display:flex;align-items:center;gap:12px;padding:0 13px;background:#fff}
+.pm .pic{width:40px;height:40px;border-radius:12px;background:var(--cream2);display:flex;align-items:center;justify-content:center;color:var(--esp)}
+.pm .pt{flex:1}
+.pm .pt b{display:block;font-size:14.5px}
+.pm .pt small{color:var(--muted);font-size:11.5px}
+.pm .rad{width:22px;height:22px;border-radius:50%;border:2px solid var(--line);position:relative}
+.pm .rad i{position:absolute;inset:3px;border-radius:50%;background:var(--gold2);transform:scale(0)}
+.pm.on{border-color:var(--gold);background:#fffaf0}
+.pm.on .pic{background:var(--esp);color:var(--goldL)}
+.pm.on .rad{border-color:var(--gold)}
+
+/* to'lov */
+.payHead{display:flex;align-items:center;gap:12px;margin-top:14px}
+.payHead .pic{width:50px;height:50px;border-radius:15px;background:var(--esp);color:var(--goldL);display:flex;align-items:center;justify-content:center}
+.payHead b{font-size:19px;display:block}
+.payHead small{color:var(--muted);font-size:13px}
+.hint{font-size:13px;color:var(--muted);margin-top:12px;line-height:1.45}
+#bankCard{margin-top:14px;height:204px;border-radius:22px;position:relative;overflow:hidden;color:var(--goldS);
+  background:linear-gradient(135deg,#3b2615 0%,#1e1006 55%,#2a180b 100%);box-shadow:0 18px 40px rgba(30,16,6,.35);transform-style:preserve-3d}
+#bankCard .foil{position:absolute;inset:0}
+#bankCard .top{position:absolute;left:20px;right:20px;top:18px;display:flex;justify-content:space-between;align-items:center}
+#bankCard .top span{font-weight:800;letter-spacing:2px;font-size:13px;color:var(--goldL)}
+#bankCard .top img{height:34px}
+#bankCard .chip{position:absolute;left:20px;top:66px;width:46px;height:34px;border-radius:7px;background:linear-gradient(135deg,#eac87a,#9d804c);box-shadow:inset 0 0 0 1px rgba(30,16,6,.3)}
+#bankCard .chip:before{content:'';position:absolute;left:14px;top:0;bottom:0;width:18px;border-left:1px solid rgba(30,16,6,.35);border-right:1px solid rgba(30,16,6,.35)}
+#bankCard .num{position:absolute;left:20px;right:20px;top:118px;display:flex;align-items:center;gap:10px;font-size:21px;font-weight:800;letter-spacing:1.5px;white-space:nowrap;color:#fff;font-variant-numeric:tabular-nums}
+#bankCard .num svg{color:var(--goldL)}
+#bankCard .hol{position:absolute;left:20px;bottom:18px;font-size:12px;letter-spacing:2.5px;font-weight:700;color:var(--goldL)}
+#bankCard .shine{position:absolute;top:-40px;left:0;width:90px;height:300px;transform:rotate(25deg);background:linear-gradient(90deg,transparent,rgba(255,236,190,.35),transparent)}
+.amt{margin-top:12px;height:54px;border-radius:15px;background:var(--cream);border:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;padding:0 15px;font-size:14px;color:var(--muted)}
+.amt b{color:var(--esp);font-size:19px;display:flex;align-items:center;gap:6px}
+#toast{position:absolute;left:50%;top:520px;transform:translateX(-50%);background:var(--esp);color:var(--goldL);font-weight:800;font-size:14px;padding:11px 18px;border-radius:14px;display:flex;align-items:center;gap:8px;z-index:90;opacity:0;white-space:nowrap;box-shadow:0 10px 30px rgba(30,16,6,.35)}
+#upl{margin-top:12px;height:66px;border-radius:15px;border:1.5px dashed var(--gold);background:#fffaf0;display:flex;align-items:center;gap:12px;padding:0 12px;opacity:0}
+#upl .th{width:44px;height:48px;border-radius:8px;background:#fff;border:1px solid var(--line);position:relative;overflow:hidden;flex:none}
+#upl .th i{position:absolute;left:6px;right:6px;height:3px;border-radius:3px;background:var(--line)}
+#upl .th em{position:absolute;left:12px;top:8px;width:20px;height:20px;border-radius:50%;background:#e7f4ec}
+#upl .bar{height:6px;border-radius:6px;background:var(--line);margin-top:6px;overflow:hidden}
+#upl .bar b{display:block;height:100%;width:0;background:var(--grad)}
+#payDone{position:absolute;left:0;right:0;top:120px;text-align:center;opacity:0}
+.doneC{width:110px;height:110px;border-radius:50%;background:var(--grad);margin:0 auto;display:flex;align-items:center;justify-content:center;box-shadow:0 18px 40px rgba(209,169,85,.45)}
+#payDone h3{font-size:22px;font-weight:800;margin-top:20px}
+#payDone p{font-size:14.5px;color:var(--ink2);margin:10px 34px 0;line-height:1.45}
+.confetti{position:absolute;width:8px;height:14px;border-radius:2px;z-index:95}
+
+/* bank ilovasi (karta o'tkazmasi) */
+#bank{background:#f7f3ec;z-index:70}
+.bkHead{position:absolute;left:0;right:0;top:0;height:98px;padding-top:50px;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:16px;background:#fff;border-bottom:1px solid var(--line)}
+.bkHead .bk{position:absolute;left:16px;top:56px;color:var(--gold2);font-weight:700;font-size:15px}
+#bkBody{position:absolute;left:0;right:0;top:98px;padding:16px}
+.bkFrom{background:linear-gradient(135deg,#58401b,#2a180b);border-radius:18px;color:#fff;padding:14px 16px;display:flex;justify-content:space-between;align-items:center}
+.bkFrom small{font-size:11.5px;color:rgba(246,234,208,.7);display:block}
+.bkFrom b{font-size:15px}
+.bkLbl{font-size:12.5px;font-weight:700;color:var(--ink2);margin:16px 0 6px}
+.bkIn{height:54px;border-radius:14px;background:#fff;border:1.5px solid var(--line);display:flex;align-items:center;padding:0 14px;font-size:17px;font-weight:700;letter-spacing:.5px;justify-content:space-between}
+.bkIn.focus{border-color:var(--gold);box-shadow:0 0 0 4px rgba(209,169,85,.18)}
+.paste{position:absolute;background:var(--esp);color:#fff;font-size:13px;font-weight:700;padding:8px 14px;border-radius:10px;opacity:0}
+.recv{margin-top:10px;display:flex;align-items:center;gap:10px;background:#e7f4ec;color:#2f7d4f;border-radius:12px;padding:9px 12px;font-size:13px;font-weight:700;opacity:0}
+.recv i{width:26px;height:26px;border-radius:50%;background:var(--esp);display:flex;align-items:center;justify-content:center;font-style:normal;color:var(--goldL);font-size:12px}
+#bkBtn{position:absolute;left:16px;right:16px;bottom:34px;height:56px;border-radius:16px;background:var(--esp);color:var(--goldL);font-weight:800;font-size:17px;display:flex;align-items:center;justify-content:center;overflow:hidden}
+#bkOk{position:absolute;inset:98px 0 0;background:#f7f3ec;text-align:center;opacity:0}
+#bkOk h3{font-size:22px;font-weight:800;margin-top:22px}
+#bkOk .sm{font-family:var(--serif);font-size:40px;font-weight:800;color:var(--esp);margin-top:6px}
+.rcpt{margin:22px 26px 0;background:#fff;border-radius:18px;padding:6px 16px;border:1px solid var(--line);text-align:left}
+.rcpt div{display:flex;justify-content:space-between;font-size:13px;padding:9px 0;color:var(--muted)}
+.rcpt div b{color:var(--ink)}
+.rcpt div+div{border-top:1px dashed var(--line)}
+
+/* teginish belgisi */
+#touch{position:absolute;left:0;top:0;width:0;height:0;z-index:200;opacity:0}
+#touch .dot{position:absolute;left:-26px;top:-26px;width:52px;height:52px;border-radius:50%;background:radial-gradient(circle,rgba(255,250,238,.85) 0 30%,rgba(234,200,122,.45) 60%);border:4px solid #d1a955;box-shadow:0 0 0 2px rgba(30,16,6,.55),0 8px 22px rgba(30,16,6,.4)}
+#touch .rip{position:absolute;left:-26px;top:-26px;width:52px;height:52px;border-radius:50%;border:3px solid var(--gold);opacity:0}
+
+/* outro */
+#outro{position:absolute;inset:0;opacity:0}
+#outroDisc{position:absolute;left:540px;top:1350px;width:10px;height:10px;border-radius:50%;background:radial-gradient(circle,#3b2615 0%,#1e1006 45%,#120802 100%);transform:translate(-50%,-50%) scale(0)}
+#outroIn{position:absolute;inset:0;text-align:center;color:var(--goldS)}
+#outroLogo{position:absolute;left:190px;top:470px;width:700px}
+#outroLogoMask{position:absolute;inset:0}
+#outroTitle{position:absolute;left:40px;right:40px;top:860px;font-family:var(--serif);font-weight:800;font-size:108px;line-height:1.05;color:var(--goldS)}
+#outroTitle .g{font-style:italic;background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent;padding-right:.08em}
+#outroTitle span{display:inline-block}
+#outroSub{position:absolute;left:80px;right:80px;top:1130px;font-size:40px;color:rgba(246,234,208,.78);line-height:1.4;font-weight:500}
+#outroCta{position:absolute;left:50%;top:1330px;transform:translateX(-50%);background:var(--grad);color:var(--esp);border-radius:80px;padding:30px 54px;font-weight:800;font-size:46px;display:flex;align-items:center;gap:20px;white-space:nowrap;box-shadow:0 24px 60px rgba(209,169,85,.35)}
+#outroFeat{position:absolute;left:0;right:0;top:1540px;display:flex;justify-content:center;gap:22px}
+#outroFeat span{border:2px solid rgba(234,200,122,.45);border-radius:60px;padding:16px 28px;font-size:30px;font-weight:700;color:var(--goldL)}
+
+#ctrl{position:fixed;left:12px;bottom:12px;z-index:999;font:13px system-ui;color:#eac87a}
+body.render #ctrl{display:none}
+</style>
+</head>
+<body>
+<div id="fit"><div id="stage">
+  <div id="bg"></div><div id="dots"></div>
+  <div class="blob" id="blob1"></div><div class="blob" id="blob2"></div><div class="blob" id="blob3"></div>
+  <div id="sparks"></div>
+
+  <!-- ===== INTRO ===== -->
+  <div id="intro">
+    <div id="iconRing"></div>
+    <div id="appIcon"><img src="../miniapp/public/mark.png" alt=""><div id="iconShine"></div></div>
+    <div id="brand">
+      <div id="brandWord"><span>I</span><span>P</span><span>P</span><span>O</span></div>
+      <div id="brandSub">by Fotima Zuhra shop</div>
+      <div id="brandLine"></div>
+    </div>
+    <div id="introTitle"><span class="w">Ilovadan</span><span class="w">qanday</span><br><span class="w">buyurtma</span><span class="w g">beriladi?</span></div>
+    <div id="introPill"><i></i>5 ta oson qadam</div>
+  </div>
+
+  <!-- ===== TELEFON ===== -->
+  <div id="phoneWrap">
+    <div id="disc"><div id="discGlow"></div></div>
+    <svg id="ring" viewBox="0 0 1000 1000"><circle cx="500" cy="500" r="490" fill="none" stroke="#d1a955" stroke-width="3" stroke-dasharray="10 16" opacity=".7"/>
+      <circle cx="500" cy="10" r="9" fill="#eac87a"/></svg>
+    <div id="phone"><div id="screen"><div id="island"></div>
+      <div id="app">
+
+        <!-- Telegram chat -->
+        <div class="scr" id="tg">
+          <div id="tgPattern"></div>
+          <div class="tgHead">
+            <div class="tgBack"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M15 5l-7 7 7 7"/></svg>Chatlar</div>
+            <div class="ava"><img src="../miniapp/public/mark.png" alt=""></div>
+            <div class="tgName"><b>IPPO by Fotima Zuhra</b><small>bot</small></div>
+          </div>
+          <div class="bubble me" id="b0" style="top:132px">/start<span class="tm">10:24 ✓✓</span></div>
+          <div class="bubble" id="b1" style="top:196px">Assalomu alaykum, <b>Aziza</b>! 👋<br>IPPO do‘koniga xush kelibsiz.<br>Koreyadan <b>original</b> jenshen, kollagen va kosmetika ✨<span class="tm">10:24</span></div>
+          <div class="inlineBtn" id="b2" style="top:338px"><span>🛍</span> Do‘konni ochish</div>
+          <div class="tgInput"><div class="tgMenu" id="tgMenu">▦ Do‘kon</div><div class="tgField">Xabar</div></div>
+        </div>
+
+        <!-- Splash -->
+        <div class="scr" id="splash">
+          <img class="mk" src="../miniapp/public/mark.png" alt="">
+          <img class="lg" src="../miniapp/public/logo.png" alt="">
+          <div id="splashBar"><b></b></div>
+        </div>
+
+        <!-- Home -->
+        <div class="scr" id="home">
+          <div id="homeScroll">
+            <div class="hh">
+              <img class="logo" src="../miniapp/public/logo.png" alt="">
+              <div class="hello">Salom, <b>Aziza</b> 👋</div>
+              <div class="search"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>Mahsulot qidirish...</div>
+            </div>
+            <div class="hero">
+              <svg viewBox="0 0 200 120" preserveAspectRatio="none"><path d="M0 100 C60 60 110 120 200 30" stroke="#eac87a" fill="none"/><path d="M20 120 C80 70 130 110 200 60" stroke="#d1a955" fill="none"/><path d="M60 0 C90 60 150 30 200 90" stroke="#9d804c" fill="none"/></svg>
+              <div class="k">MADE IN KOREA</div>
+              <h3>Koreyadan original go‘zallik</h3>
+              <div class="s">Jenshen · Kollagen · Kosmetika · Parfyum</div>
+              <span class="btn">Katalogni ochish ›</span>
+            </div>
+            <div class="trust"><span>✓ 100% original</span><span>🚚 Koreya bo‘ylab</span><span>💳 Naqd yoki karta</span></div>
+            <div class="sec"><h4>Kategoriyalar <small>Barchasi ›</small></h4>
+              <div class="cats">
+                <div class="cat"><div class="ci" style="background-image:url(../products/01_jenshen/03_qora_jenshen_royal_gold_seti_4_dona.jpg)"></div><div class="cn">Jenshen</div><div class="cc">4 ta</div></div>
+                <div class="cat"><div class="ci" style="background-image:url(../products/02_kollagen/05_red_apple_collagen_qizil_olma_kollageni.jpg)"></div><div class="cn">Kollagen</div><div class="cc">3 ta</div></div>
+                <div class="cat"><div class="ci" style="background-image:url(../products/03_vitaminlar/08_kalsiy_magniy_vitamin_d_sink_kompleksi.jpg)"></div><div class="cn">Vitaminlar</div><div class="cc">3 ta</div></div>
+                <div class="cat"><div class="ci" style="background-image:url(../products/04_soch_parvarishi/11_k_ginseng_jenshen_shampuni.jpg)"></div><div class="cn">Soch</div><div class="cc">3 ta</div></div>
+                <div class="cat"><div class="ci" style="background-image:url(../products/05_yuz_parvarishi/15_dr_ippo_yuz_parvarish_seti.jpg)"></div><div class="cn">Yuz parvarishi</div><div class="cc">5 ta</div></div>
+                <div class="cat"><div class="ci" style="background-image:url(../products/06_parfyumeriya/19_chanel_allure_homme.jpg)"></div><div class="cn">Parfyum</div><div class="cc">2 ta</div></div>
+              </div>
+            </div>
+            <div class="sec"><h4>Mashhur mahsulotlar <small>Barchasi ›</small></h4>
+              <div class="grid">
+                <div class="pc" id="pcMain"><div class="pi" style="background-image:url(../products/01_jenshen/01_punggi_red_ginseng_extract_gold_6_yillik.jpg)"></div><span class="tag">HIT</span><div class="pn">Punggi Red Ginseng Extract Gold</div><div class="pp">165 000 ₩</div><span class="add">+</span></div>
+                <div class="pc"><div class="pi" style="background-image:url(../products/01_jenshen/03_qora_jenshen_royal_gold_seti_4_dona.jpg)"></div><span class="tag">SET</span><div class="pn">Qora jenshen Royal Gold seti</div><div class="pp">65 000 ₩</div><span class="add">+</span></div>
+                <div class="pc"><div class="pi" style="background-image:url(../products/02_kollagen/05_red_apple_collagen_qizil_olma_kollageni.jpg)"></div><span class="tag">HIT</span><div class="pn">Red Apple Collagen</div><div class="pp">40 000 ₩</div><span class="add">+</span></div>
+                <div class="pc"><div class="pi" style="background-image:url(../products/05_yuz_parvarishi/15_dr_ippo_yuz_parvarish_seti.jpg)"></div><span class="tag">SET</span><div class="pn">Dr.IPPO yuz parvarish seti</div><div class="pp">55 000 ₩</div><span class="add">+</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Savatcha -->
+        <div class="scr" id="cartScr">
+          <div style="position:absolute;left:0;right:0;top:98px">
+            <div class="pgTitle">Savatcha</div>
+            <div class="cItem"><div class="im" style="background-image:url(../products/01_jenshen/01_punggi_red_ginseng_extract_gold_6_yillik.jpg)"></div>
+              <div style="flex:1"><b>Punggi Red Ginseng Extract Gold (6 yillik)</b><div class="pr">165 000 ₩</div></div>
+              <div class="qty" style="height:40px;gap:10px;padding:0 10px;font-size:15px"><i>−</i>1<i>+</i></div></div>
+            <div class="sum"><div><span>Mahsulotlar</span><span>165 000 ₩</span></div><div><span>Yetkazish</span><span class="green">Bepul</span></div><div class="tot"><span>Jami</span><span>165 000 ₩</span></div></div>
+          </div>
+          <div class="cartFoot"><div class="bigBtn" id="coBtn">Rasmiylashtirish · 165 000 ₩</div></div>
+        </div>
+
+        <!-- Mini-app sarlavhasi -->
+        <div class="maHead" id="maHead"><div class="x">✕ Yopish</div><div class="mid"><b>IPPO by Fotima Zuhra</b><small>mini-ilova</small></div><div class="dots"><i>•••</i></div></div>
+
+        <!-- Pastki menyu -->
+        <div id="nav">
+          <div class="ni on" id="nHome"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M3 10.5L12 3l9 7.5V20a1 1 0 01-1 1h-5v-6H9v6H4a1 1 0 01-1-1z"/></svg>Asosiy</div>
+          <div class="ni"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="2"/><rect x="14" y="3" width="7" height="7" rx="2"/><rect x="3" y="14" width="7" height="7" rx="2"/><rect x="14" y="14" width="7" height="7" rx="2"/></svg>Katalog</div>
+          <div class="ni" id="nCart"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M5 8h14l-1.2 11.2a2 2 0 01-2 1.8H8.2a2 2 0 01-2-1.8z"/><path d="M9 8V6a3 3 0 016 0v2"/></svg>Savatcha<span id="cartBadge">1</span></div>
+          <div class="ni"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 21c1.5-4 4.5-6 8-6s6.5 2 8 6"/></svg>Profil</div>
+        </div>
+
+        <div class="dim" id="dim"></div>
+
+        <!-- Mahsulot oynasi -->
+        <div class="sheet" id="pSheet" style="height:720px">
+          <div class="grab"></div>
+          <div id="psImg" style="background-image:url(../products/01_jenshen/01_punggi_red_ginseng_extract_gold_6_yillik.jpg)"></div>
+          <div class="ps">
+            <div class="chips"><span>HIT</span><span>✓ 100% original</span><span>Koreya</span></div>
+            <h2>Punggi Red Ginseng Extract Gold (6 yillik)</h2>
+            <div class="price">165 000 ₩</div>
+            <div class="desc">6 yillik qizil jenshen ekstrakti — immunitet va quvvat uchun. Kuniga 1 qoshiq.</div>
+          </div>
+          <div class="psFoot"><div class="qty"><i>−</i>1<i>+</i></div><div class="bigBtn" id="addBtn"><span id="addTxt">🛍 Savatchaga</span></div></div>
+        </div>
+        <div id="flyImg" style="background-image:url(../products/01_jenshen/01_punggi_red_ginseng_extract_gold_6_yillik.jpg)"></div>
+
+        <!-- Rasmiylashtirish -->
+        <div class="sheet" id="coSheet" style="height:722px">
+          <div class="grab"></div>
+          <div id="coWin" style="position:absolute;left:0;right:0;top:18px;bottom:88px;overflow:hidden">
+          <div id="coBody">
+            <div class="sheetTitle">Buyurtmani rasmiylashtirish</div>
+            <div class="fld"><div class="l">Ismingiz</div><div class="in" id="fName"></div></div>
+            <div class="fld"><div class="l">Telefon</div><div class="in" id="fPhone"></div></div>
+            <div class="fld"><div class="l">Hudud</div><div class="in" id="fRegion" style="justify-content:space-between"></div></div>
+            <div class="fld"><div class="l">Manzil</div><div class="in" id="fAddr"></div></div>
+            <div class="fld"><div class="l">To‘lov usuli</div>
+              <div class="pms">
+                <div class="pm on" id="pmCash"><div class="pic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="6" width="20" height="12" rx="2"/><circle cx="12" cy="12" r="2.5"/></svg></div><div class="pt"><b>Naqd pul</b><small>Yetkazganda to‘laysiz</small></div><div class="rad"><i></i></div></div>
+                <div class="pm" id="pmCard"><div class="pic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20M6 15h4"/></svg></div><div class="pt"><b>Kartaga o‘tkazma</b><small>O‘tkazib, chek rasmini yuborasiz</small></div><div class="rad"><i></i></div></div>
+              </div>
+            </div>
+            <div class="sum" style="margin:14px 0 0"><div><span>Mahsulotlar</span><span>165 000 ₩</span></div><div><span>Yetkazish</span><span class="green">Bepul</span></div><div class="tot"><span>Jami</span><span>165 000 ₩</span></div></div>
+          </div></div>
+          <div class="psFoot"><div class="bigBtn" id="confirmBtn">Buyurtmani tasdiqlash · 165 000 ₩</div></div>
+        </div>
+
+        <!-- Karta to'lovi -->
+        <div class="sheet" id="paySheet" style="height:722px">
+          <div class="grab"></div>
+          <div style="padding:0 18px" id="payBody">
+            <div class="payHead"><div class="pic"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20M6 15h4"/></svg></div><div><b>Kartaga o‘tkazma</b><small>Buyurtma #1024</small></div></div>
+            <div class="hint">Quyidagi kartaga summani o‘tkazing va chek rasmini yuklang.</div>
+            <div id="bankCard">
+              <svg class="foil" viewBox="0 0 340 204" preserveAspectRatio="none"><path d="M-10 170 C80 110 170 200 350 70" stroke="#eac87a" stroke-opacity=".35" fill="none" stroke-width="1.2"/><path d="M-10 190 C90 130 190 210 350 100" stroke="#d1a955" stroke-opacity=".25" fill="none"/><path d="M180 -10 C200 60 280 40 350 120" stroke="#9d804c" stroke-opacity=".35" fill="none"/></svg>
+              <div class="top"><span>IPPO · KARTA</span><img src="../miniapp/public/mark.png" alt=""></div>
+              <div class="chip"></div>
+              <div class="num" id="cardNum">9400 •••• •••• 2026 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15V5a2 2 0 012-2h10"/></svg></div>
+              <div class="hol">FOTIMA ZUHRA</div>
+              <div class="shine" id="cardShine"></div>
+            </div>
+            <div class="amt"><span>Summa</span><b>165 000 ₩ <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15V5a2 2 0 012-2h10"/></svg></b></div>
+            <div id="upl"><div class="th"><em></em><i style="top:34px"></i><i style="top:40px;right:14px"></i></div><div style="flex:1"><div style="font-weight:800;font-size:13.5px" id="uplTxt">chek_165000.jpg</div><div class="bar"><b id="uplBar"></b></div></div></div>
+          </div>
+          <div class="psFoot" id="payFoot" style="flex-direction:column;gap:6px"><div class="bigBtn" id="uploadBtn" style="flex:none">📷 Chek rasmini yuklash</div><div style="text-align:center;font-weight:700;color:var(--muted);font-size:14px;padding-top:4px">Keyinroq to‘layman</div></div>
+          <div id="payDone">
+            <div class="doneC"><svg width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="#1e1006" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path id="doneTick" d="M5 12.5l4.5 4.5L19 7.5" stroke-dasharray="24" stroke-dashoffset="24"/></svg></div>
+            <h3>Chek yuborildi!</h3>
+            <p>Tekshirib, botda xabar beramiz.<br>Buyurtmangiz tez orada yo‘lga chiqadi.</p>
+            <div class="bigBtn dark" style="margin:26px 24px 0;flex:none">OK</div>
+          </div>
+        </div>
+
+        <!-- Bank ilovasi -->
+        <div class="scr" id="bank">
+          <div class="bkHead"><span class="bk">‹ Orqaga</span>Kartadan kartaga</div>
+          <div id="bkBody">
+            <div class="bkFrom"><div><small>Mening kartam</small><b>•••• 7788</b></div><div style="text-align:right"><small>Balans</small><b>1 250 000 ₩</b></div></div>
+            <div class="bkLbl">Qabul qiluvchi karta</div>
+            <div class="bkIn" id="bkCard"><span id="bkCardTxt" style="color:#b9aa97;font-weight:500">Karta raqami</span></div>
+            <div class="recv" id="bkRecv"><i>FZ</i>FOTIMA ZUHRA ✓</div>
+            <div class="bkLbl">Summa</div>
+            <div class="bkIn" id="bkAmt"><span id="bkAmtTxt" style="color:#b9aa97;font-weight:500">0 ₩</span></div>
+          </div>
+          <div class="paste" id="paste">Qo‘yish</div>
+          <div id="bkBtn"><span>O‘tkazish</span></div>
+          <div id="bkOk">
+            <div class="doneC" style="margin-top:50px"><svg width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="#1e1006" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path id="bkTick" d="M5 12.5l4.5 4.5L19 7.5" stroke-dasharray="24" stroke-dashoffset="24"/></svg></div>
+            <h3>O‘tkazma bajarildi</h3>
+            <div class="sm">165 000 ₩</div>
+            <div class="rcpt"><div><span>Qabul qiluvchi</span><b>FOTIMA ZUHRA</b></div><div><span>Karta</span><b>9400 •••• 2026</b></div><div><span>Holat</span><b style="color:#2f7d4f">Muvaffaqiyatli</b></div></div>
+            <div style="margin-top:18px;font-weight:800;color:var(--gold2);font-size:14px">⤓ Chek saqlandi</div>
+          </div>
+        </div>
+
+        <div id="toast">✓ Nusxalandi</div>
+        <div class="sbar" id="sbar"><span>9:41</span><span class="ic">
+          <svg width="18" height="12" viewBox="0 0 18 12" fill="currentColor"><rect x="0" y="8" width="3" height="4" rx="1"/><rect x="5" y="5" width="3" height="7" rx="1"/><rect x="10" y="2.5" width="3" height="9.5" rx="1"/><rect x="15" y="0" width="3" height="12" rx="1"/></svg>
+          <svg width="16" height="12" viewBox="0 0 16 12" fill="currentColor"><path d="M8 11.5l2.3-2.6a3.3 3.3 0 00-4.6 0zM3.4 6.6a6.5 6.5 0 019.2 0l1.5-1.6a8.7 8.7 0 00-12.2 0zM.5 3.4a10.8 10.8 0 0115 0L16 2.9A12 12 0 000 2.9z"/></svg>
+          <svg width="26" height="12" viewBox="0 0 26 12"><rect x=".5" y=".5" width="22" height="11" rx="3" fill="none" stroke="currentColor" opacity=".5"/><rect x="2" y="2" width="17" height="8" rx="1.8" fill="currentColor"/><rect x="23.5" y="4" width="1.8" height="4" rx=".9" fill="currentColor" opacity=".5"/></svg></span></div>
+        <div id="touch"><div class="rip"></div><div class="dot"></div></div>
+      </div>
+    </div></div>
+  </div>
+
+  <!-- ===== SARLAVHA ===== -->
+  <div id="head">
+    <div id="prog"><div class="seg"><b></b></div><div class="seg"><b></b></div><div class="seg"><b></b></div><div class="seg"><b></b></div><div class="seg"><b></b></div></div>
+    <div id="badge"><div id="badgeNum"><span id="bn0">1</span><span id="bn1">2</span></div><div id="badgeTxt">QADAM</div></div>
+    <div id="titles"></div>
+  </div>
+
+  <!-- ===== OUTRO ===== -->
+  <div id="outro">
+    <div id="outroDisc"></div>
+    <div id="outroIn">
+      <img id="outroLogo" src="../miniapp/public/logo.png" alt="IPPO">
+      <div id="outroTitle"><span>Tayyor!</span> <span class="g">Buyurtma</span><br><span>qabul qilindi</span></div>
+      <div id="outroSub">Koreya bo‘ylab yetkazib beramiz.<br>Naqd yoki karta orqali to‘lang.</div>
+      <div id="outroCta"><svg width="50" height="50" viewBox="0 0 24 24" fill="#1e1006"><path d="M21.9 4.3l-3.2 15.1c-.2 1-.9 1.3-1.8.8l-4.9-3.6-2.4 2.3c-.3.3-.5.5-1 .5l.4-5 9.1-8.2c.4-.4-.1-.6-.6-.2L6.2 13 1.4 11.5c-1-.3-1-1 .2-1.5L20.6 2.8c.9-.3 1.6.2 1.3 1.5z"/></svg>@IPPO_by_fotimazuhrabot</div>
+      <div id="outroFeat"><span>✓ 100% original</span><span>✦ Koreyadan</span></div>
+    </div>
+  </div>
+
+  <div id="sweep"></div>
+  <div id="confettiLayer" style="position:absolute;inset:0;pointer-events:none"></div>
+</div></div>
+<div id="ctrl"><button id="play">▶ / ❚❚</button> <input id="scrub" type="range" min="0" max="46" step="0.01" value="0" style="width:420px;vertical-align:middle"> <span id="tlabel">0.00</span></div>
+
+<script>
+/* ============ yordamchilar ============ */
+const $ = (s) => document.querySelector(s);
+const clamp = (v, a = 0, b = 1) => Math.min(b, Math.max(a, v));
+const lerp = (a, b, p) => a + (b - a) * p;
+const E = {
+  lin: (x) => x,
+  out: (x) => 1 - Math.pow(1 - x, 3),
+  in: (x) => x * x * x,
+  io: (x) => (x < 0.5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2),
+  back: (x) => { const c1 = 1.70158, c3 = c1 + 1; return 1 + c3 * Math.pow(x - 1, 3) + c1 * Math.pow(x - 1, 2); },
+  expo: (x) => (x === 1 ? 1 : 1 - Math.pow(2, -10 * x)),
+  elastic: (x) => x === 0 ? 0 : x === 1 ? 1 : Math.pow(2, -10 * x) * Math.sin((x * 10 - 0.75) * ((2 * Math.PI) / 3)) + 1,
+};
+// t vaqtida [a,b] oralig'idagi progress (0..1)
+const P = (t, a, b, e = E.out) => e(clamp((t - a) / (b - a)));
+function css(el, o) {
+  if (typeof el === 'string') el = $(el);
+  const tf = [];
+  if (o.x != null || o.y != null) tf.push(`translate(${o.x || 0}px,${o.y || 0}px)`);
+  if (o.tf) tf.push(o.tf);
+  if (o.rx != null) tf.push(`rotateX(${o.rx}deg)`);
+  if (o.ry != null) tf.push(`rotateY(${o.ry}deg)`);
+  if (o.r != null) tf.push(`rotate(${o.r}deg)`);
+  if (o.s != null) tf.push(`scale(${o.s})`);
+  el.style.transform = tf.join(' ');
+  if (o.o != null) el.style.opacity = o.o;
+  if (o.blur != null) el.style.filter = o.blur > 0.05 ? `blur(${o.blur}px)` : 'none';
+  if (o.vis != null) el.style.visibility = o.vis ? 'visible' : 'hidden';
+}
+// pulsatsiyasiz: kirish (in) va chiqish (out) progress bilan ko'rinish
+const show = (t, a, b) => (t >= a && t < b);
+
+/* ============ vaqt jadvali (soniya) ============ */
+const DUR = 46;
+const STEPS = [
+  { a: 3.9, b: 10.6, t: ['Ilovani', 'oching'], p: 'Telegram’da <b>@IPPO_by_fotimazuhrabot</b> ni oching va <b>«Do‘konni ochish»</b> tugmasini bosing' },
+  { a: 10.6, b: 16.6, t: ['Mahsulotni', 'tanlang'], p: 'Kategoriyalar va mashhur mahsulotlardan o‘zingizga keragini toping' },
+  { a: 16.6, b: 21.9, t: ['Savatchaga', 'qo‘shing'], p: '<b>«Savatchaga»</b> tugmasini bosing va savatchani oching' },
+  { a: 21.9, b: 29.9, t: ['Ma’lumotlarni', 'kiriting'], p: 'Ism, telefon va manzilni yozing, <b>«Kartaga o‘tkazma»</b> ni tanlang' },
+  { a: 29.9, b: 41.0, t: ['Karta orqali', 'to‘lang'], p: 'Summani kartaga o‘tkazing va <b>chek rasmini</b> yuklang — tamom!' },
+];
+const TAPS = [
+  { t: 7.0, el: '#b2' },
+  { t: 12.9, el: '#pcMain' },
+  { t: 17.3, el: '#addBtn' },
+  { t: 19.25, el: '#nCart' },
+  { t: 21.5, el: '#coBtn' },
+  { t: 25.55, el: '#fRegion' },
+  { t: 28.45, el: '#pmCard' },
+  { t: 29.35, el: '#confirmBtn' },
+  { t: 32.1, el: '#cardNum' },
+  { t: 34.05, el: '#bkCard' },
+  { t: 34.45, el: '#paste' },
+  { t: 36.0, el: '#bkBtn' },
+  { t: 38.0, el: '#uploadBtn' },
+];
+
+/* ============ sarlavhalarni yaratish ============ */
+const titles = $('#titles');
+STEPS.forEach((s, i) => {
+  const d = document.createElement('div');
+  d.className = 'stepT';
+  d.innerHTML = `<h1><span>${s.t[0]}</span> <span class="g">${s.t[1]}</span></h1><p>${s.p}</p>`;
+  titles.appendChild(d);
+  s.el = d;
+  s.fit = () => { const h = d.querySelector('h1'); const dsp = d.style.display; d.style.display = 'block'; h.style.fontSize = ''; const w = h.scrollWidth; if (w > 990) h.style.fontSize = (104 * 990 / w) + 'px'; d.style.display = dsp; };
+});
+
+/* uchqunlar (logodagi ✦ yulduzcha) */
+const STAR = '<svg viewBox="0 0 24 24"><path d="M12 0c.6 6.4 5.6 11.4 12 12-6.4.6-11.4 5.6-12 12-.6-6.4-5.6-11.4-12-12C6.4 11.4 11.4 6.4 12 0z" fill="currentColor"/></svg>';
+const sparkData = [
+  [120, 260, 1.0, 0.0], [930, 200, 0.7, 1.3], [980, 760, 1.2, 2.1], [70, 900, 0.8, 0.7], [160, 1720, 0.9, 1.9],
+  [940, 1680, 1.1, 0.4], [520, 150, 0.6, 2.6], [860, 1180, 0.7, 3.1], [210, 1260, 0.6, 1.1],
+];
+const sparks = sparkData.map(([x, y, s, ph]) => {
+  const d = document.createElement('div');
+  d.className = 'spark';
+  d.style.left = x + 'px'; d.style.top = y + 'px';
+  d.innerHTML = STAR;
+  $('#sparks').appendChild(d);
+  return { d, s, ph };
+});
+
+/* konfetti (determinstik) */
+function rnd(seed) { let s = seed; return () => ((s = (s * 16807) % 2147483647) - 1) / 2147483646; }
+const conf = [];
+{
+  const r = rnd(42);
+  const cols = ['#eac87a', '#d1a955', '#9d804c', '#58401b', '#f6ead0', '#1e1006'];
+  for (let i = 0; i < 70; i++) {
+    const d = document.createElement('div');
+    d.className = 'confetti';
+    d.style.background = cols[i % cols.length];
+    if (i % 3 === 0) { d.style.width = '14px'; d.style.height = '14px'; d.style.borderRadius = '50%'; }
+    $('#confettiLayer').appendChild(d);
+    const ang = -Math.PI / 2 + (r() - 0.5) * 2.4;
+    const sp = 900 + r() * 1100;
+    conf.push({ d, vx: Math.cos(ang) * sp, vy: Math.sin(ang) * sp, rot: r() * 720 - 360, delay: r() * 0.15, x0: 540 + (r() - 0.5) * 160, y0: 1180 });
+  }
+}
+
+/* matn yozish */
+function typeInto(el, text, t, a, b, ph, focus) {
+  const n = Math.round(clamp((t - a) / (b - a)) * text.length);
+  const typing = t >= a - 0.25 && t < b + 0.35;
+  const caret = typing && (Math.floor(t * 3) % 2 === 0 || (t >= a && t <= b)) ? '<span class="caret"></span>' : '';
+  el.classList.toggle('focus', typing && focus !== false);
+  if (n === 0) el.innerHTML = caret + `<span class="ph">${ph}</span>`;
+  else el.innerHTML = text.slice(0, n) + caret;
+}
+
+/* ============ asosiy render(t) ============ */
+const app = $('#app');
+const APP_SCALE = 532 / 390;
+app.style.transform = `scale(${APP_SCALE})`;
+
+function seek(t) {
+  /* ---- fon harakati ---- */
+  css('#blob1', { x: Math.sin(t * 0.35) * 60, y: Math.cos(t * 0.3) * 40 });
+  css('#blob2', { x: Math.cos(t * 0.28) * 70, y: Math.sin(t * 0.33) * 60 });
+  css('#blob3', { x: Math.sin(t * 0.22 + 1) * 50, y: Math.cos(t * 0.25) * 30 });
+  css('#dots', { x: (t * 6) % 38, y: (t * 4) % 38 });
+  sparks.forEach(({ d, s, ph }) => {
+    const k = (Math.sin(t * 1.6 + ph * 2) + 1) / 2;
+    css(d, { s: s * (0.5 + k * 0.6), r: t * 30 + ph * 40, o: 0.25 + k * 0.6 });
+    d.style.color = t > 41.4 ? '#eac87a' : '#d1a955';
+  });
+  // qadam almashishida oltin nur
+  let sw = -1;
+  [0.3, ...STEPS.map((s) => s.a), 41.1].forEach((a) => { if (t >= a - 0.2 && t < a + 0.9) sw = (t - (a - 0.2)) / 1.1; });
+  if (sw >= 0) css('#sweep', { x: lerp(-500, 1400, E.io(sw)), o: Math.sin(sw * Math.PI) * 0.9 });
+  else css('#sweep', { o: 0 });
+
+  /* ---- INTRO ---- */
+  const introOut = P(t, 3.4, 4.1, E.in);
+  $('#intro').style.display = t < 4.2 ? 'block' : 'none';
+  if (t < 4.2) {
+    const ic = P(t, 0.15, 0.95, E.back);
+    css('#appIcon', { s: lerp(0.3, 1, ic) * (1 - introOut * 0.4), r: lerp(-20, 0, ic), o: P(t, 0.15, 0.45), y: -introOut * 420 });
+    const mk = P(t, 0.5, 1.3, E.out);
+    $('#appIcon img').style.clipPath = `inset(${(1 - mk) * 100}% 0 0 0)`;
+    css('#iconShine', { x: lerp(-160, 420, P(t, 1.1, 1.8, E.io)) });
+    const rg = clamp((t - 0.8) / 0.9);
+    css('#iconRing', { s: lerp(0.75, 1.5, E.out(rg)), o: rg > 0 && rg < 1 ? (1 - rg) * 0.8 : 0 });
+    document.querySelectorAll('#brandWord span').forEach((sp, i) => {
+      const p = P(t, 0.9 + i * 0.11, 1.5 + i * 0.11, E.back);
+      css(sp, { y: lerp(120, 0, p) - introOut * 380, o: clamp(p * 2) * (1 - introOut), blur: (1 - p) * 10 });
+    });
+    css('#brandSub', { y: lerp(30, 0, P(t, 1.5, 2.0)) - introOut * 360, o: P(t, 1.5, 2.0) * (1 - introOut) });
+    css('#brandLine', { tf: `scaleX(${P(t, 1.6, 2.1, E.io)})`, y: -introOut * 360, o: 1 - introOut });
+    document.querySelectorAll('#introTitle .w').forEach((w, i) => {
+      const p = P(t, 1.9 + i * 0.12, 2.5 + i * 0.12, E.out);
+      css(w, { y: lerp(70, 0, p) - introOut * 300, o: p * (1 - introOut), blur: (1 - p) * 8 });
+    });
+    const pl = P(t, 2.5, 3.0, E.back);
+    css('#introPill', { tf: 'translateX(-50%)', y: -introOut * 260, s: lerp(0.6, 1, pl), o: clamp(pl * 1.5) * (1 - introOut) });
+    const pulse = (t * 1.4) % 1;
+    $('#introPill i').style.boxShadow = `0 0 0 ${pulse * 16}px rgba(209,169,85,${0.5 * (1 - pulse)})`;
+  }
+
+  /* ---- TELEFON ---- */
+  const inP = P(t, 3.7, 4.8, E.out);
+  const outP = P(t, 40.9, 41.7, E.in);
+  const floatY = Math.sin(t * 1.1) * 6;
+  css('#phone', {
+    y: lerp(1300, 0, inP) + floatY + outP * 1300,
+    rx: lerp(28, 0, inP) - outP * 10, ry: lerp(-18, 0, inP), r: lerp(-6, 0, inP) + outP * 6,
+    s: lerp(0.85, 1, inP),
+  });
+  css('#disc', { s: lerp(0.2, 1, P(t, 3.8, 4.8, E.back)) * (1 - outP * 0.1), o: P(t, 3.8, 4.3) * (1 - P(t, 41.6, 41.9)) });
+  css('#ring', { r: t * 12, s: lerp(0.6, 1, P(t, 4.0, 5.0, E.out)), o: P(t, 4.0, 4.6) * (1 - outP) });
+  $('#phoneWrap').style.display = t > 3.5 && t < 42 ? 'block' : 'none';
+
+  /* ---- SARLAVHA ---- */
+  const hIn = P(t, 3.9, 4.6, E.out), hOut = P(t, 40.8, 41.4, E.in);
+  css('#prog', { tf: 'translateX(-50%)', y: lerp(-40, 0, hIn) - hOut * 60, o: hIn * (1 - hOut) });
+  document.querySelectorAll('#prog .seg b').forEach((b, i) => {
+    const s = STEPS[i];
+    const p = clamp((t - s.a) / (s.b - s.a));
+    b.style.width = p * 100 + '%';
+    b.style.background = p >= 1 ? 'var(--esp)' : 'var(--grad)';
+  });
+  css('#badge', { tf: 'translateX(-50%)', s: lerp(0.5, 1, P(t, 4.0, 4.6, E.back)), o: P(t, 4.0, 4.3) * (1 - hOut), y: -hOut * 60 });
+  let si = 0; STEPS.forEach((s, i) => { if (t >= s.a) si = i; });
+  // raqam aylanishi
+  const flipP = P(t, STEPS[si].a, STEPS[si].a + 0.5, E.back);
+  $('#bn0').textContent = si; $('#bn1').textContent = si + 1;
+  css('#bn0', { y: si === 0 ? -60 : lerp(0, -60, flipP), o: si === 0 ? 0 : 1 - flipP });
+  css('#bn1', { y: si === 0 ? 0 : lerp(60, 0, flipP) });
+  STEPS.forEach((s, i) => {
+    const pIn = P(t, s.a + 0.05, s.a + 0.75, E.out);
+    const endT = i < STEPS.length - 1 ? STEPS[i + 1].a - 0.35 : 40.8;
+    const pOut = P(t, endT, endT + 0.35, E.in);
+    const vis = t >= s.a - 0.1 && t < endT + 0.4;
+    s.el.style.display = vis ? 'block' : 'none';
+    if (!vis) return;
+    const [w1, w2] = s.el.querySelectorAll('h1 span');
+    css(w1, { y: lerp(90, 0, pIn) - pOut * 60, o: pIn * (1 - pOut), blur: (1 - pIn) * 10 + pOut * 8 });
+    const p2 = P(t, s.a + 0.2, s.a + 0.95, E.back);
+    css(w2, { y: lerp(90, 0, p2) - pOut * 60, o: clamp(p2) * (1 - pOut), blur: (1 - clamp(p2)) * 10 + pOut * 8, r: lerp(-6, 0, clamp(p2)) });
+    // oltin so'zda yaltirash
+    w2.style.backgroundImage = (() => { const c = ((t - s.a) * 45) % 160 - 30; return `linear-gradient(110deg,#9d804c 0%,#c9a04e ${c - 12}%,#e2b85e ${c}%,#c9a04e ${c + 12}%,#9d804c 100%)`; })();
+    const pp = P(t, s.a + 0.35, s.a + 1.0);
+    css(s.el.querySelector('p'), { y: lerp(30, 0, pp) - pOut * 40, o: pp * (1 - pOut) });
+  });
+
+  renderApp(t);
+  renderTouch(t);
+  renderOutro(t);
+}
+
+/* ============ ilova ichidagi ekranlar ============ */
+function renderApp(t) {
+  if (t < 3.5 || t > 42) return;
+  const W = 390, H = 830;
+
+  // Telegram chat
+  const tgVis = t < 7.9;
+  $('#tg').style.display = tgVis ? 'block' : 'none';
+  if (tgVis) {
+    const b0 = P(t, 4.6, 5.0, E.back), b1 = P(t, 5.3, 5.75, E.back), b2 = P(t, 5.75, 6.15, E.back);
+    css('#b0', { s: lerp(0.4, 1, b0), o: clamp(b0 * 2) });
+    css('#b1', { s: lerp(0.4, 1, b1), o: clamp(b1 * 2) });
+    const press = t > 6.95 && t < 7.15 ? 0.95 : 1;
+    css('#b2', { y: lerp(20, 0, b2), o: clamp(b2 * 2), s: press });
+    $('#b2').style.background = t > 6.95 && t < 7.4 ? 'rgba(30,16,6,.9)' : 'rgba(30,16,6,.72)';
+  }
+  // splash: tegilgan joydan aylana bo'lib ochiladi
+  const spVis = t >= 7.05 && t < 9.9;
+  $('#splash').style.display = spVis ? 'flex' : 'none';
+  if (spVis) {
+    const rv = P(t, 7.05, 7.75, E.io);
+    $('#splash').style.clipPath = `circle(${rv * 950}px at 162px 360px)`;
+    css('#splash .mk', { s: lerp(0.4, 1, P(t, 7.4, 8.1, E.back)) * (1 + Math.sin(t * 5) * 0.015), o: P(t, 7.4, 7.8) });
+    const lg = P(t, 7.9, 8.6, E.out);
+    $('#splash .lg').style.clipPath = `inset(0 ${(1 - lg) * 100}% 0 0)`;
+    $('#splashBar b').style.width = P(t, 8.0, 9.2, E.io) * 100 + '%';
+    css('#splash', { o: 1 - P(t, 9.4, 9.85) });
+  }
+  // mini-app sarlavhasi va menyu
+  const maVis = t >= 7.5;
+  $('#maHead').style.display = maVis ? 'flex' : 'none';
+  css('#maHead', { y: lerp(-100, 0, P(t, 9.25, 9.8)) });
+  $('#nav').style.display = t >= 9.3 ? 'flex' : 'none';
+  css('#nav', { y: lerp(80, 0, P(t, 9.35, 9.9)) });
+
+  // home
+  const homeVis = t >= 9.3 && t < 20.2;
+  $('#home').style.display = homeVis ? 'block' : 'none';
+  if (homeVis) {
+    const hp = P(t, 9.3, 10.0, E.out);
+    css('#home', { y: lerp(60, 0, hp), o: hp, s: lerp(1.04, 1, hp) });
+    const sc = P(t, 11.1, 12.4, E.io) * 520;
+    css('#homeScroll', { y: -sc });
+    // kartalar ketma-ket paydo bo'ladi
+    document.querySelectorAll('#home .cat').forEach((c, i) => {
+      const p = P(t, 9.6 + i * 0.07, 10.2 + i * 0.07, E.back);
+      css(c, { s: lerp(0.7, 1, p), o: clamp(p * 1.5) });
+    });
+    document.querySelectorAll('#home .pc').forEach((c, i) => {
+      const p = P(t, 11.6 + i * 0.1, 12.2 + i * 0.1, E.back);
+      const press = c.id === 'pcMain' && t > 12.85 && t < 13.05 ? 0.96 : 1;
+      css(c, { y: lerp(40, 0, p), o: clamp(p * 1.5), s: press });
+      if (c.id === 'pcMain') c.style.boxShadow = t > 12.4 && t < 13.2 ? `0 0 0 ${3 + Math.sin(t * 12) * 1.5}px rgba(209,169,85,.8)` : 'none';
+    });
+    const nh = t > 19.3 ? 0 : 1;
+    $('#nHome').classList.toggle('on', !!nh);
+    $('#nCart').classList.toggle('on', !nh);
+  } else {
+    $('#nHome').classList.toggle('on', t < 19.3);
+    $('#nCart').classList.toggle('on', t >= 19.3);
+  }
+
+  // mahsulot oynasi
+  const psIn = P(t, 13.0, 13.6, E.out), psOut = P(t, 18.35, 18.85, E.in);
+  const psVis = t >= 13.0 && t < 18.9;
+  $('#pSheet').style.display = psVis ? 'block' : 'none';
+  let dimO = 0;
+  if (psVis) {
+    css('#pSheet', { y: lerp(760, 0, psIn) + psOut * 760 });
+    dimO = Math.max(dimO, psIn * (1 - psOut));
+    const z = 1 + P(t, 13.4, 16.5, E.io) * 0.08;
+    $('#psImg').style.backgroundSize = `${z * 100}% auto`;
+    const added = t >= 17.35;
+    $('#addTxt').textContent = added ? '✓ Qo‘shildi' : '🛍 Savatchaga';
+    $('#addBtn').style.background = added ? 'var(--esp)' : 'var(--grad)';
+    $('#addBtn').style.color = added ? 'var(--goldL)' : 'var(--esp)';
+    css('#addBtn', { s: t > 17.25 && t < 17.45 ? 0.95 : 1 });
+  }
+  // rasm savatchaga uchadi (parabola)
+  const fp = clamp((t - 17.4) / 0.8);
+  if (fp > 0 && fp < 1) {
+    const e = E.io(fp);
+    const x0 = 155, y0 = 150, x1 = 214, y1 = 780;
+    const x = lerp(x0, x1, e), y = lerp(y0, y1, e) - Math.sin(e * Math.PI) * 140;
+    css('#flyImg', { x: x - 40, y: y - 40, s: lerp(1.6, 0.25, e), r: e * 40, o: 1 });
+  } else css('#flyImg', { o: 0 });
+  const bp = P(t, 18.2, 18.6, E.elastic);
+  css('#cartBadge', { s: t < 18.2 ? 0 : bp });
+  css('#nCart svg', { s: t > 18.15 && t < 18.5 ? 1 + Math.sin((t - 18.15) / 0.35 * Math.PI) * 0.3 : 1 });
+
+  // savatcha
+  const ctVis = t >= 19.35 && t < 29.9;
+  $('#cartScr').style.display = ctVis ? 'block' : 'none';
+  if (ctVis) {
+    const cp = P(t, 19.35, 19.9, E.out);
+    css('#cartScr', { x: lerp(W, 0, cp) });
+    css('#home', { x: lerp(0, -W * 0.3, cp) });
+    const ip = P(t, 19.7, 20.3, E.back);
+    css('#cartScr .cItem', { x: lerp(80, 0, ip), o: clamp(ip * 1.5) });
+    css('#cartScr .sum', { y: lerp(40, 0, P(t, 19.9, 20.4)), o: P(t, 19.9, 20.4) });
+    css('#coBtn', { s: t > 21.45 && t < 21.65 ? 0.95 : 1 + (t > 20.5 && t < 21.4 ? Math.sin(t * 8) * 0.012 : 0) });
+  }
+
+  // rasmiylashtirish
+  const coIn = P(t, 21.65, 22.25, E.out), coOut = P(t, 29.5, 29.95, E.in);
+  const coVis = t >= 21.65 && t < 30;
+  $('#coSheet').style.display = coVis ? 'block' : 'none';
+  if (coVis) {
+    css('#coSheet', { y: lerp(780, 0, coIn) + coOut * 780 });
+    dimO = Math.max(dimO, coIn * (1 - coOut));
+    typeInto($('#fName'), 'Aziza Karimova', t, 22.7, 23.6, 'Ism va familiya');
+    typeInto($('#fPhone'), '+82 10 1234 5678', t, 23.9, 25.1, '+82 10 1234 5678');
+    const reg = t >= 25.7;
+    $('#fRegion').innerHTML = (reg ? '<span>Seul</span>' : '<span class="ph">Hududni tanlang</span>') + '<span style="color:var(--gold2)">▾</span>';
+    $('#fRegion').classList.toggle('focus', t > 25.4 && t < 26.0);
+    typeInto($('#fAddr'), 'Gangnam-gu, Teheran-ro 12', t, 26.2, 27.3, 'Ko‘cha, uy, xonadon');
+    css('#coBody', { y: -P(t, 27.5, 28.2, E.io) * 250 });
+    const card = t >= 28.5;
+    $('#pmCash').classList.toggle('on', !card);
+    $('#pmCard').classList.toggle('on', card);
+    css('#pmCash .rad i', { s: card ? 0 : 1 });
+    css('#pmCard .rad i', { s: card ? P(t, 28.5, 28.8, E.back) : 0 });
+    css('#pmCard', { s: t > 28.4 && t < 28.6 ? 0.97 : 1 });
+    css('#confirmBtn', { s: t > 29.3 && t < 29.5 ? 0.95 : 1 });
+  }
+
+  // karta to'lovi
+  const pyIn = P(t, 29.8, 30.4, E.out);
+  const pyVis = t >= 29.8;
+  $('#paySheet').style.display = pyVis ? 'block' : 'none';
+  if (pyVis) {
+    css('#paySheet', { y: lerp(760, 0, pyIn) });
+    dimO = Math.max(dimO, pyIn);
+    const cf = P(t, 30.35, 31.25, E.back);
+    css('#bankCard', { rx: lerp(80, 0, cf), s: lerp(0.8, 1, cf), o: clamp(cf * 2), ry: Math.sin(t * 1.2) * 3 * cf });
+    css('#cardShine', { x: lerp(-160, 480, P(t, 31.0, 31.9, E.io)) + (t > 38.7 ? lerp(0, 0, 0) : 0) });
+    css('#cardNum', { s: t > 32.05 && t < 32.25 ? 0.96 : 1 });
+    $('#cardNum').style.color = t > 32.1 && t < 33.2 ? '#eac87a' : '#fff';
+    const up = clamp((t - 38.1) / 1.0);
+    css('#upl', { o: t > 38.05 ? 1 : 0, y: lerp(20, 0, P(t, 38.05, 38.3)) });
+    $('#uplBar').style.width = E.io(up) * 100 + '%';
+    $('#uplTxt').textContent = up >= 1 ? '✓ Yuklandi' : 'Yuklanmoqda… ' + Math.round(E.io(up) * 100) + '%';
+    css('#uploadBtn', { s: t > 37.95 && t < 38.15 ? 0.95 : 1 });
+    const dn = P(t, 39.25, 39.7, E.out);
+    css('#payBody', { o: 1 - dn, y: -dn * 30 });
+    css('#payFoot', { o: 1 - dn });
+    css('#payDone', { o: dn, s: lerp(0.85, 1, P(t, 39.25, 39.8, E.back)) });
+    $('#doneTick').setAttribute('stroke-dashoffset', 24 * (1 - P(t, 39.5, 40.0, E.io)));
+  }
+
+  // toast
+  const tp = t >= 32.15 && t < 33.4;
+  css('#toast', { tf: 'translateX(-50%)', o: tp ? P(t, 32.15, 32.35) * (1 - P(t, 33.1, 33.4)) : 0, y: tp ? lerp(-20, 0, P(t, 32.15, 32.4, E.back)) : 0 });
+
+  // bank ilovasi (kartaga o'tkazma)
+  const bkIn = P(t, 33.3, 33.85, E.out), bkOut = P(t, 37.2, 37.7, E.in);
+  const bkVis = t >= 33.3 && t < 37.75;
+  $('#bank').style.display = bkVis ? 'block' : 'none';
+  if (bkVis) {
+    css('#bank', { x: lerp(W, 0, bkIn) + bkOut * W });
+    $('#bkCard').classList.toggle('focus', t > 34.0 && t < 34.7);
+    const pasteV = t > 34.15 && t < 34.55;
+    const pr = $('#bkCard').getBoundingClientRect(), ar = app.getBoundingClientRect();
+    const sc = pr.width / 358;
+    $('#paste').style.left = (pr.left - ar.left) / (ar.width / W) + 20 + 'px';
+    $('#paste').style.top = (pr.top - ar.top) / (ar.height / H) - 42 + 'px';
+    css('#paste', { o: pasteV ? 1 : 0, s: pasteV ? lerp(0.6, 1, P(t, 34.15, 34.3, E.back)) : 1 });
+    const pasted = t >= 34.5;
+    $('#bkCardTxt').textContent = pasted ? '9400 •••• •••• 2026' : 'Karta raqami';
+    $('#bkCardTxt').style.color = pasted ? 'var(--ink)' : '#b9aa97';
+    $('#bkCardTxt').style.fontWeight = pasted ? '700' : '500';
+    const rv = P(t, 34.7, 35.0, E.back);
+    css('#bkRecv', { o: clamp(rv), y: lerp(-8, 0, rv) });
+    $('#bkAmt').classList.toggle('focus', t > 35.0 && t < 35.75);
+    const amtTxt = '165 000 ₩';
+    const an = Math.round(P(t, 35.05, 35.6, E.lin) * 7);
+    const digits = '165000'.slice(0, Math.min(6, an));
+    const shown = digits ? Number(digits).toLocaleString('ru-RU').replace(/ /g, ' ') + ' ₩' : '0 ₩';
+    $('#bkAmtTxt').textContent = t >= 35.6 ? amtTxt : shown;
+    $('#bkAmtTxt').style.color = digits ? 'var(--ink)' : '#b9aa97';
+    $('#bkAmtTxt').style.fontWeight = digits ? '800' : '500';
+    css('#bkBtn', { s: t > 35.95 && t < 36.15 ? 0.95 : 1 });
+    $('#bkBtn span').textContent = t > 36.0 && t < 36.3 ? 'Yuborilmoqda…' : 'O‘tkazish · 165 000 ₩';
+    const ok = P(t, 36.3, 36.65, E.out);
+    css('#bkOk', { o: ok, s: lerp(0.95, 1, ok) });
+    $('#bkOk .doneC').style.transform = `scale(${lerp(0.4, 1, P(t, 36.3, 36.75, E.back))})`;
+    $('#bkTick').setAttribute('stroke-dashoffset', 24 * (1 - P(t, 36.5, 36.9, E.io)));
+  }
+
+  $('#dim').style.opacity = dimO;
+  $('#dim').style.display = dimO > 0.001 ? 'block' : 'none';
+
+  // status bar rangi
+  const dark = t >= 7.3 && t < 9.6;
+  $('#sbar').style.color = dark ? '#f6ead0' : '#23160b';
+
+  // telefondagi konfetti
+  const cp = clamp((t - 39.35) / 1.6);
+  conf.forEach((c) => {
+    const tt = clamp(cp * 1.6 - c.delay) ;
+    if (cp <= 0 || tt <= 0 || tt >= 1) { c.d.style.opacity = 0; return; }
+    const s = tt * 1.25;
+    const x = c.x0 + c.vx * s * 0.55, y = c.y0 + c.vy * s * 0.55 + 1300 * s * s;
+    css(c.d, { x, y, r: c.rot * s * 2, o: 1 - Math.pow(tt, 3) });
+  });
+}
+
+/* ============ teginish belgisi ============ */
+function renderTouch(t) {
+  const touch = $('#touch');
+  const tap = TAPS.find((k) => t >= k.t - 0.55 && t < k.t + 0.5);
+  if (!tap) { touch.style.opacity = 0; return; }
+  const el = $(tap.el);
+  const r = el.getBoundingClientRect(), ar = app.getBoundingClientRect();
+  const k = ar.width / 390;
+  let x = (r.left + r.width / 2 - ar.left) / k, y = (r.top + r.height / 2 - ar.top) / k;
+  if (tap.el === '#pcMain') { y -= 20; }
+  const a = P(t, tap.t - 0.55, tap.t - 0.1, E.out);
+  const out = P(t, tap.t + 0.2, tap.t + 0.5);
+  css(touch, { x: x + (1 - a) * 40, y: y + (1 - a) * 60, o: a * (1 - out) });
+  const pr = t >= tap.t && t < tap.t + 0.2 ? 0.8 : 1;
+  css(touch.querySelector('.dot'), { s: pr });
+  const rp = clamp((t - tap.t) / 0.5);
+  css(touch.querySelector('.rip'), { s: 1 + rp * 1.6, o: rp > 0 && rp < 1 ? 1 - rp : 0 });
+}
+
+/* ============ outro ============ */
+function renderOutro(t) {
+  const vis = t >= 41.0;
+  $('#outro').style.opacity = vis ? 1 : 0;
+  if (!vis) return;
+  const dp = P(t, 41.0, 41.9, E.io);
+  css('#outroDisc', { tf: 'translate(-50%,-50%)', s: dp * 460 });
+  const lg = P(t, 41.8, 42.7, E.out);
+  $('#outroLogo').style.clipPath = `inset(0 ${(1 - lg) * 100}% 0 0)`;
+  css('#outroLogo', { s: lerp(0.9, 1, lg) + Math.sin(t * 1.2) * 0.008, y: Math.sin(t * 1.2) * 6 });
+  $('#outroLogo').style.filter = `drop-shadow(0 0 ${20 + Math.sin(t * 2) * 10}px rgba(234,200,122,.35))`;
+  document.querySelectorAll('#outroTitle span').forEach((s, i) => {
+    const p = P(t, 42.4 + i * 0.15, 43.1 + i * 0.15, E.back);
+    css(s, { y: lerp(80, 0, p), o: clamp(p * 1.5), blur: (1 - clamp(p)) * 8 });
+  });
+  const sb = P(t, 43.0, 43.6);
+  css('#outroSub', { y: lerp(30, 0, sb), o: sb });
+  const ct = P(t, 43.4, 44.0, E.back);
+  css('#outroCta', { tf: 'translateX(-50%)', s: lerp(0.5, 1, ct) * (1 + (t > 44.2 ? Math.sin((t - 44.2) * 4) * 0.02 : 0)), o: clamp(ct * 1.5) });
+  const ft = P(t, 43.8, 44.4);
+  css('#outroFeat', { y: lerp(30, 0, ft), o: ft });
+  // fon uchqunlari to'q fonda ko'rinadi — #sparks sahna ustiga chiqariladi
+  $('#sparks').style.zIndex = t > 41.4 ? 5 : 0;
+  $('#sparks').style.position = 'absolute'; $('#sparks').style.inset = '0';
+  // oxirida sekin qorayish
+  $('#stage').style.filter = t > 45.5 ? `brightness(${1 - P(t, 45.5, 46, E.lin) * 0.0})` : 'none';
+}
+
+/* ============ boshqaruv ============ */
+window.seek = seek;
+document.fonts.ready.then(() => { STEPS.forEach((s) => s.fit()); seek(cur); });
+STEPS.forEach((s) => s.fit());
+window.DUR = DUR;
+let playing = !/render/.test(location.search), t0 = performance.now(), cur = 0;
+if (!playing) document.body.classList.add('render');
+function fit() {
+  const s = Math.min(innerWidth / 1080, innerHeight / 1920);
+  $('#stage').style.transform = document.body.classList.contains('render') ? 'none' : `scale(${s})`;
+}
+addEventListener('resize', fit); fit();
+function loop(now) {
+  if (playing) { cur = ((now - t0) / 1000) % DUR; seek(cur); $('#scrub').value = cur; $('#tlabel').textContent = cur.toFixed(2); }
+  requestAnimationFrame(loop);
+}
+$('#play').onclick = () => { playing = !playing; t0 = performance.now() - cur * 1000; };
+$('#scrub').oninput = (e) => { playing = false; cur = +e.target.value; seek(cur); $('#tlabel').textContent = cur.toFixed(2); };
+seek(0);
+if (playing) requestAnimationFrame(loop);
+</script>
+</body>
+</html>
