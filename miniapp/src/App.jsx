@@ -38,6 +38,18 @@ function initialLang() {
   return tgUser?.language_code === 'ru' ? 'ru' : 'uz';
 }
 
+// Oxirgi ma'lumotlar telefonda saqlanadi — server uxlasa ham ilova darhol ochiladi
+const CACHE_KEY = 'ippo_cache_v1';
+function loadCache() {
+  try {
+    const c = JSON.parse(ls.get(CACHE_KEY) || 'null');
+    return c && Array.isArray(c.products) ? c : null;
+  } catch {
+    return null;
+  }
+}
+const cached = loadCache();
+
 function loadSeen() {
   try {
     return new Set(JSON.parse(ls.get('ippo_seen_stories') || '[]'));
@@ -48,9 +60,9 @@ function loadSeen() {
 
 export default function App() {
   const [lang, setLangState] = useState(initialLang);
-  const [config, setConfig] = useState(null);
-  const [products, setProducts] = useState(null);
-  const [stories, setStories] = useState([]);
+  const [config, setConfig] = useState(cached?.config || null);
+  const [products, setProducts] = useState(cached?.products || null);
+  const [stories, setStories] = useState(cached?.stories || []);
   const [user, setUser] = useState(null);
   const [loadError, setLoadError] = useState(false);
   const [waking, setWaking] = useState(false);
@@ -76,6 +88,7 @@ export default function App() {
         setConfig(c);
         setProducts(p);
         setStories(s);
+        ls.set(CACHE_KEY, JSON.stringify({ config: c, products: p, stories: s }));
         reloadBrokenImages();
       })
       .catch(() => setLoadError(true));
@@ -203,7 +216,7 @@ export default function App() {
         <Onboarding onDone={finishIntro} />
       ) : (
         <>
-          {waking && <div className="waking">{t.waking}</div>}
+          {waking && !products && <div className="waking">{t.waking}</div>}
           <main className="app">{page}</main>
           <BottomNav tab={tab} onTab={goTab} />
 
