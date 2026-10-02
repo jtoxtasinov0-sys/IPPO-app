@@ -11,6 +11,11 @@ const MODES = [
   { key: 'wholesale', icon: 'box' },
   { key: 'retail', icon: 'bag' },
 ];
+const FEATS = [
+  { icon: 'shield', key: 0 },
+  { icon: 'truck', key: 1 },
+  { icon: 'sparkle', key: 2 },
+];
 
 export default function Onboarding({ initialMarket, initialMode, onDone, onCancel }) {
   const { t, lang, setLang } = useI18n();
@@ -18,10 +23,10 @@ export default function Onboarding({ initialMarket, initialMode, onDone, onCance
   const [market, setMarket] = useState(initialMarket || null);
   const [mode, setMode] = useState(initialMode || null);
 
-  // Kirish ekrani och — Telegram sarlavhasi ham shu rangda, chiqqanda asl rangga qaytadi
+  // Kirish ekrani oq — Telegram sarlavhasi ham shu rangda, chiqqanda asl rangga qaytadi
   useEffect(() => {
     try {
-      tg?.setHeaderColor?.('#FBF6EC');
+      tg?.setHeaderColor?.('#FFFBF5');
     } catch {}
     return () => {
       try {
@@ -43,21 +48,39 @@ export default function Onboarding({ initialMarket, initialMode, onDone, onCance
   }
 
   const isMarket = step === 0;
+  const back = step === 1 ? () => setStep(0) : onCancel;
+  const items = isMarket
+    ? MARKETS.map((m) => ({
+        key: m.key,
+        on: market === m.key,
+        icon: <Flag market={m.key} size={30} />,
+        flag: true,
+        name: t.marketName[m.key],
+        sub: t.marketSub[m.key],
+        pick: () => chooseMarket(m.key),
+      }))
+    : MODES.map((m) => ({
+        key: m.key,
+        on: mode === m.key,
+        icon: <Icon name={m.icon} size={24} stroke={1.8} />,
+        name: t.modeName[m.key],
+        sub: t.modeSub[m.key],
+        pick: () => chooseMode(m.key),
+      }));
 
   return (
-    <div className="intro">
-      <div className="intro-top">
-        {step === 1 ? (
-          <button className="intro-skip intro-back" onClick={() => setStep(0)}>
-            <Icon name="chevron" size={16} stroke={2.4} /> {t.back}
+    <div className="onb">
+      <span className="onb-spark s1" />
+      <span className="onb-spark s2" />
+      <span className="onb-dotgrid" />
+
+      <header className="onb-top">
+        {back ? (
+          <button className="onb-round" onClick={back} aria-label={t.back}>
+            <Icon name="chevron" size={18} stroke={2.4} />
           </button>
-        ) : onCancel ? (
-          <button className="intro-skip intro-back" onClick={onCancel}>
-            <Icon name="chevron" size={16} stroke={2.4} /> {t.back}
-          </button>
-        ) : (
-          <span />
-        )}
+        ) : null}
+        <img className="onb-logo" src="/logo.png" alt="IPPO by Fotima Zuhra" />
         <div className="lang-switch">
           {['uz', 'ru'].map((l) => (
             <button key={l} className={lang === l ? 'on' : ''} onClick={() => setLang(l)}>
@@ -65,58 +88,61 @@ export default function Onboarding({ initialMarket, initialMode, onDone, onCance
             </button>
           ))}
         </div>
-      </div>
+      </header>
 
-      <div className="intro-visual intro-visual-sm" key={'v' + step}>
-        <div className="intro-logo-wrap">
-          <img className="intro-logo" src="/logo.png" alt="IPPO by Fotima Zuhra" />
+      <main className="onb-main">
+        <section className="onb-hero" key={'h' + step}>
+          <div className="onb-hero-text">
+            <span className="onb-script">{t.onbEyebrow}</span>
+            <h1>{isMarket ? t.chooseMarketTitle : t.chooseModeTitle}</h1>
+            <p>{isMarket ? t.chooseMarketText : t.chooseModeText}</p>
+            <span className="onb-step">
+              {t.onbStep} {step + 1} / 2 <Icon name="chevron" size={13} stroke={2.6} />
+            </span>
+          </div>
+          <div className="onb-hero-art">
+            <span className="onb-ring" />
+            <img src="/mark.png" alt="" />
+          </div>
+        </section>
+
+        <div className="onb-label">
+          <b>{isMarket ? t.onbPickMarket : t.onbPickMode}</b>
         </div>
-      </div>
 
-      <div className="intro-text" key={'t' + step}>
-        <h1>{isMarket ? t.chooseMarketTitle : t.chooseModeTitle}</h1>
-        <p>{isMarket ? t.chooseMarketText : t.chooseModeText}</p>
-      </div>
+        <div className="onb-list" key={'c' + step}>
+          {items.map((it, k) => (
+            <button
+              key={it.key}
+              className={`onb-card ${it.on ? 'on' : ''}`}
+              style={{ animationDelay: `${k * 70}ms` }}
+              onClick={it.pick}
+            >
+              <span className={`onb-tile ${it.flag ? 'is-flag' : ''}`}>{it.icon}</span>
+              <span className="onb-card-text">
+                <b>{it.name}</b>
+                <small>{it.sub}</small>
+              </span>
+              <span className="onb-go">
+                <Icon name="chevron" size={18} stroke={2.6} />
+              </span>
+            </button>
+          ))}
+        </div>
 
-      <div className="choice-list" key={'c' + step}>
-        {isMarket
-          ? MARKETS.map((m, k) => (
-              <button
-                key={m.key}
-                className={`choice ${market === m.key ? 'on' : ''}`}
-                style={{ animationDelay: `${k * 70}ms` }}
-                onClick={() => chooseMarket(m.key)}
-              >
-                <span className="choice-ic flagbox">
-                  <Flag market={m.key} size={32} />
-                </span>
-                <span className="choice-text">
-                  <b>{t.marketName[m.key]}</b>
-                  <small>{t.marketSub[m.key]}</small>
-                </span>
-                <Icon name="chevron" size={18} stroke={2.2} />
-              </button>
-            ))
-          : MODES.map((m, k) => (
-              <button
-                key={m.key}
-                className={`choice ${mode === m.key ? 'on' : ''}`}
-                style={{ animationDelay: `${k * 70}ms` }}
-                onClick={() => chooseMode(m.key)}
-              >
-                <span className="choice-ic">
-                  <Icon name={m.icon} size={24} stroke={1.8} />
-                </span>
-                <span className="choice-text">
-                  <b>{t.modeName[m.key]}</b>
-                  <small>{t.modeSub[m.key]}</small>
-                </span>
-                <Icon name="chevron" size={18} stroke={2.2} />
-              </button>
-            ))}
-      </div>
+        <div className="onb-feats">
+          {FEATS.map((f) => (
+            <div key={f.key} className="onb-feat">
+              <span>
+                <Icon name={f.icon} size={18} stroke={2} />
+              </span>
+              <small>{t.onbFeats[f.key]}</small>
+            </div>
+          ))}
+        </div>
+      </main>
 
-      <div className="intro-dots">
+      <div className="onb-dots">
         {[0, 1].map((k) => (
           <span key={k} className={k === step ? 'on' : ''} />
         ))}

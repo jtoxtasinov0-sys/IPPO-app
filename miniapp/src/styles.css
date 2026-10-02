@@ -1890,174 +1890,6 @@ a {
   border: 2px solid #fff;
 }
 
-/* ——— Onboarding (och krem fon + logodagi oltin) ——— */
-.intro {
-  --intro-bg: #fbf6ec;
-  --intro-ink: #3a2812;
-  --intro-text: #6f5a3e;
-  --intro-accent: #a67c32;
-  --intro-title: linear-gradient(135deg, #c2974a 0%, #a67c32 45%, #7a5a26 100%);
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  padding: 16px 20px calc(20px + var(--safe-b));
-  background:
-    radial-gradient(90% 55% at 100% 0%, rgba(234, 200, 122, 0.38) 0%, rgba(234, 200, 122, 0) 70%),
-    radial-gradient(80% 45% at 0% 100%, rgba(209, 169, 85, 0.22) 0%, rgba(209, 169, 85, 0) 70%),
-    var(--intro-bg);
-  color: var(--intro-ink);
-  position: relative;
-  overflow: hidden;
-}
-/* Logodagi kabi nozik oltin lentalar (burchaklarda) */
-.intro::before,
-.intro::after {
-  content: '';
-  /* fixed — konteyner ichida scroll hosil qilmaydi (tugma bosilganda ekran siljimaydi) */
-  position: fixed;
-  border-radius: 50%;
-  pointer-events: none;
-}
-.intro::before {
-  width: 150vw;
-  height: 150vw;
-  max-width: 760px;
-  max-height: 760px;
-  top: -62%;
-  right: -78%;
-  border: 1.5px solid rgba(201, 160, 78, 0.45);
-  box-shadow:
-    0 0 0 14px rgba(255, 255, 255, 0),
-    0 0 0 15.5px rgba(201, 160, 78, 0.22);
-}
-.intro::after {
-  width: 120vw;
-  height: 120vw;
-  max-width: 600px;
-  max-height: 600px;
-  bottom: -52%;
-  left: -70%;
-  border: 1.5px solid rgba(201, 160, 78, 0.38);
-  box-shadow:
-    0 0 0 12px rgba(255, 255, 255, 0),
-    0 0 0 13.5px rgba(201, 160, 78, 0.18);
-}
-.intro > * {
-  position: relative;
-  z-index: 1;
-}
-.intro-top {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-.intro .lang-switch {
-  background: rgba(255, 255, 255, 0.75);
-  border-color: rgba(201, 160, 78, 0.35);
-  box-shadow: 0 2px 10px rgba(157, 128, 76, 0.12);
-}
-.intro .lang-switch button {
-  color: var(--intro-accent);
-}
-.intro .lang-switch button.on {
-  color: #2a180b;
-}
-.intro-skip {
-  color: var(--intro-accent);
-  font-weight: 700;
-  font-size: 14px;
-}
-.intro-visual {
-  flex: 1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  animation: fadeIn 0.4s ease;
-}
-.intro-logo-wrap {
-  position: relative;
-  width: 84%;
-  max-width: 380px;
-  display: flex;
-  justify-content: center;
-}
-/* Logo ortida yumshoq oq nur — och fonda ham oltin yaxshi ko'rinadi */
-.intro-logo-wrap::before {
-  content: '';
-  position: absolute;
-  inset: -30% -12%;
-  background: radial-gradient(closest-side, rgba(255, 255, 255, 0.95), rgba(255, 255, 255, 0));
-}
-.intro-logo {
-  position: relative;
-  width: 100%;
-  /* Och oltin krem fonda xira ko'rinmasin: biroz to'qroq + soya */
-  filter: brightness(0.86) saturate(1.2) drop-shadow(0 6px 14px rgba(122, 90, 38, 0.28));
-}
-.intro-icons {
-  display: flex;
-  gap: 16px;
-}
-.intro-ic {
-  width: 78px;
-  height: 78px;
-  border-radius: 24px;
-  border: 1px solid rgba(201, 160, 78, 0.4);
-  background: #fff;
-  color: var(--intro-accent);
-  box-shadow: 0 8px 22px rgba(157, 128, 76, 0.16);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  animation: pop 0.45s cubic-bezier(0.2, 1.4, 0.4, 1) both;
-}
-.intro-ic:nth-child(2) {
-  background: var(--gold-grad);
-  border-color: transparent;
-  color: #2a180b;
-  transform: translateY(-14px);
-  box-shadow: 0 12px 28px rgba(201, 160, 78, 0.4);
-}
-.intro-text {
-  text-align: center;
-  animation: fadeIn 0.4s ease;
-  margin-bottom: 22px;
-}
-.intro-text h1 {
-  font-family: var(--serif);
-  font-size: 34px;
-  line-height: 1.1;
-  font-weight: 700;
-  background: var(--intro-title);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-  margin-bottom: 10px;
-}
-.intro-text p {
-  margin: 0 auto;
-  max-width: 330px;
-  color: var(--intro-text);
-  font-size: 15.5px;
-}
-.intro-dots {
-  display: flex;
-  justify-content: center;
-  gap: 6px;
-  margin-bottom: 18px;
-}
-.intro-dots span {
-  width: 7px;
-  height: 7px;
-  border-radius: 99px;
-  background: rgba(157, 128, 76, 0.28);
-  transition: all 0.25s;
-}
-.intro-dots span.on {
-  width: 22px;
-  background: var(--gold);
-}
-
 /* ——— Boshqa ——— */
 .toast {
   position: fixed;
@@ -2151,86 +1983,375 @@ a {
   }
 }
 
-/* ——— Davlat / savdo turi tanlash ——— */
-.intro-back {
-  display: inline-flex;
-  align-items: center;
-  gap: 2px;
-}
-.intro-back svg {
-  transform: rotate(180deg);
-}
-.intro-visual-sm {
-  flex: 0.8;
-  min-height: 150px;
-}
-.intro-visual-sm .intro-logo-wrap {
-  width: 62%;
-  max-width: 280px;
-}
-.choice-list {
+/* ——— Onboarding: davlat / savdo turi (oq fon, logodagi oltin aksent) ——— */
+.onb {
+  --onb-bg: #fffbf5;
+  --onb-ink: #22160a;
+  --onb-text: #7a6a55;
+  --onb-gold: #c9a04e;
+  --onb-gold-d: #a67c32;
+  --onb-tint: #fbf0dc;
+  --onb-hero: linear-gradient(135deg, #f7dc9a 0%, #e6bd66 48%, #c99a45 100%);
+  --onb-btn: linear-gradient(135deg, #e3b85f 0%, #c99a45 55%, #a67c32 100%);
+  --onb-shadow: 0 12px 32px -14px rgba(120, 84, 30, 0.28), 0 2px 6px rgba(120, 84, 30, 0.06);
+  position: relative;
+  min-height: 100vh;
   display: flex;
   flex-direction: column;
-  gap: 12px;
-  margin-bottom: 22px;
+  padding: 14px 18px calc(16px + var(--safe-b));
+  background: var(--onb-bg);
+  color: var(--onb-ink);
+  font-family: var(--font);
+  overflow: hidden;
 }
-.choice {
+.onb > *:not(.onb-spark):not(.onb-dotgrid) {
+  position: relative;
+  z-index: 1;
+}
+
+/* Bezak: oltin yulduzchalar va nuqtali to'r (namunadagidek) */
+.onb-spark {
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  background: var(--onb-gold);
+  clip-path: polygon(50% 0, 61% 39%, 100% 50%, 61% 61%, 50% 100%, 39% 61%, 0 50%, 39% 39%);
+  opacity: 0.8;
+  pointer-events: none;
+}
+.onb-spark.s1 {
+  top: 66px;
+  left: 46%;
+}
+.onb-spark.s2 {
+  bottom: 70px;
+  right: 22px;
+  width: 11px;
+  height: 11px;
+  opacity: 0.55;
+}
+.onb-dotgrid {
+  position: absolute;
+  top: 58px;
+  right: 14px;
+  width: 54px;
+  height: 30px;
+  background-image: radial-gradient(rgba(201, 160, 78, 0.55) 1.3px, transparent 1.5px);
+  background-size: 9px 9px;
+  pointer-events: none;
+}
+
+/* Yuqori panel */
+.onb-top {
   display: flex;
   align-items: center;
-  gap: 14px;
-  width: 100%;
-  padding: 16px;
-  border-radius: 20px;
-  border: 1.5px solid rgba(201, 160, 78, 0.35);
-  background: rgba(255, 255, 255, 0.85);
-  color: var(--intro-ink, #3a2812);
-  text-align: left;
-  box-shadow: 0 6px 18px rgba(157, 128, 76, 0.12);
-  animation: fadeIn 0.35s ease both;
-  transition: transform 0.15s, border-color 0.15s, box-shadow 0.15s;
+  gap: 10px;
+  min-height: 44px;
 }
-.choice:active {
-  transform: scale(0.98);
+.onb-logo {
+  height: 40px;
+  width: auto;
+  margin-right: auto;
+  filter: brightness(0.9) saturate(1.15);
 }
-.choice.on {
-  border-color: var(--gold);
-  box-shadow: 0 8px 24px rgba(201, 160, 78, 0.35);
-}
-.choice > svg {
-  color: var(--intro-accent, #a67c32);
+.onb-round {
+  width: 40px;
+  height: 40px;
   flex-shrink: 0;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #fff;
+  color: var(--onb-ink);
+  box-shadow: var(--onb-shadow);
 }
-.choice-ic {
-  width: 50px;
-  height: 50px;
-  border-radius: 16px;
+.onb-round svg {
+  transform: rotate(180deg);
+}
+.onb .lang-switch {
+  background: #fff;
+  border: 0;
+  border-radius: 99px;
+  box-shadow: var(--onb-shadow);
+}
+.onb .lang-switch button {
+  border-radius: 99px;
+  padding: 7px 12px;
+  color: var(--onb-text);
+}
+.onb .lang-switch button.on {
+  background: var(--onb-btn);
+  color: #fff;
+}
+
+.onb-main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 16px;
+  padding: 14px 0;
+}
+
+/* Hero karta — namunadagi "Experience Luxury" bloki */
+.onb-hero {
+  position: relative;
+  display: flex;
+  align-items: center;
+  min-height: 178px;
+  padding: 20px 18px;
+  border-radius: 26px;
+  background: var(--onb-hero);
+  box-shadow: 0 18px 40px -16px rgba(166, 124, 50, 0.6);
+  overflow: hidden;
+  animation: fadeIn 0.4s ease both;
+}
+.onb-hero::before {
+  /* yaltiroq nur */
+  content: '';
+  position: absolute;
+  inset: -40% 30% auto -20%;
+  height: 120%;
+  background: radial-gradient(closest-side, rgba(255, 255, 255, 0.55), rgba(255, 255, 255, 0));
+  pointer-events: none;
+}
+.onb-hero-text {
+  position: relative;
+  flex: 1;
+  min-width: 0;
+  z-index: 1;
+}
+.onb-script {
+  display: block;
+  font-family: var(--serif);
+  font-style: italic;
+  font-weight: 700;
+  font-size: 19px;
+  line-height: 1;
+  color: #7a5520;
+  margin-bottom: 6px;
+}
+.onb-hero h1 {
+  font-family: var(--font);
+  font-size: 25px;
+  line-height: 1.12;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: var(--onb-ink);
+  margin-bottom: 7px;
+}
+.onb-hero p {
+  font-size: 12.5px;
+  line-height: 1.4;
+  color: rgba(34, 22, 10, 0.72);
+  max-width: 200px;
+  margin-bottom: 12px;
+}
+.onb-step {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 6px 10px 6px 12px;
+  border-radius: 99px;
+  background: rgba(255, 255, 255, 0.85);
+  color: var(--onb-gold-d);
+  font-size: 12px;
+  font-weight: 800;
+}
+.onb-hero-art {
+  position: relative;
+  width: 112px;
+  height: 112px;
   flex-shrink: 0;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: var(--gold-grad);
-  color: #2a180b;
 }
-.choice-ic.flagbox {
-  background: #fff;
-  border: 1px solid rgba(201, 160, 78, 0.35);
-  font-size: 30px;
-  line-height: 1;
+.onb-ring {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, #fff 0%, #fff7e6 60%, #f5e2b8 100%);
+  box-shadow:
+    0 12px 26px -8px rgba(122, 85, 32, 0.55),
+    0 0 0 8px rgba(255, 255, 255, 0.25);
 }
-.choice-text {
-  flex: 1;
+.onb-hero-art img {
+  position: relative;
+  height: 80px;
+  width: auto;
+  filter: brightness(0.85) saturate(1.25) drop-shadow(0 4px 6px rgba(122, 85, 32, 0.35));
+  animation: pop 0.5s cubic-bezier(0.2, 1.4, 0.4, 1) both;
+}
+
+/* Bo'lim sarlavhasi */
+.onb-label {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  padding: 0 4px;
+  margin-top: 2px;
+}
+.onb-label b {
+  font-size: 16.5px;
+  font-weight: 800;
+}
+.onb-label span {
+  font-size: 13px;
+  font-weight: 800;
+  color: var(--onb-gold-d);
+}
+
+/* Tanlash kartalari */
+.onb-list {
   display: flex;
   flex-direction: column;
-  gap: 2px;
+  gap: 12px;
+}
+.onb-card {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  width: 100%;
+  padding: 12px 12px 12px 12px;
+  border-radius: 22px;
+  border: 1.5px solid transparent;
+  background: #fff;
+  color: var(--onb-ink);
+  text-align: left;
+  box-shadow: var(--onb-shadow);
+  animation: fadeIn 0.35s ease both;
+  transition: transform 0.15s, border-color 0.15s, box-shadow 0.15s;
+}
+.onb-card:active {
+  transform: scale(0.98);
+}
+.onb-card.on {
+  border-color: var(--onb-gold);
+  box-shadow: 0 14px 32px -12px rgba(201, 160, 78, 0.6);
+}
+.onb-tile {
+  width: 56px;
+  height: 56px;
+  flex-shrink: 0;
+  border-radius: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--onb-tint);
+  color: var(--onb-gold-d);
+}
+.onb-tile .flag {
+  border-radius: 4px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.12);
+}
+.onb-card-text {
+  flex: 1;
   min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
 }
-.choice-text b {
-  font-size: 17px;
+.onb-card-text b {
+  font-size: 16px;
+  font-weight: 800;
 }
-.choice-text small {
-  font-size: 13px;
-  color: var(--intro-text, #6f5a3e);
+.onb-card-text small {
+  font-size: 12.5px;
+  line-height: 1.35;
+  color: var(--onb-text);
 }
+.onb-go {
+  width: 36px;
+  height: 36px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--onb-btn);
+  color: #fff;
+  box-shadow: 0 6px 14px -4px rgba(166, 124, 50, 0.7);
+}
+.onb-card.on .onb-go {
+  transform: scale(1.08);
+}
+
+/* Afzalliklar qatori */
+.onb-feats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  margin-top: 2px;
+}
+.onb-feat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 7px;
+  padding: 12px 6px;
+  border-radius: 18px;
+  background: #fff;
+  box-shadow: var(--onb-shadow);
+  text-align: center;
+}
+.onb-feat span {
+  width: 34px;
+  height: 34px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--onb-tint);
+  color: var(--onb-gold-d);
+}
+.onb-feat small {
+  font-size: 11.5px;
+  font-weight: 700;
+  line-height: 1.25;
+  color: var(--onb-ink);
+}
+
+.onb-dots {
+  display: flex;
+  justify-content: center;
+  gap: 6px;
+}
+.onb-dots span {
+  width: 7px;
+  height: 7px;
+  border-radius: 99px;
+  background: rgba(166, 124, 50, 0.25);
+  transition: all 0.25s;
+}
+.onb-dots span.on {
+  width: 22px;
+  background: var(--onb-btn);
+}
+
+/* Kichik ekranlar (Telegram Desktop oynasi ~380×640) */
+@media (max-height: 660px) {
+  .onb-main {
+    gap: 12px;
+    padding: 8px 0;
+  }
+  .onb-hero {
+    min-height: 0;
+    padding: 16px;
+  }
+  .onb-hero-art {
+    width: 92px;
+    height: 92px;
+  }
+  .onb-hero-art img {
+    height: 64px;
+  }
+  .onb-feat {
+    padding: 9px 4px;
+  }
+}
+
 
 /* Bosh sahifadagi "🇺🇿 O'zbekiston · Optom" tugmasi */
 .market-pill {
