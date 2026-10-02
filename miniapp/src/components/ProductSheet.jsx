@@ -162,6 +162,7 @@ function ProductBody({ p, config, market, onClose, onGoCart }) {
               </button>
             )}
             <button className="btn primary grow" onClick={add} disabled={out || maxQty <= 0}>
+              {!out && <Icon name="bag" size={18} stroke={2.2} />}
               {out ? t.outOfStock : `${t.addToCart} · ${money(p.price * qty)}`}
             </button>
           </>

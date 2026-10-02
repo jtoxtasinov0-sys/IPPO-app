@@ -11,8 +11,8 @@ export function initTelegram() {
   try {
     tg.ready();
     tg.expand();
-    tg.setHeaderColor?.('#1E1006');
-    tg.setBackgroundColor?.('#FAF6EF');
+    tg.setHeaderColor?.('#FFFBF5');
+    tg.setBackgroundColor?.('#FFFBF5');
     tg.setBottomBarColor?.('#FFFFFF');
     tg.disableVerticalSwipes?.();
   } catch {}

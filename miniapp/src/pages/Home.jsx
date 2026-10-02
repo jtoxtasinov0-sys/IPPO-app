@@ -13,6 +13,8 @@ export default function Home({ config, market, mode, onMarket, products, stories
   const popular = featured.length ? featured : products.slice(0, 6);
   const onSale = products.filter((p) => p.tag === 'sale' || (p.oldPrice && p.oldPrice > p.price)).slice(0, 8);
 
+  const heroImg = popular[0]?.images?.[0];
+
   const catCover = (key) => products.find((p) => p.category === key)?.images?.[0];
   const catCount = (key) => products.filter((p) => p.category === key).length;
 
@@ -21,18 +23,19 @@ export default function Home({ config, market, mode, onMarket, products, stories
       <header className="home-head">
         <div className="home-head-row">
           <img className="home-logo" src="/logo.png" alt="IPPO" />
-        </div>
-        <div className="market-row">
-          <div className="home-hello">
-            {t.hello}, <b>{name || t.guest}</b> 👋
-          </div>
           <button className="market-pill" onClick={onMarket}>
             <Flag market={market} size={18} /> {t.modeName[mode]} <Icon name="chevron" size={14} stroke={2.4} />
           </button>
         </div>
+        <div className="home-hello">
+          {t.hello}, <b>{name || t.guest}</b> 👋
+        </div>
         <button className="search-pill" onClick={() => onCatalog({ focus: true })}>
           <Icon name="search" size={19} />
           <span>{t.searchPh}</span>
+          <span className="search-go">
+            <Icon name="grid" size={17} stroke={2} />
+          </span>
         </button>
       </header>
 
@@ -45,29 +48,31 @@ export default function Home({ config, market, mode, onMarket, products, stories
       )}
 
       <section className="hero-card" onClick={() => onCatalog({})}>
-        <svg className="hero-lines" viewBox="0 0 200 120" preserveAspectRatio="none" aria-hidden="true">
-          <path d="M120 -10 C 150 40, 175 70, 215 90" />
-          <path d="M140 -10 C 165 35, 185 55, 215 65" />
-        </svg>
-        <div className="hero-kicker">🇰🇷 Made in Korea</div>
-        <h2 className="hero-title">{t.heroTitle}</h2>
-        <div className="hero-sub">{t.heroSub}</div>
-        <span className="btn primary sm">
-          {t.heroBtn} <Icon name="chevron" size={16} stroke={2.2} />
-        </span>
+        <div className="hero-text">
+          <div className="hero-kicker">Made in Korea</div>
+          <h2 className="hero-title">{t.heroTitle}</h2>
+          <div className="hero-sub">{t.heroSub}</div>
+          <span className="hero-btn">
+            {t.heroBtn} <Icon name="chevron" size={14} stroke={2.6} />
+          </span>
+        </div>
+        <div className="hero-art">
+          <span className="hero-disc" />
+          <Img src={heroImg} width={360} alt="" />
+        </div>
       </section>
 
       <div className="trust-row">
         <div>
-          <Icon name="shield" size={20} />
+          <span className="trust-ic"><Icon name="shield" size={19} /></span>
           <span>{t.trustOriginal}</span>
         </div>
         <div>
-          <Icon name="truck" size={20} />
+          <span className="trust-ic"><Icon name="truck" size={19} /></span>
           <span>{market === 'uz' ? t.trustDeliveryUz : t.trustDelivery}</span>
         </div>
         <div>
-          <Icon name="card" size={20} />
+          <span className="trust-ic"><Icon name="card" size={19} /></span>
           <span>{t.trustPay}</span>
         </div>
       </div>

@@ -30,7 +30,7 @@ export default function Onboarding({ initialMarket, initialMode, onDone, onCance
     } catch {}
     return () => {
       try {
-        tg?.setHeaderColor?.('#1E1006');
+        tg?.setHeaderColor?.('#FFFBF5');
       } catch {}
     };
   }, []);
