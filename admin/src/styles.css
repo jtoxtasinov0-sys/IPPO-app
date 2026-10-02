@@ -8,12 +8,16 @@
   --gold-muted: #9d804c;
   --bronze: #58401b;
   --gold-grad: linear-gradient(135deg, #eac87a 0%, #d1a955 50%, #9d804c 100%);
-  --bg: #f7f3ec;
+  --gold-hero: linear-gradient(135deg, #f7dc9a 0%, #e6bd66 48%, #c99a45 100%);
+  --gold-btn: linear-gradient(135deg, #dcb05a 0%, #c0913f 55%, #9f7530 100%);
+  --gold-tint: #fbf0dc;
+  --gold-deep: #a67c32;
+  --bg: #fffbf5;
   --card: #fff;
   --ink: #23160b;
   --ink-2: #4a3a2b;
   --muted: #8c7b69;
-  --line: #eae0cf;
+  --line: #f0e7d7;
   --red: #b83b3b;
   --red-soft: #fbeaea;
   --green: #2f7d4f;
@@ -23,7 +27,7 @@
   --purple: #6b3fa0;
   --purple-soft: #f1e8fb;
   --r: 14px;
-  --shadow: 0 1px 2px rgba(35, 22, 11, 0.05), 0 4px 14px rgba(35, 22, 11, 0.06);
+  --shadow: 0 10px 26px -14px rgba(120, 84, 30, 0.26), 0 1px 3px rgba(120, 84, 30, 0.05);
   --font: 'Manrope', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
   --serif: 'Cormorant Garamond', Georgia, serif;
 }
@@ -144,8 +148,8 @@ img {
   gap: 6px;
   height: 40px;
   padding: 0 16px;
-  border-radius: 11px;
-  font-weight: 700;
+  border-radius: 12px;
+  font-weight: 800;
   white-space: nowrap;
   transition: transform 0.1s, filter 0.15s;
 }
@@ -153,14 +157,15 @@ img {
   transform: scale(0.97);
 }
 .btn.primary {
-  background: var(--gold-grad);
-  color: var(--espresso);
+  background: var(--gold-btn);
+  color: #fff;
+  box-shadow: 0 8px 18px -8px rgba(166, 124, 50, 0.7);
 }
 .btn.primary:hover:not(:disabled) {
   filter: brightness(1.05);
 }
 .btn.ghost {
-  background: var(--gold-soft);
+  background: var(--gold-tint);
   color: var(--bronze);
 }
 .btn.text {
@@ -230,8 +235,9 @@ select.input {
 .sidebar {
   width: 232px;
   flex: 0 0 232px;
-  background: var(--espresso);
-  color: #d9c6a0;
+  background: #fff;
+  color: var(--ink-2);
+  box-shadow: 10px 0 30px -18px rgba(120, 84, 30, 0.3);
   display: flex;
   flex-direction: column;
   padding: 18px 12px;
@@ -247,13 +253,20 @@ select.input {
 }
 .brand img {
   width: 150px;
+  filter: brightness(0.9) saturate(1.15);
 }
+/* "ADMIN" yozuvi — har doim ko'rinadi */
 .brand span {
-  font-size: 11px;
-  letter-spacing: 2px;
+  align-self: flex-start;
+  padding: 4px 10px;
+  border-radius: 99px;
+  background: var(--gold-btn);
+  color: #fff;
+  font-size: 10.5px;
+  letter-spacing: 1.6px;
   text-transform: uppercase;
-  color: var(--gold-muted);
-  font-weight: 700;
+  font-weight: 800;
+  box-shadow: 0 4px 10px -3px rgba(166, 124, 50, 0.6);
 }
 .sidebar nav {
   display: flex;
@@ -266,25 +279,27 @@ select.input {
   align-items: center;
   gap: 10px;
   padding: 10px 12px;
-  border-radius: 11px;
+  border-radius: 12px;
   text-align: left;
-  font-weight: 600;
-  color: #cbb792;
+  font-weight: 700;
+  color: var(--ink-2);
   transition: background 0.15s;
 }
 .sidebar nav button:hover {
-  background: rgba(234, 200, 122, 0.08);
+  background: var(--gold-tint);
 }
 .sidebar nav button.on {
-  background: var(--gold-grad);
-  color: var(--espresso);
+  background: var(--gold-btn);
+  color: #fff;
+  box-shadow: 0 8px 18px -8px rgba(166, 124, 50, 0.7);
 }
 .ni {
   width: 22px;
   text-align: center;
 }
 .logout {
-  color: #9c8762;
+  color: var(--muted);
+  font-weight: 700;
   font-size: 13px;
   padding: 10px 12px;
   text-align: left;
@@ -309,9 +324,9 @@ select.input {
   flex-wrap: wrap;
 }
 .page-head h1 {
-  font-family: var(--serif);
-  font-size: 32px;
-  font-weight: 700;
+  font-size: 26px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
   display: flex;
   align-items: center;
   gap: 10px;
@@ -319,8 +334,8 @@ select.input {
 .count {
   font-family: var(--font);
   font-size: 13px;
-  background: var(--gold-soft);
-  color: var(--bronze);
+  background: var(--gold-tint);
+  color: var(--gold-deep);
   padding: 2px 10px;
   border-radius: 99px;
 }
@@ -338,11 +353,19 @@ select.input {
     height: auto;
     padding: 10px 10px 8px;
   }
+  .sidebar {
+    box-shadow: 0 10px 26px -16px rgba(120, 84, 30, 0.35);
+    border-radius: 0 0 20px 20px;
+  }
   .brand {
     flex-direction: row;
     align-items: center;
-    justify-content: space-between;
+    justify-content: flex-start;
+    gap: 10px;
     padding: 0 4px 8px;
+  }
+  .brand span {
+    align-self: center;
   }
   .brand img {
     width: 96px;
@@ -366,14 +389,11 @@ select.input {
     right: 10px;
     padding: 6px 8px;
   }
-  .brand span {
-    display: none;
-  }
   .page {
     padding: 16px 14px 60px;
   }
   .page-head h1 {
-    font-size: 26px;
+    font-size: 22px;
   }
 }
 
@@ -384,23 +404,21 @@ select.input {
   align-items: center;
   justify-content: center;
   padding: 20px;
-  /* Och krem fon + logodagi oltin nur */
   background:
-    radial-gradient(90% 60% at 100% 0%, rgba(234, 200, 122, 0.4) 0%, rgba(234, 200, 122, 0) 70%),
-    radial-gradient(80% 50% at 0% 100%, rgba(209, 169, 85, 0.24) 0%, rgba(209, 169, 85, 0) 70%),
-    #fbf6ec;
+    radial-gradient(70% 45% at 100% 0%, rgba(234, 200, 122, 0.3) 0%, rgba(234, 200, 122, 0) 70%),
+    var(--bg);
 }
 .login-card {
   width: 100%;
   max-width: 360px;
   background: var(--card);
-  border: 1px solid rgba(201, 160, 78, 0.3);
-  border-radius: 22px;
+  border: 0;
+  border-radius: 26px;
   padding: 28px 24px;
   display: flex;
   flex-direction: column;
   gap: 12px;
-  box-shadow: 0 20px 50px rgba(157, 128, 76, 0.18);
+  box-shadow: 0 24px 50px -20px rgba(120, 84, 30, 0.4);
 }
 .login-logo {
   width: 190px;
@@ -409,9 +427,20 @@ select.input {
   filter: brightness(0.86) saturate(1.2) drop-shadow(0 4px 10px rgba(122, 90, 38, 0.25));
 }
 .login-card h1 {
-  font-family: var(--serif);
   text-align: center;
-  font-size: 28px;
+  font-size: 24px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+.login-badge {
+  align-self: center;
+  padding: 4px 12px;
+  border-radius: 99px;
+  background: var(--gold-btn);
+  color: #fff;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 1.6px;
 }
 .login-card label {
   display: flex;
@@ -422,7 +451,8 @@ select.input {
   color: var(--ink-2);
 }
 .login-card input {
-  height: 44px;
+  height: 46px;
+  background: var(--bg);
   border: 1.5px solid var(--line);
   border-radius: 12px;
   padding: 0 12px;
@@ -461,13 +491,14 @@ select.input {
   box-shadow: var(--shadow);
 }
 .stat:first-child {
-  background: var(--espresso);
-  color: var(--gold-light);
-  border-color: var(--espresso);
+  background: var(--gold-hero);
+  color: var(--ink);
+  border-color: transparent;
+  box-shadow: 0 16px 34px -16px rgba(166, 124, 50, 0.65);
 }
 .stat:first-child span,
 .stat:first-child small {
-  color: #bca781;
+  color: rgba(34, 22, 10, 0.68);
 }
 .stat span {
   font-size: 12px;
@@ -530,9 +561,9 @@ select.input {
   gap: 6px;
 }
 .seg button.on {
-  background: var(--espresso);
-  border-color: var(--espresso);
-  color: var(--gold-light);
+  background: var(--gold-btn);
+  border-color: transparent;
+  color: #fff;
 }
 .seg em {
   font-style: normal;
@@ -718,8 +749,8 @@ select.ps-rejected {
   position: absolute;
   top: 8px;
   left: 8px;
-  background: var(--espresso);
-  color: var(--gold-light);
+  background: var(--gold-btn);
+  color: #fff;
   font-size: 11px;
   font-weight: 800;
   padding: 3px 8px;
@@ -832,8 +863,8 @@ select.ps-rejected {
   border-bottom: 1px solid var(--line);
 }
 .modal-head h2 {
-  font-family: var(--serif);
-  font-size: 24px;
+  font-size: 20px;
+  font-weight: 800;
 }
 .modal-body {
   padding: 18px 20px;
@@ -906,8 +937,8 @@ select.ps-rejected {
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  background: var(--espresso);
-  color: var(--gold-light);
+  background: var(--gold-btn);
+  color: #fff;
   padding: 5px 6px 5px 12px;
   border-radius: 99px;
   font-weight: 700;
@@ -950,8 +981,8 @@ select.ps-rejected {
   position: absolute;
   top: 6px;
   left: 6px;
-  background: var(--gold-grad);
-  color: var(--espresso);
+  background: var(--gold-btn);
+  color: #fff;
   font-size: 10px;
   font-weight: 800;
   padding: 2px 7px;

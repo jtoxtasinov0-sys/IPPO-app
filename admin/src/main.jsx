@@ -7,8 +7,8 @@ import './styles.css';
 try {
   tg?.ready();
   tg?.expand();
-  tg?.setHeaderColor?.('#1E1006');
-  tg?.setBackgroundColor?.('#F7F3EC');
+  tg?.setHeaderColor?.('#FFFBF5');
+  tg?.setBackgroundColor?.('#FFFBF5');
 } catch {}
 
 ReactDOM.createRoot(document.getElementById('root')).render(

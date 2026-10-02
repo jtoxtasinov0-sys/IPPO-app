@@ -26,7 +26,8 @@ export default function Login({ onLogin }) {
     <div className="login">
       <form className="login-card" onSubmit={submit}>
         <img src="/logo.png" alt="IPPO" className="login-logo" />
-        <h1>Admin panel</h1>
+        <span className="login-badge">ADMIN</span>
+        <h1>Boshqaruv paneli</h1>
         {isTelegram && <p className="hint">Telegram orqali kirish uchun botda <code>/admin PAROL</code> yozing yoki login bilan kiring.</p>}
         <label>
           Login

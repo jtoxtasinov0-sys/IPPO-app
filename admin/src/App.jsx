@@ -77,7 +77,7 @@ export default function App() {
       <aside className="sidebar">
         <div className="brand">
           <img src="/logo.png" alt="IPPO" />
-          <span>Admin panel</span>
+          <span>Admin</span>
         </div>
         <nav>
           {TABS.map((t) => (
