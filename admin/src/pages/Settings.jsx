@@ -39,8 +39,35 @@ export default function Settings() {
       </div>
 
       <section className="panel">
-        <h3>💳 Kartaga o‘tkazma</h3>
-        <p className="muted small">Karta/hisob raqami kiritilsa — Mini App'da «Kartaga o‘tkazma» usuli paydo bo‘ladi. Bo‘sh bo‘lsa faqat naqd.</p>
+        <h3>🇺🇿 O‘zbekiston — karta</h3>
+        <p className="muted small">O‘zbekistonni tanlagan mijozlar shu kartaga o‘tkazadi. Bo‘sh bo‘lsa — faqat naqd.</p>
+        <div className="form-grid">
+          <label className="span2">
+            Karta raqami
+            <input className="input" value={f.cardNumberUz} onChange={set('cardNumberUz')} placeholder="8600 1234 5678 9012" />
+          </label>
+          <label>
+            Bank / karta turi
+            <input className="input" value={f.bankNameUz} onChange={set('bankNameUz')} placeholder="Uzcard, Humo, Visa…" />
+          </label>
+          <label>
+            Egasi (ism familiya)
+            <input className="input" value={f.cardHolderUz} onChange={set('cardHolderUz')} placeholder="FOTIMA ZUHRA" />
+          </label>
+          <label>
+            Yetkazish narxi (so‘m)
+            <input className="input" inputMode="numeric" value={f.deliveryFeeUz} onChange={set('deliveryFeeUz')} placeholder="0 = bepul" />
+          </label>
+          <label>
+            Shu summadan bepul (so‘m)
+            <input className="input" inputMode="numeric" value={f.freeDeliveryFromUz} onChange={set('freeDeliveryFromUz')} placeholder="0 = chegara yo‘q" />
+          </label>
+        </div>
+      </section>
+
+      <section className="panel">
+        <h3>🇰🇷 Koreya — karta</h3>
+        <p className="muted small">Koreyani tanlagan mijozlar shu karta/hisobga o‘tkazadi. Bo‘sh bo‘lsa — faqat naqd.</p>
         <div className="form-grid">
           <label className="span2">
             Karta yoki hisob raqami
@@ -58,7 +85,7 @@ export default function Settings() {
       </section>
 
       <section className="panel">
-        <h3>🚚 Yetkazib berish</h3>
+        <h3>🇰🇷 Koreya — yetkazib berish</h3>
         <div className="form-grid">
           <label>
             Yetkazish narxi (₩)

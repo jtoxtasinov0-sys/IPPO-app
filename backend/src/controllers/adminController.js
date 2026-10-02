@@ -57,8 +57,8 @@ async function stats(_req, res) {
     prisma.order.count(),
     prisma.order.count({ where: { createdAt: { gte: startOfDay } } }),
     prisma.order.groupBy({ by: ['status'], _count: { _all: true } }),
-    prisma.order.aggregate({ _sum: { total: true }, where: notCancelled }),
-    prisma.order.aggregate({ _sum: { total: true }, where: { ...notCancelled, createdAt: { gte: startOfDay } } }),
+    prisma.order.groupBy({ by: ['market'], _sum: { total: true }, where: notCancelled }),
+    prisma.order.groupBy({ by: ['market'], _sum: { total: true }, where: { ...notCancelled, createdAt: { gte: startOfDay } } }),
     prisma.order.count({ where: { paymentStatus: 'pending' } }),
     prisma.user.count(),
     prisma.product.count({ where: { isActive: true } }),
@@ -67,8 +67,9 @@ async function stats(_req, res) {
     total,
     today,
     byStatus: Object.fromEntries(byStatus.map((r) => [r.status, r._count._all])),
-    revenue: revenue._sum.total || 0,
-    revenueToday: revenueToday._sum.total || 0,
+    // davlat bo'yicha: { kr: 120000, uz: 3500000 } — valyutalar har xil, qo'shib bo'lmaydi
+    revenue: Object.fromEntries(revenue.map((r) => [r.market, r._sum.total || 0])),
+    revenueToday: Object.fromEntries(revenueToday.map((r) => [r.market, r._sum.total || 0])),
     pendingReceipts,
     users,
     products,
@@ -195,7 +196,9 @@ async function patchProduct(req, res) {
   if (typeof b.isActive === 'boolean') data.isActive = b.isActive;
   if (typeof b.isFeatured === 'boolean') data.isFeatured = b.isFeatured;
   if ('stock' in b) data.stock = b.stock === null || b.stock === '' ? null : Math.max(0, parseInt(b.stock, 10) || 0);
-  if ('price' in b) data.price = Math.max(0, parseInt(b.price, 10) || 0);
+  for (const k of Object.values(Product.PRICE_FIELD).flatMap(Object.values)) {
+    if (k in b) data[k] = Math.max(0, parseInt(b[k], 10) || 0);
+  }
   res.json(await prisma.product.update({ where: { id: Number(req.params.id) }, data }));
 }
 
@@ -284,10 +287,10 @@ function meta(_req, res) {
   res.json({
     categories: cfg.categories,
     tags: cfg.tags,
-    regions: cfg.regions,
+    markets: cfg.markets,
+    modes: cfg.modes,
     orderStatuses: cfg.orderStatuses,
     paymentStatuses: cfg.paymentStatuses,
-    currency: cfg.currency,
     company: cfg.company,
   });
 }

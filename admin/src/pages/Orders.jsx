@@ -1,7 +1,7 @@
 // Buyurtmalar: statistika, filtr, holat va to'lov holatini o'zgartirish, chek, o'chirish
 import { useCallback, useEffect, useState } from 'react';
 import Modal from '../components/Modal';
-import { api, imageUrl, money, formatDate, ORDER_STATUS, PAY_STATUS } from '../lib/api';
+import { api, imageUrl, money, formatDate, ORDER_STATUS, PAY_STATUS, FLAG } from '../lib/api';
 
 export default function Orders({ meta }) {
   const [orders, setOrders] = useState(null);
@@ -56,7 +56,14 @@ export default function Orders({ meta }) {
     load();
   }
 
-  const region = (key) => meta?.regions?.find((r) => r.key === key)?.uz || key;
+  const region = (key) => meta?.markets?.flatMap((m) => m.regions).find((r) => r.key === key)?.uz || key;
+  const modeName = (k) => meta?.modes?.find((m) => m.key === k)?.uz || 'Dona';
+  // Tushum davlat bo'yicha alohida: "120,000 ₩ · 3 500 000 so‘m"
+  const revenue = (obj) =>
+    Object.entries(obj || {})
+      .filter(([, v]) => v > 0)
+      .map(([m, v]) => money(v, m))
+      .join(' · ') || money(0);
   const count = (k) => stats?.byStatus?.[k] || 0;
 
   return (
@@ -73,12 +80,12 @@ export default function Orders({ meta }) {
           <div className="stat">
             <span>Bugun</span>
             <b>{stats.today}</b>
-            <small>{money(stats.revenueToday)}</small>
+            <small>{revenue(stats.revenueToday)}</small>
           </div>
           <div className="stat">
             <span>Jami buyurtma</span>
             <b>{stats.total}</b>
-            <small>{money(stats.revenue)}</small>
+            <small>{revenue(stats.revenue)}</small>
           </div>
           <div className={`stat ${stats.pendingReceipts ? 'warn' : ''}`}>
             <span>Chek kutmoqda</span>
@@ -131,8 +138,11 @@ export default function Orders({ meta }) {
                 <div>
                   <div className="oc-no">#{o.id}</div>
                   <div className="muted small">{formatDate(o.createdAt)}</div>
+                  <div className="oc-market">
+                    {FLAG[o.market]} {o.market === 'uz' ? 'O‘zbekiston' : 'Koreya'} · {modeName(o.mode)}
+                  </div>
                 </div>
-                <div className="oc-total">{money(o.total)}</div>
+                <div className="oc-total">{money(o.total, o.market)}</div>
               </div>
 
               <div className="oc-items">
@@ -143,12 +153,12 @@ export default function Orders({ meta }) {
                       <div className="oc-item-name">{it.name}</div>
                       <div className="muted small">
                         {it.article}
-                        {it.variant ? ` · ${it.variant}` : ''} · {it.qty} × {money(it.unitPrice)}
+                        {it.variant ? ` · ${it.variant}` : ''} · {it.qty} × {money(it.unitPrice, o.market)}
                       </div>
                     </div>
                   </div>
                 ))}
-                {o.deliveryFee > 0 && <div className="muted small">🚚 Yetkazish: {money(o.deliveryFee)}</div>}
+                {o.deliveryFee > 0 && <div className="muted small">🚚 Yetkazish: {money(o.deliveryFee, o.market)}</div>}
               </div>
 
               <div className="oc-customer">

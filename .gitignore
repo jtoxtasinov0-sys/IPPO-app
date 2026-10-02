@@ -52,3 +52,14 @@ desktop.ini
 *.tmp
 tmp/
 .cache/
+
+# === ippo-video (HyperFrames) — generatsiya qilinadigan fayllar ===
+ippo-video/.tools/node_modules/
+ippo-video/snapshots/
+ippo-video/renders/
+ippo-video/.hyperframes/*.log
+
+# === YANGI-MAHSULOTLAR — rasmlar va tekshiruv natijalari (repo'ga kirmaydi) ===
+YANGI-MAHSULOTLAR/*/
+YANGI-MAHSULOTLAR/TEKSHIRUV.csv
+YANGI-MAHSULOTLAR/mahsulotlar.json

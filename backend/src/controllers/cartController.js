@@ -12,16 +12,29 @@ const { saveImage } = require('../utils/upload');
 const { t, adminOrderText } = require('../utils/i18n');
 const { signWebToken } = require('../middlewares/auth.middleware');
 
+// Mijoz tanlagan davlat va savdo turi (noto'g'ri bo'lsa — Koreya, dona)
+const pickMarket = (v) => (cfg.isMarket(v) ? v : 'kr');
+const pickMode = (v) => (cfg.isMode(v) ? v : 'retail');
+
 async function getConfig(_req, res) {
-  const [pay, delivery, s] = await Promise.all([Setting.payment(), Setting.delivery(), Setting.all()]);
+  const s = await Setting.all();
+  // Har davlatga: hududlar, valyuta, o'z kartasi va yetkazish narxi
+  const markets = await Promise.all(
+    cfg.markets.map(async (m) => {
+      const [pay, delivery] = await Promise.all([Setting.payment(m.key), Setting.delivery(m.key)]);
+      return {
+        ...m,
+        payment: { methods: pay.cardEnabled ? ['cash', 'card'] : ['cash'], card: pay.cardEnabled ? pay.card : null },
+        delivery,
+      };
+    })
+  );
   res.json({
     company: cfg.company,
-    currency: cfg.currency,
     categories: cfg.categories,
     tags: cfg.tags,
-    regions: cfg.regions,
-    payment: { methods: pay.cardEnabled ? ['cash', 'card'] : ['cash'], card: pay.cardEnabled ? pay.card : null },
-    delivery,
+    markets,
+    modes: cfg.modes,
     shopNote: s.shopNote || '',
   });
 }
@@ -55,6 +68,8 @@ function me(req, res) {
     username: u.username,
     phone: u.phone,
     lang: u.lang,
+    market: u.market,
+    mode: u.mode,
     seenIntro: u.seenIntro,
     isWeb: !!req.isWeb,
   });
@@ -64,6 +79,8 @@ async function updateMe(req, res) {
   const data = {};
   if (['uz', 'ru'].includes(req.body.lang)) data.lang = req.body.lang;
   if (typeof req.body.seenIntro === 'boolean') data.seenIntro = req.body.seenIntro;
+  if (cfg.isMarket(req.body.market)) data.market = req.body.market;
+  if (cfg.isMode(req.body.mode)) data.mode = req.body.mode;
   const u = await prisma.user.update({ where: { id: req.user.id }, data });
   req.user = u;
   me(req, res);
@@ -71,9 +88,9 @@ async function updateMe(req, res) {
 
 /**
  * Narxlar FAQAT shu yerda hisoblanadi — Mini App yuborgan narxga ishonilmaydi.
- * rawItems: [{productId, variant, qty}]
+ * rawItems: [{productId, variant, qty}], market: kr | uz, mode: retail | wholesale
  */
-async function priceCart(rawItems) {
+async function priceCart(rawItems, market = 'kr', mode = 'retail') {
   const merged = new Map();
   for (const r of (Array.isArray(rawItems) ? rawItems : []).slice(0, 50)) {
     const productId = parseInt(r?.productId, 10);
@@ -96,7 +113,8 @@ async function priceCart(rawItems) {
       problems.push({ productId: it.productId, variant: it.variant, reason: 'unavailable' });
       continue;
     }
-    if (!p.price) {
+    const unitPrice = Product.priceFor(p, market, mode);
+    if (!unitPrice) {
       problems.push({ productId: p.id, variant: it.variant, reason: 'noPrice' });
       continue;
     }
@@ -122,21 +140,22 @@ async function priceCart(rawItems) {
       image: Product.imageForVariant(p, variant),
       variant,
       qty,
-      unitPrice: p.price,
-      oldPrice: p.oldPrice,
-      lineTotal: p.price * qty,
+      unitPrice,
+      // chizilgan eski narx faqat Koreya donasi uchun kiritiladi
+      oldPrice: market === 'kr' && mode === 'retail' ? p.oldPrice : null,
+      lineTotal: unitPrice * qty,
     });
   }
 
   const subtotal = lines.reduce((s, l) => s + l.lineTotal, 0);
   const totalQty = lines.reduce((s, l) => s + l.qty, 0);
-  const d = await Setting.delivery();
+  const d = await Setting.delivery(market);
   const deliveryFee = subtotal > 0 && d.fee > 0 && !(d.freeFrom > 0 && subtotal >= d.freeFrom) ? d.fee : 0;
   return { lines, problems, subtotal, totalQty, deliveryFee, total: subtotal + deliveryFee, freeFrom: d.freeFrom };
 }
 
 async function calculate(req, res) {
-  res.json(await priceCart(req.body.items));
+  res.json(await priceCart(req.body.items, pickMarket(req.body.market), pickMode(req.body.mode)));
 }
 
 function badRequest(res, field, error) {
@@ -151,15 +170,17 @@ async function createOrder(req, res) {
   const address = String(b.address || '').trim().slice(0, 300);
   const comment = String(b.comment || '').trim().slice(0, 500) || null;
   const method = String(b.paymentMethod || '');
+  const market = pickMarket(b.market);
+  const mode = pickMode(b.mode);
 
   if (name.length < 2) return badRequest(res, 'customerName', 'Ismni kiriting');
   if (phoneDigits.length < 9 || phoneDigits.length > 15) return badRequest(res, 'phone', 'Telefon noto‘g‘ri');
-  if (!cfg.regions.some((r) => r.key === region)) return badRequest(res, 'region', 'Hududni tanlang');
+  if (!cfg.market(market).regions.some((r) => r.key === region)) return badRequest(res, 'region', 'Hududni tanlang');
   if (address.length < 3) return badRequest(res, 'address', 'Manzilni kiriting');
-  const pay = await Setting.payment();
+  const pay = await Setting.payment(market);
   if (!(method === 'cash' || (method === 'card' && pay.cardEnabled))) return badRequest(res, 'paymentMethod', 'To‘lov usuli');
 
-  const priced = await priceCart(b.items);
+  const priced = await priceCart(b.items, market, mode);
   if (!priced.lines.length) return res.status(400).json({ error: 'Savatcha bo‘sh', problems: priced.problems });
   // Har qanday muammo (tugagan, narxsiz, yetarli emas) — mijoz savatchada ko'rib, qayta tasdiqlaydi
   if (priced.problems.length) return res.status(409).json({ error: 'problems', problems: priced.problems });
@@ -172,6 +193,8 @@ async function createOrder(req, res) {
       return tx.order.create({
         data: {
           userId: req.user.id,
+          market,
+          mode,
           items: priced.lines.map(({ oldPrice, ...l }) => l),
           totalQty: priced.totalQty,
           subtotal: priced.subtotal,
@@ -196,6 +219,8 @@ async function createOrder(req, res) {
   const upd = {};
   if (!req.user.phone) upd.phone = phone;
   if (!req.user.firstName) upd.firstName = name;
+  if (req.user.market !== market) upd.market = market;
+  if (req.user.mode !== mode) upd.mode = mode;
   if (Object.keys(upd).length) prisma.user.update({ where: { id: req.user.id }, data: upd }).catch(() => {});
 
   // Adminlarga: rasm(lar) + to'liq ma'lumot bitta xabarda

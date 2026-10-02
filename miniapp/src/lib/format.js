@@ -1,4 +1,18 @@
-export const money = (n) => `${Math.round(Number(n) || 0).toLocaleString('en-US')} ₩`;
+// Tanlangan davlat (App o'rnatadi) — money() valyutani shundan oladi
+let currentMarket = 'kr';
+export const setMoneyMarket = (m) => (currentMarket = m === 'uz' ? 'uz' : 'kr');
+
+// kr -> "25,000 ₩", uz -> "250 000 so‘m"
+export const money = (n, market = currentMarket) => {
+  const v = Math.round(Number(n) || 0).toLocaleString('en-US');
+  return market === 'uz' ? `${v.replace(/,/g, ' ')} so‘m` : `${v} ₩`;
+};
+
+// Davlat va savdo turiga mos narx (0 = narx kiritilmagan)
+export function priceFor(p, market, mode) {
+  if (market === 'uz') return (mode === 'wholesale' ? p.priceUzOptom : p.priceUz) || 0;
+  return (mode === 'wholesale' ? p.priceOptom : p.price) || 0;
+}
 
 export function formatDate(d, lang = 'uz') {
   const dt = new Date(d);
@@ -8,10 +22,11 @@ export function formatDate(d, lang = 'uz') {
 
 export const onlyDigits = (s) => String(s || '').replace(/\D/g, '');
 
-// Koreya raqami: +82 10 1234 5678 (boshqa davlat raqami ham qabul qilinadi)
-export function formatPhone(raw) {
+// Koreya: +82 10 1234 5678, O'zbekiston: +998 90 123 45 67 (boshqa davlat raqami ham qabul qilinadi)
+export function formatPhone(raw, market = currentMarket) {
   let d = onlyDigits(raw).slice(0, 15);
   if (!d) return '';
+  if (market === 'uz' && d.length <= 9 && !/^(998|0|82)/.test(d)) d = '998' + d;
   if (d.startsWith('0')) d = '82' + d.slice(1);
   if (d.startsWith('82')) {
     const r = d.slice(2);

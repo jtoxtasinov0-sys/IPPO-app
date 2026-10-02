@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import ProductForm from '../components/ProductForm';
-import { api, imageUrl, frameStyle, money } from '../lib/api';
+import { api, imageUrl, frameStyle, money, PRICE_FIELDS } from '../lib/api';
 
 export default function Products({ meta }) {
   const [list, setList] = useState(null);
@@ -44,7 +44,7 @@ export default function Products({ meta }) {
   }
 
   const catName = (k) => meta?.categories?.find((c) => c.key === k)?.uz || k;
-  const noPrice = (list || []).filter((p) => !p.price && p.isActive).length;
+  const noPrice = (list || []).filter((p) => p.isActive && PRICE_FIELDS.some((x) => !p[x.key])).length;
 
   return (
     <div className="page">
@@ -91,7 +91,14 @@ export default function Products({ meta }) {
               <div className="pc-name" onClick={() => setEditing(p)}>
                 {p.name}
               </div>
-              <div className="pc-price">{p.price ? money(p.price) : <span className="warn-text">Narx yo‘q</span>}</div>
+              <div className="pc-prices">
+                {PRICE_FIELDS.map((x) => (
+                  <div key={x.key}>
+                    <span className="muted">{x.label.replace(/ (₩|so‘m)$/, '')}</span>
+                    {p[x.key] ? <b>{money(p[x.key], x.market)}</b> : <span className="warn-text">—</span>}
+                  </div>
+                ))}
+              </div>
               <div className="muted small">Ombor: {p.stock == null ? '∞' : p.stock}</div>
               <div className="pc-toggles">
                 <label className="switch">

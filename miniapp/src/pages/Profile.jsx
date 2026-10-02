@@ -8,8 +8,9 @@ import { cart } from '../lib/store';
 import { useI18n } from '../lib/i18n';
 import { money, formatDate, formatPhone } from '../lib/format';
 import { tgUser, openLink, haptic } from '../lib/telegram';
+import Flag from '../components/Flag';
 
-export default function Profile({ config, user, refreshKey, onPay, onGoCart, onIntro }) {
+export default function Profile({ config, user, market, mode, onMarket, refreshKey, onPay, onGoCart }) {
   const { t, lang, setLang, label } = useI18n();
   const [orders, setOrders] = useState(null);
   const [error, setError] = useState(false);
@@ -36,7 +37,7 @@ export default function Profile({ config, user, refreshKey, onPay, onGoCart, onI
     onGoCart();
   }
 
-  const region = (key) => label(config?.regions?.find((r) => r.key === key)) || key;
+  const region = (key) => label(config?.markets?.flatMap((m) => m.regions).find((r) => r.key === key)) || key;
 
   return (
     <div className="page profile">
@@ -105,12 +106,12 @@ export default function Profile({ config, user, refreshKey, onPay, onGoCart, onI
                 </div>
                 <div className="order-meta">
                   <span className="muted small">
-                    {region(o.region)} · {o.paymentMethod === 'card' ? t.card : t.payCashLabel}
+                    <Flag market={o.market} size={14} /> {region(o.region)} · {t.modeName[o.mode] || ''} · {o.paymentMethod === 'card' ? t.card : t.payCashLabel}
                   </span>
                   {o.paymentMethod === 'card' && <span className={`pay-status ps-${o.paymentStatus}`}>{t.payStatus[o.paymentStatus]}</span>}
                 </div>
                 <div className="order-bottom">
-                  <div className="order-total">{money(o.total)}</div>
+                  <div className="order-total">{money(o.total, o.market)}</div>
                   <div className="order-actions">
                     {needsReceipt && (
                       <button className="btn primary sm" onClick={() => onPay(o)}>
@@ -181,12 +182,15 @@ export default function Profile({ config, user, refreshKey, onPay, onGoCart, onI
               <Icon name="chevron" size={16} />
             </a>
           )}
-          <button onClick={onIntro}>
+          <button onClick={onMarket}>
             <span className="ci">
-              <Icon name="info" size={20} />
+              <Icon name="globe" size={20} />
             </span>
             <span className="ct">
-              <b>{t.howItWorks}</b>
+              <b>{t.marketAndMode}</b>
+              <small>
+                <Flag market={market} size={14} /> {t.marketName[market]} · {t.modeName[mode]}
+              </small>
             </span>
             <Icon name="chevron" size={16} />
           </button>

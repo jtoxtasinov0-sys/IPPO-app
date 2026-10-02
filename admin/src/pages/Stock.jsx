@@ -1,6 +1,6 @@
 // Ombor: har mahsulot qoldig'i (bo'sh = cheklanmagan) va narxni tez o'zgartirish
 import { useEffect, useState } from 'react';
-import { api, imageUrl } from '../lib/api';
+import { api, imageUrl, PRICE_FIELDS } from '../lib/api';
 
 export default function Stock() {
   const [list, setList] = useState(null);
@@ -23,7 +23,9 @@ export default function Stock() {
       const d = draft[p.id] || {};
       const body = {};
       if ('stock' in d) body.stock = d.stock === '' ? null : Math.max(0, parseInt(d.stock, 10) || 0);
-      if ('price' in d) body.price = Math.max(0, parseInt(String(d.price).replace(/\D/g, ''), 10) || 0);
+      for (const { key } of PRICE_FIELDS) {
+        if (key in d) body[key] = Math.max(0, parseInt(String(d[key]).replace(/\D/g, ''), 10) || 0);
+      }
       const updated = await api.patchProduct(p.id, body);
       setList((l) => l.map((x) => (x.id === p.id ? updated : x)));
       setDraft((dr) => {
@@ -44,7 +46,7 @@ export default function Stock() {
   };
 
   const shown = (list || []).filter((p) =>
-    filter === 'low' ? p.stock != null && p.stock <= 3 : filter === 'unlimited' ? p.stock == null : filter === 'noprice' ? !p.price : true
+    filter === 'low' ? p.stock != null && p.stock <= 3 : filter === 'unlimited' ? p.stock == null : filter === 'noprice' ? PRICE_FIELDS.some((x) => !p[x.key]) : true
   );
 
   return (
@@ -76,10 +78,14 @@ export default function Stock() {
               <b>{p.name}</b>
               <span className="muted small">{p.article}</span>
             </div>
-            <label className="stock-field">
-              Narx ₩
-              <input className="input" inputMode="numeric" value={val(p, 'price') || ''} placeholder="0" onChange={(e) => setVal(p, 'price', e.target.value)} />
-            </label>
+            <div className="stock-prices">
+              {PRICE_FIELDS.map((x) => (
+                <label className="stock-field" key={x.key}>
+                  {x.label}
+                  <input className="input" inputMode="numeric" value={val(p, x.key) || ''} placeholder="0" onChange={(e) => setVal(p, x.key, e.target.value)} />
+                </label>
+              ))}
+            </div>
             <div className="stock-field">
               Qoldiq
               <div className="stock-ctrl">

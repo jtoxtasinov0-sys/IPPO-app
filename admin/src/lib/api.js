@@ -113,7 +113,21 @@ export function frameStyle(f) {
   };
 }
 
-export const money = (n) => `${Math.round(Number(n) || 0).toLocaleString('en-US')} ₩`;
+// market: kr -> "25,000 ₩", uz -> "250 000 so‘m"
+export const money = (n, market = 'kr') => {
+  const v = Math.round(Number(n) || 0).toLocaleString('en-US');
+  return market === 'uz' ? `${v.replace(/,/g, ' ')} so‘m` : `${v} ₩`;
+};
+
+// Mahsulotning 4 ta narxi: davlat × savdo turi
+export const PRICE_FIELDS = [
+  { key: 'priceOptom', market: 'kr', label: '🇰🇷 Optom ₩' },
+  { key: 'price', market: 'kr', label: '🇰🇷 Dona ₩' },
+  { key: 'priceUzOptom', market: 'uz', label: '🇺🇿 Optom so‘m' },
+  { key: 'priceUz', market: 'uz', label: '🇺🇿 Dona so‘m' },
+];
+
+export const FLAG = { kr: '🇰🇷', uz: '🇺🇿' };
 
 export function formatDate(d) {
   const dt = new Date(d);

@@ -16,6 +16,7 @@ import { api, onWaking } from './lib/api';
 import { I18nContext, getDict } from './lib/i18n';
 import { tgUser } from './lib/telegram';
 import { reloadBrokenImages } from './lib/image';
+import { priceFor, setMoneyMarket } from './lib/format';
 
 const ls = {
   get(k) {
@@ -39,7 +40,7 @@ function initialLang() {
 }
 
 // Oxirgi ma'lumotlar telefonda saqlanadi — server uxlasa ham ilova darhol ochiladi
-const CACHE_KEY = 'ippo_cache_v1';
+const CACHE_KEY = 'ippo_cache_v2'; // v2: davlat/optom narxlari bilan
 function loadCache() {
   try {
     const c = JSON.parse(ls.get(CACHE_KEY) || 'null');
@@ -49,6 +50,9 @@ function loadCache() {
   }
 }
 const cached = loadCache();
+
+const savedMarket = () => (['uz', 'kr'].includes(ls.get('ippo_market')) ? ls.get('ippo_market') : null);
+const savedMode = () => (['retail', 'wholesale'].includes(ls.get('ippo_mode')) ? ls.get('ippo_mode') : null);
 
 function loadSeen() {
   try {
@@ -77,7 +81,11 @@ export default function App() {
   const [payOrder, setPayOrder] = useState(null);
   const [successOrder, setSuccessOrder] = useState(null);
   const [refreshKey, setRefreshKey] = useState(0);
-  const [showIntro, setShowIntro] = useState(() => !ls.get('ippo_intro'));
+  // Davlat (uz | kr) va savdo turi (retail | wholesale) — tanlanmagan bo'lsa tanlash ekrani chiqadi
+  const [market, setMarket] = useState(savedMarket);
+  const [mode, setMode] = useState(savedMode);
+  const [showIntro, setShowIntro] = useState(() => !savedMarket() || !savedMode());
+  setMoneyMarket(market);
 
   useEffect(() => onWaking(setWaking), []);
 
@@ -97,7 +105,14 @@ export default function App() {
       .then((u) => {
         setUser(u);
         if (!ls.get('ippo_lang') && (u.lang === 'uz' || u.lang === 'ru')) setLangState(u.lang);
-        if (u.seenIntro) setShowIntro(false);
+        // Telefon xotirasi tozalangan bo'lsa — serverda saqlangan tanlov
+        if (!savedMarket() && !savedMode() && u.market && u.mode) {
+          setMarket(u.market);
+          setMode(u.mode);
+          ls.set('ippo_market', u.market);
+          ls.set('ippo_mode', u.mode);
+          setShowIntro(false);
+        }
       })
       .catch(() => {});
   }, []);
@@ -114,10 +129,14 @@ export default function App() {
   const i18n = useMemo(() => ({ lang, t: getDict(lang), setLang }), [lang, setLang]);
   const t = i18n.t;
 
-  function finishIntro() {
+  function finishIntro(m, md) {
+    setMarket(m);
+    setMode(md);
+    ls.set('ippo_market', m);
+    ls.set('ippo_mode', md);
     setShowIntro(false);
-    ls.set('ippo_intro', '1');
-    api.updateMe({ seenIntro: true }).catch(() => {});
+    window.scrollTo({ top: 0 });
+    api.updateMe({ seenIntro: true, market: m, mode: md }).catch(() => {});
   }
 
   function goTab(next) {
@@ -139,7 +158,18 @@ export default function App() {
     });
   }
 
-  const productById = useMemo(() => new Map((products || []).map((p) => [p.id, p])), [products]);
+  // Narx tanlangan davlat va savdo turiga qarab almashtiriladi — komponentlar p.price ni ishlatadi
+  const shown = useMemo(
+    () =>
+      products?.map((p) => ({
+        ...p,
+        price: priceFor(p, market, mode),
+        oldPrice: market === 'kr' && mode === 'retail' ? p.oldPrice : null,
+      })) || null,
+    [products, market, mode]
+  );
+  const marketCfg = config?.markets?.find((m) => m.key === market) || null;
+  const productById = useMemo(() => new Map((shown || []).map((p) => [p.id, p])), [shown]);
   const openProduct = openProductId ? productById.get(openProductId) : null;
 
   function onOrderDone(order) {
@@ -165,13 +195,16 @@ export default function App() {
         </div>
       </div>
     );
-  } else if (!products) {
+  } else if (!shown) {
     page = <Loading />;
   } else if (tab === 'home') {
     page = (
       <Home
         config={config}
-        products={products}
+        market={market}
+        mode={mode}
+        onMarket={() => setShowIntro(true)}
+        products={shown}
         stories={stories}
         seenStories={seenStories}
         user={user}
@@ -182,12 +215,14 @@ export default function App() {
     );
   } else if (tab === 'catalog') {
     page = (
-      <Catalog config={config} products={products} filter={filter} setFilter={setFilter} onOpen={(p) => setOpenProductId(p.id)} />
+      <Catalog config={config} products={shown} filter={filter} setFilter={setFilter} onOpen={(p) => setOpenProductId(p.id)} />
     );
   } else if (tab === 'cart') {
     page = (
       <Cart
-        products={products}
+        products={shown}
+        market={market}
+        mode={mode}
         refreshKey={refreshKey}
         onCatalog={() => openCatalog()}
         onOpen={(p) => setOpenProductId(p.id)}
@@ -202,10 +237,12 @@ export default function App() {
       <Profile
         config={config}
         user={user}
+        market={market}
+        mode={mode}
+        onMarket={() => setShowIntro(true)}
         refreshKey={refreshKey}
         onPay={setPayOrder}
         onGoCart={() => goTab('cart')}
-        onIntro={() => setShowIntro(true)}
       />
     );
   }
@@ -213,7 +250,12 @@ export default function App() {
   return (
     <I18nContext.Provider value={i18n}>
       {showIntro ? (
-        <Onboarding onDone={finishIntro} />
+        <Onboarding
+          initialMarket={market}
+          initialMode={mode}
+          onDone={finishIntro}
+          onCancel={market && mode ? () => setShowIntro(false) : null}
+        />
       ) : (
         <>
           {waking && !products && <div className="waking">{t.waking}</div>}
@@ -223,6 +265,7 @@ export default function App() {
           <ProductSheet
             product={openProduct}
             config={config}
+            market={market}
             onClose={() => setOpenProductId(null)}
             onGoCart={() => {
               setOpenProductId(null);
@@ -234,6 +277,9 @@ export default function App() {
             open={checkoutOpen}
             calc={checkoutCalc}
             config={config}
+            market={market}
+            mode={mode}
+            marketCfg={marketCfg}
             user={user}
             onClose={() => setCheckoutOpen(false)}
             onDone={onOrderDone}
@@ -246,7 +292,7 @@ export default function App() {
 
           <PaymentScreen
             order={payOrder}
-            card={config?.payment?.card}
+            card={config?.markets?.find((m) => m.key === (payOrder?.market || market))?.payment?.card}
             onClose={() => {
               setPayOrder(null);
               setRefreshKey((k) => k + 1);

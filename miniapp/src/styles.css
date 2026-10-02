@@ -2150,3 +2150,119 @@ a {
     width: 100%;
   }
 }
+
+/* ——— Davlat / savdo turi tanlash ——— */
+.intro-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+}
+.intro-back svg {
+  transform: rotate(180deg);
+}
+.intro-visual-sm {
+  flex: 0.8;
+  min-height: 150px;
+}
+.intro-visual-sm .intro-logo-wrap {
+  width: 62%;
+  max-width: 280px;
+}
+.choice-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 22px;
+}
+.choice {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  width: 100%;
+  padding: 16px;
+  border-radius: 20px;
+  border: 1.5px solid rgba(201, 160, 78, 0.35);
+  background: rgba(255, 255, 255, 0.85);
+  color: var(--intro-ink, #3a2812);
+  text-align: left;
+  box-shadow: 0 6px 18px rgba(157, 128, 76, 0.12);
+  animation: fadeIn 0.35s ease both;
+  transition: transform 0.15s, border-color 0.15s, box-shadow 0.15s;
+}
+.choice:active {
+  transform: scale(0.98);
+}
+.choice.on {
+  border-color: var(--gold);
+  box-shadow: 0 8px 24px rgba(201, 160, 78, 0.35);
+}
+.choice > svg {
+  color: var(--intro-accent, #a67c32);
+  flex-shrink: 0;
+}
+.choice-ic {
+  width: 50px;
+  height: 50px;
+  border-radius: 16px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--gold-grad);
+  color: #2a180b;
+}
+.choice-ic.flagbox {
+  background: #fff;
+  border: 1px solid rgba(201, 160, 78, 0.35);
+  font-size: 30px;
+  line-height: 1;
+}
+.choice-text {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+.choice-text b {
+  font-size: 17px;
+}
+.choice-text small {
+  font-size: 13px;
+  color: var(--intro-text, #6f5a3e);
+}
+
+/* Bosh sahifadagi "🇺🇿 O'zbekiston · Optom" tugmasi */
+.market-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border-radius: 99px;
+  border: 1px solid rgba(234, 200, 122, 0.45);
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--gold-light);
+  font-size: 13px;
+  font-weight: 700;
+}
+.market-pill svg {
+  transform: rotate(90deg);
+}
+.market-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+.flag {
+  display: inline-block;
+  vertical-align: -0.15em;
+  border-radius: 2px;
+  flex-shrink: 0;
+}
+.checkout-market {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin: -6px 0 12px;
+}

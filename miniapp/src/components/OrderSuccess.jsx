@@ -14,7 +14,7 @@ export default function OrderSuccess({ order, onClose, onOrders }) {
           </div>
           <h2>{t.orderAccepted}</h2>
           <div className="success-no">
-            {t.orderNo(order.id)} · {money(order.total)}
+            {t.orderNo(order.id)} · {money(order.total, order.market)}
           </div>
           <p className="muted">{t.weWillCall}</p>
           <button className="btn primary block lg" onClick={onClose}>

@@ -11,6 +11,16 @@ function imageForVariant(p, variant) {
   return images[0] || null;
 }
 
+// Davlat va savdo turiga mos narx (0 = narx kiritilmagan)
+const PRICE_FIELD = {
+  kr: { retail: 'price', wholesale: 'priceOptom' },
+  uz: { retail: 'priceUz', wholesale: 'priceUzOptom' },
+};
+function priceFor(p, market, mode) {
+  const field = (PRICE_FIELD[market] || PRICE_FIELD.kr)[mode] || 'price';
+  return p[field] || 0;
+}
+
 // Mijozga ko'rinadigan maydonlar
 function toPublic(p) {
   return {
@@ -29,6 +39,9 @@ function toPublic(p) {
     imageVariants: p.imageVariants,
     variants: p.variants,
     price: p.price,
+    priceOptom: p.priceOptom,
+    priceUz: p.priceUz,
+    priceUzOptom: p.priceUzOptom,
     oldPrice: p.oldPrice,
     stock: p.stock,
     isFeatured: p.isFeatured,
@@ -80,6 +93,9 @@ function sanitizeInput(b = {}) {
     imageVariants,
     variants,
     price: int(b.price) ?? 0,
+    priceOptom: int(b.priceOptom) ?? 0,
+    priceUz: int(b.priceUz) ?? 0,
+    priceUzOptom: int(b.priceUzOptom) ?? 0,
     oldPrice: int(b.oldPrice),
     stock: b.stock === '' || b.stock == null ? null : int(b.stock),
     isActive: b.isActive !== false,
@@ -88,4 +104,4 @@ function sanitizeInput(b = {}) {
   };
 }
 
-module.exports = { imageForVariant, toPublic, listActive, sanitizeInput };
+module.exports = { PRICE_FIELD, priceFor, imageForVariant, toPublic, listActive, sanitizeInput };

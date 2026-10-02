@@ -60,7 +60,7 @@ export default function Catalog({ config, products, filter, setFilter, onOpen })
           <button className={`chip ${!filter.category ? 'on' : ''}`} onClick={() => set({ category: null })}>
             {t.all}
           </button>
-          {config?.categories?.map((c) => (
+          {config?.categories?.filter((c) => products.some((p) => p.category === c.key)).map((c) => (
             <button
               key={c.key}
               className={`chip ${filter.category === c.key ? 'on' : ''}`}

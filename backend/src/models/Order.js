@@ -8,6 +8,8 @@ function findWithUser(id) {
 function toPublic(o) {
   return {
     id: o.id,
+    market: o.market,
+    mode: o.mode,
     items: o.items,
     totalQty: o.totalQty,
     subtotal: o.subtotal,

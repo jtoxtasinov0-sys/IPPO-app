@@ -98,7 +98,7 @@ export default function PaymentScreen({ order, card, onClose, onUpdated }) {
               <button className="amount-row" onClick={() => copy(String(order.total))}>
                 <span className="muted">{t.amount}</span>
                 <span className="amount">
-                  {money(order.total)} <Icon name="copy" size={16} />
+                  {money(order.total, order.market)} <Icon name="copy" size={16} />
                 </span>
               </button>
 

@@ -26,6 +26,12 @@
       "port": 5183
     },
     {
+      "name": "backend-nobot",
+      "runtimeExecutable": "node",
+      "runtimeArgs": ["-e", "process.chdir('backend'); process.env.BOT_TOKEN=''; require(require('path').resolve('src/index.js'))"],
+      "port": 5000
+    },
+    {
       "name": "admin-alt",
       "runtimeExecutable": "npm",
       "runtimeArgs": ["--prefix", "admin", "run", "dev", "--", "--port", "5184", "--strictPort"],

@@ -11,7 +11,7 @@ import { cart, useCart } from '../lib/store';
 import { haptic, openLink } from '../lib/telegram';
 import { money } from '../lib/format';
 
-export default function ProductSheet({ product, config, onClose, onGoCart }) {
+export default function ProductSheet({ product, config, market, onClose, onGoCart }) {
   const open = !!product;
   // Yopilish animatsiyasi paytida ham kontent turadi
   const [p, setP] = useState(product);
@@ -21,12 +21,12 @@ export default function ProductSheet({ product, config, onClose, onGoCart }) {
 
   return (
     <Sheet open={open} onClose={onClose} full className="product-sheet">
-      {p && <ProductBody key={p.id} p={p} config={config} onClose={onClose} onGoCart={onGoCart} />}
+      {p && <ProductBody key={p.id} p={p} config={config} market={market} onClose={onClose} onGoCart={onGoCart} />}
     </Sheet>
   );
 }
 
-function ProductBody({ p, config, onClose, onGoCart }) {
+function ProductBody({ p, config, market, onClose, onGoCart }) {
   const { t, pick, label } = useI18n();
   const items = useCart();
   const [variant, setVariant] = useState(p.variants?.[0] || null);
@@ -147,7 +147,7 @@ function ProductBody({ p, config, onClose, onGoCart }) {
               <Icon name="shield" size={18} /> {t.trustOriginal}
             </div>
             <div>
-              <Icon name="truck" size={18} /> {t.trustDelivery}
+              <Icon name="truck" size={18} /> {market === 'uz' ? t.trustDeliveryUz : t.trustDelivery}
             </div>
           </div>
         </div>

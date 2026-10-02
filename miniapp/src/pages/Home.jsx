@@ -4,8 +4,9 @@ import Img from '../components/Img';
 import Icon from '../components/Icon';
 import { useI18n } from '../lib/i18n';
 import { tgUser } from '../lib/telegram';
+import Flag from '../components/Flag';
 
-export default function Home({ config, products, stories, seenStories, user, onStory, onOpen, onCatalog }) {
+export default function Home({ config, market, mode, onMarket, products, stories, seenStories, user, onStory, onOpen, onCatalog }) {
   const { t, label } = useI18n();
   const name = tgUser?.first_name || user?.firstName || '';
   const featured = products.filter((p) => p.isFeatured).slice(0, 6);
@@ -21,8 +22,13 @@ export default function Home({ config, products, stories, seenStories, user, onS
         <div className="home-head-row">
           <img className="home-logo" src="/logo.png" alt="IPPO" />
         </div>
-        <div className="home-hello">
-          {t.hello}, <b>{name || t.guest}</b> 👋
+        <div className="market-row">
+          <div className="home-hello">
+            {t.hello}, <b>{name || t.guest}</b> 👋
+          </div>
+          <button className="market-pill" onClick={onMarket}>
+            <Flag market={market} size={18} /> {t.modeName[mode]} <Icon name="chevron" size={14} stroke={2.4} />
+          </button>
         </div>
         <button className="search-pill" onClick={() => onCatalog({ focus: true })}>
           <Icon name="search" size={19} />
@@ -58,7 +64,7 @@ export default function Home({ config, products, stories, seenStories, user, onS
         </div>
         <div>
           <Icon name="truck" size={20} />
-          <span>{t.trustDelivery}</span>
+          <span>{market === 'uz' ? t.trustDeliveryUz : t.trustDelivery}</span>
         </div>
         <div>
           <Icon name="card" size={20} />
@@ -71,7 +77,7 @@ export default function Home({ config, products, stories, seenStories, user, onS
           <h2>{t.categories}</h2>
         </div>
         <div className="cat-grid">
-          {config?.categories?.map((c) => (
+          {config?.categories?.filter((c) => catCount(c.key) > 0).map((c) => (
             <button key={c.key} className="cat-tile" onClick={() => onCatalog({ category: c.key })}>
               <div className="cat-img">
                 <Img src={catCover(c.key)} width={320} alt="" />

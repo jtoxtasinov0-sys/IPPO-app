@@ -2,12 +2,18 @@
 const prisma = require('../database/connection');
 const cfg = require('../config/default');
 
+// Koreya kalitlari eski nomida qoldi (bazadagi qiymatlar saqlansin), O'zbekistonniki — ...Uz
 const DEFAULTS = {
   cardNumber: cfg.payment.card.number,
   cardHolder: cfg.payment.card.holder,
   bankName: cfg.payment.card.bank,
   deliveryFee: '0', // ₩, 0 = bepul
   freeDeliveryFrom: '0', // shu summadan boshlab bepul (0 = chegara yo'q)
+  cardNumberUz: '',
+  cardHolderUz: '',
+  bankNameUz: '',
+  deliveryFeeUz: '0', // so'm
+  freeDeliveryFromUz: '0',
   shopNote: '', // Mini App'da ko'rinadigan qisqa e'lon (ixtiyoriy)
 };
 
@@ -35,21 +41,26 @@ async function setMany(obj) {
   return all();
 }
 
-async function payment() {
+const suffix = (market) => (market === 'uz' ? 'Uz' : '');
+
+// Davlatga mos karta: market = 'kr' | 'uz'
+async function payment(market) {
   const s = await all();
+  const x = suffix(market);
   const card = {
-    number: (s.cardNumber || '').trim(),
-    holder: (s.cardHolder || '').trim(),
-    bank: (s.bankName || '').trim(),
+    number: (s['cardNumber' + x] || '').trim(),
+    holder: (s['cardHolder' + x] || '').trim(),
+    bank: (s['bankName' + x] || '').trim(),
   };
   return { card, cardEnabled: !!card.number };
 }
 
-async function delivery() {
+async function delivery(market) {
   const s = await all();
+  const x = suffix(market);
   return {
-    fee: Math.max(0, parseInt(s.deliveryFee, 10) || 0),
-    freeFrom: Math.max(0, parseInt(s.freeDeliveryFrom, 10) || 0),
+    fee: Math.max(0, parseInt(s['deliveryFee' + x], 10) || 0),
+    freeFrom: Math.max(0, parseInt(s['freeDeliveryFrom' + x], 10) || 0),
   };
 }
 

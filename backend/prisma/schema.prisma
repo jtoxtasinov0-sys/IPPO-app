@@ -18,6 +18,8 @@ model User {
   username   String?
   phone      String?
   lang       String   @default("uz")
+  market     String? // kr | uz — tanlagan davlati
+  mode       String? // retail (dona) | wholesale (optom)
   seenIntro  Boolean  @default(false)
   isAdmin    Boolean  @default(false) // botda "/admin PAROL" yozgan
   isBlocked  Boolean  @default(false) // botni bloklagan
@@ -41,7 +43,10 @@ model Product {
   imageFrames   Json? // har rasm uchun {z, x, y} — kartochkada joylashuv
   imageVariants Json? // har rasm qaysi turga tegishli: ["Sariq", null, ...]
   variants      String[] // mahsulot turlari: Sariq, Pushti ...
-  price         Int      @default(0) // ₩; 0 = narx kiritilmagan ("narxini so'rang")
+  price         Int      @default(0) // Koreya, dona (₩); 0 = narx kiritilmagan ("narxini so'rang")
+  priceOptom    Int      @default(0) // Koreya, optom (₩)
+  priceUz       Int      @default(0) // O'zbekiston, dona (so'm)
+  priceUzOptom  Int      @default(0) // O'zbekiston, optom (so'm)
   oldPrice      Int? // chizilgan eski narx
   stock         Int? // null = cheklanmagan
   isActive      Boolean  @default(true)
@@ -55,6 +60,8 @@ model Order {
   id            Int       @id @default(autoincrement())
   userId        Int?
   user          User?     @relation(fields: [userId], references: [id], onDelete: SetNull)
+  market        String    @default("kr") // kr (₩) | uz (so'm)
+  mode          String    @default("retail") // retail (dona) | wholesale (optom)
   items         Json // [{productId, article, name, image, variant, qty, unitPrice, lineTotal}]
   totalQty      Int
   subtotal      Int

@@ -8,10 +8,14 @@ const esc = (s) =>
     .replace(/</g, '&lt;')
     .replace(/>/g, '&gt;');
 
-const money = (n) => `${Math.round(Number(n) || 0).toLocaleString('en-US')} ${cfg.currency.symbol}`;
+// market: kr -> "25,000 ₩", uz -> "250 000 so‘m"
+const money = (n, market = 'kr') => {
+  const v = Math.round(Number(n) || 0).toLocaleString('en-US');
+  return market === 'uz' ? `${v.replace(/,/g, ' ')} ${cfg.market('uz').currency.symbol}` : `${v} ${cfg.market('kr').currency.symbol}`;
+};
 
 const regionName = (key, lang = 'uz') => {
-  const r = cfg.regions.find((x) => x.key === key);
+  const r = cfg.allRegions().find((x) => x.key === key);
   return r ? r[lang] || r.uz : key;
 };
 
@@ -20,7 +24,7 @@ const T = {
     welcome: (name) =>
       `Assalomu alaykum${name ? ', <b>' + esc(name) + '</b>' : ''}! 🤍\n\n` +
       `<b>IPPO by Fotima Zuhra</b> — Koreyadan original kosmetika, jenshen, kollagen va vitaminlar.\n\n` +
-      `🛍 Do‘konni ochib, mahsulot tanlang — buyurtmangiz Koreya bo‘ylab yetkaziladi.\n` +
+      `🛍 Do‘konni ochib, mahsulot tanlang — buyurtmangiz Koreya va O‘zbekiston bo‘ylab yetkaziladi.\n` +
       `💳 To‘lov: naqd yoki kartaga o‘tkazma.`,
     openShop: '🛍 Do‘konni ochish',
     adminPanel: '🛠 Admin panel',
@@ -39,7 +43,7 @@ const T = {
     fallback: 'Do‘konni ochish uchun pastdagi tugmani bosing 👇',
     orderCreated: (o) =>
       `✅ <b>Buyurtmangiz qabul qilindi — #${o.id}</b>\n\n` +
-      `Summa: <b>${money(o.total)}</b>\n` +
+      `Summa: <b>${money(o.total, o.market)}</b>\n` +
       `To‘lov: ${o.paymentMethod === 'card' ? 'kartaga o‘tkazma' : 'naqd pul'}\n\n` +
       `Tez orada siz bilan bog‘lanamiz. Rahmat! 🤍`,
     payCard: (o, card) =>
@@ -47,7 +51,7 @@ const T = {
       `<code>${esc(card.number)}</code>\n` +
       (card.bank ? `Bank: ${esc(card.bank)}\n` : '') +
       (card.holder ? `Egasi: ${esc(card.holder)}\n` : '') +
-      `Summa: <b>${money(o.total)}</b>\n\n` +
+      `Summa: <b>${money(o.total, o.market)}</b>\n\n` +
       `📸 O‘tkazmadan so‘ng chek rasmini shu yerga yuboring.`,
     receiptOk: (id) => `🧾 Chek qabul qilindi (buyurtma #${id}). Tekshirib, sizga xabar beramiz.`,
     noOrderForReceipt: 'Chek biriktiriladigan to‘lanmagan buyurtma topilmadi. Buyurtmani do‘kon orqali bering 👇',
@@ -65,7 +69,7 @@ const T = {
     welcome: (name) =>
       `Здравствуйте${name ? ', <b>' + esc(name) + '</b>' : ''}! 🤍\n\n` +
       `<b>IPPO by Fotima Zuhra</b> — оригинальная косметика, женьшень, коллаген и витамины из Кореи.\n\n` +
-      `🛍 Откройте магазин и выберите товар — доставим по всей Корее.\n` +
+      `🛍 Откройте магазин и выберите товар — доставим по Корее и Узбекистану.\n` +
       `💳 Оплата: наличными или переводом на карту.`,
     openShop: '🛍 Открыть магазин',
     adminPanel: '🛠 Админ-панель',
@@ -84,7 +88,7 @@ const T = {
     fallback: 'Нажмите кнопку ниже, чтобы открыть магазин 👇',
     orderCreated: (o) =>
       `✅ <b>Заказ принят — #${o.id}</b>\n\n` +
-      `Сумма: <b>${money(o.total)}</b>\n` +
+      `Сумма: <b>${money(o.total, o.market)}</b>\n` +
       `Оплата: ${o.paymentMethod === 'card' ? 'перевод на карту' : 'наличными'}\n\n` +
       `Скоро свяжемся с вами. Спасибо! 🤍`,
     payCard: (o, card) =>
@@ -92,7 +96,7 @@ const T = {
       `<code>${esc(card.number)}</code>\n` +
       (card.bank ? `Банк: ${esc(card.bank)}\n` : '') +
       (card.holder ? `Владелец: ${esc(card.holder)}\n` : '') +
-      `Сумма: <b>${money(o.total)}</b>\n\n` +
+      `Сумма: <b>${money(o.total, o.market)}</b>\n\n` +
       `📸 После перевода отправьте сюда фото чека.`,
     receiptOk: (id) => `🧾 Чек получен (заказ #${id}). Проверим и сообщим вам.`,
     noOrderForReceipt: 'Не найден неоплаченный заказ для этого чека. Оформите заказ через магазин 👇',
@@ -134,19 +138,27 @@ function customerLine(o) {
   return '🌐 Saytdan (Telegramsiz) — telefon orqali bog‘laning';
 }
 
+// "🇺🇿 O'zbekiston · Optom"
+function marketLine(o) {
+  const m = cfg.market(o.market);
+  const mode = cfg.modes.find((x) => x.key === o.mode);
+  return `${m.flag} ${m.uz} · ${mode ? mode.uz : 'Dona'}`;
+}
+
 function adminOrderText(o, { title } = {}) {
   const items = (o.items || [])
     .map((it, i) => {
       const variant = it.variant ? ` · 🎨 ${esc(it.variant)}` : '';
-      return `${i + 1}. <b>${esc(it.name)}</b> [${esc(it.article)}]${variant}\n    ${it.qty} × ${money(it.unitPrice)} = <b>${money(it.lineTotal)}</b>`;
+      return `${i + 1}. <b>${esc(it.name)}</b> [${esc(it.article)}]${variant}\n    ${it.qty} × ${money(it.unitPrice, o.market)} = <b>${money(it.lineTotal, o.market)}</b>`;
     })
     .join('\n');
-  const delivery = o.deliveryFee ? `\n🚚 Yetkazish: ${money(o.deliveryFee)}` : '';
+  const delivery = o.deliveryFee ? `\n🚚 Yetkazish: ${money(o.deliveryFee, o.market)}` : '';
   return (
     `${title || '🆕 <b>Yangi buyurtma #' + o.id + '</b>'}\n\n` +
     `${items}\n\n` +
+    `${marketLine(o)}\n` +
     `📦 Jami: ${o.totalQty} dona${delivery}\n` +
-    `💰 <b>Summa: ${money(o.total)}</b>\n` +
+    `💰 <b>Summa: ${money(o.total, o.market)}</b>\n` +
     `💳 To‘lov: ${o.paymentMethod === 'card' ? 'Kartaga o‘tkazma' : 'Naqd pul'}\n` +
     `📌 To‘lov holati: ${PAY_STATUS[o.paymentStatus] || o.paymentStatus}\n\n` +
     `👤 ${esc(o.customerName)}\n` +

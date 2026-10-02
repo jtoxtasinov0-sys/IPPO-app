@@ -8,10 +8,11 @@ import { cart } from '../lib/store';
 import { useI18n } from '../lib/i18n';
 import { money, formatPhone, onlyDigits } from '../lib/format';
 import { haptic, tgUser } from '../lib/telegram';
+import Flag from '../components/Flag';
 
 const REQUIRED = ['customerName', 'phone', 'region', 'address'];
 
-export default function Checkout({ open, calc, config, user, onClose, onDone, onProblems }) {
+export default function Checkout({ open, calc, market, mode, marketCfg, user, onClose, onDone, onProblems }) {
   const { t, label } = useI18n();
   const [form, setForm] = useState({
     customerName: '',
@@ -26,7 +27,13 @@ export default function Checkout({ open, calc, config, user, onClose, onDone, on
   const refs = useRef({});
   const filled = useRef(false);
 
-  const methods = config?.payment?.methods || ['cash'];
+  const methods = marketCfg?.payment?.methods || ['cash'];
+  const regions = marketCfg?.regions || [];
+
+  // Davlat almashtirilsa — boshqa davlat hududi qolib ketmasin
+  useEffect(() => {
+    setForm((f) => (f.region && !regions.some((r) => r.key === f.region) ? { ...f, region: '' } : f));
+  }, [market, regions.length]);
 
   // Qayta buyurtmada: oxirgi buyurtmadan ism, telefon, hudud, manzil (yozilgan maydonga tegmaydi)
   useEffect(() => {
@@ -50,7 +57,7 @@ export default function Checkout({ open, calc, config, user, onClose, onDone, on
           ...f,
           customerName: f.customerName || last.customerName,
           phone: f.phone || formatPhone(last.phone),
-          region: f.region || (config?.regions?.some((r) => r.key === last.region) ? last.region : ''),
+          region: f.region || (regions.some((r) => r.key === last.region) ? last.region : ''),
           address: f.address || last.address,
         }));
       })
@@ -90,6 +97,8 @@ export default function Checkout({ open, calc, config, user, onClose, onDone, on
     try {
       const order = await api.createOrder({
         ...form,
+        market,
+        mode,
         items: cart.get(),
       });
       haptic('success');
@@ -125,6 +134,9 @@ export default function Checkout({ open, calc, config, user, onClose, onDone, on
     <Sheet open={open} onClose={onClose} full className="checkout-sheet">
       <div className="ps-scroll checkout">
         <h2 className="sheet-title">{t.checkoutTitle}</h2>
+        <div className="checkout-market muted small">
+          <Flag market={market} size={16} /> {t.marketName[market]} · {t.modeName[mode]}
+        </div>
 
         {field(
           'customerName',
@@ -147,7 +159,7 @@ export default function Checkout({ open, calc, config, user, onClose, onDone, on
             value={form.phone}
             onChange={set('phone')}
             onBlur={blur('phone')}
-            placeholder="+82 10 1234 5678"
+            placeholder={market === 'uz' ? '+998 90 123 45 67' : '+82 10 1234 5678'}
             inputMode="tel"
             autoComplete="tel"
           />
@@ -158,7 +170,7 @@ export default function Checkout({ open, calc, config, user, onClose, onDone, on
           <div className="select">
             <select ref={(el) => (refs.current.region = el)} value={form.region} onChange={set('region')} onBlur={blur('region')}>
               <option value="">{t.chooseRegion}</option>
-              {config?.regions?.map((r) => (
+              {regions.map((r) => (
                 <option key={r.key} value={r.key}>
                   {label(r)}
                 </option>
@@ -175,7 +187,7 @@ export default function Checkout({ open, calc, config, user, onClose, onDone, on
             value={form.address}
             onChange={set('address')}
             onBlur={blur('address')}
-            placeholder={t.addressPh}
+            placeholder={market === 'uz' ? t.addressPhUz : t.addressPh}
             rows={2}
             maxLength={300}
           />

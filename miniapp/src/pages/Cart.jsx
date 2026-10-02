@@ -10,7 +10,7 @@ import { haptic } from '../lib/telegram';
 
 const keyOf = (productId, variant) => `${productId}|${variant || ''}`;
 
-export default function Cart({ products, onCatalog, onCheckout, onOpen, refreshKey }) {
+export default function Cart({ products, market, mode, onCatalog, onCheckout, onOpen, refreshKey }) {
   const { t, pick } = useI18n();
   const items = useCart();
   const [calc, setCalc] = useState(null);
@@ -24,7 +24,7 @@ export default function Cart({ products, onCatalog, onCheckout, onOpen, refreshK
     let alive = true;
     const timer = setTimeout(() => {
       api
-        .calculate(items)
+        .calculate(items, market, mode)
         .then((r) => alive && (setCalc(r), setError(false)))
         .catch(() => alive && setError(true));
     }, 250);
@@ -32,7 +32,7 @@ export default function Cart({ products, onCatalog, onCheckout, onOpen, refreshK
       alive = false;
       clearTimeout(timer);
     };
-  }, [items, refreshKey]);
+  }, [items, refreshKey, market, mode]);
 
   if (!items.length) {
     return (

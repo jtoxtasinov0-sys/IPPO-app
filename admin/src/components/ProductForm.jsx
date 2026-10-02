@@ -2,7 +2,7 @@
 import { useState } from 'react';
 import Modal from './Modal';
 import ImagePicker from './ImagePicker';
-import { api } from '../lib/api';
+import { api, PRICE_FIELDS } from '../lib/api';
 
 const EMPTY = {
   article: '',
@@ -13,6 +13,9 @@ const EMPTY = {
   tag: '',
   volume: '',
   price: '',
+  priceOptom: '',
+  priceUz: '',
+  priceUzOptom: '',
   oldPrice: '',
   stock: '',
   variants: [],
@@ -33,6 +36,9 @@ export default function ProductForm({ product, meta, nextArticle, onClose, onSav
           ...EMPTY,
           ...product,
           price: product.price || '',
+          priceOptom: product.priceOptom || '',
+          priceUz: product.priceUz || '',
+          priceUzOptom: product.priceUzOptom || '',
           oldPrice: product.oldPrice ?? '',
           stock: product.stock ?? '',
           tag: product.tag || '',
@@ -75,7 +81,7 @@ export default function ProductForm({ product, meta, nextArticle, onClose, onSav
     }
   }
 
-  const priceNum = parseInt(String(f.price).replace(/\D/g, ''), 10) || 0;
+  const num = (v) => parseInt(String(v).replace(/\D/g, ''), 10) || 0;
 
   return (
     <Modal
@@ -144,12 +150,15 @@ export default function ProductForm({ product, meta, nextArticle, onClose, onSav
             ))}
           </select>
         </label>
+        <div className="span2 muted small">Narxlar — 0 yoki bo‘sh bo‘lsa, o‘sha davlat/turda «Narxini so‘rang» chiqadi.</div>
+        {PRICE_FIELDS.map((x) => (
+          <label key={x.key}>
+            {x.label} {num(f[x.key]) === 0 && <em className="warn-text">— narx yo‘q</em>}
+            <input className="input" inputMode="numeric" value={f[x.key]} onChange={set(x.key)} placeholder="0" />
+          </label>
+        ))}
         <label>
-          Narx (₩) {priceNum === 0 && <em className="warn-text">— 0 bo‘lsa «Narxini so‘rang»</em>}
-          <input className="input" inputMode="numeric" value={f.price} onChange={set('price')} placeholder="25000" />
-        </label>
-        <label>
-          Eski narx (chizilgan)
+          Eski narx 🇰🇷 dona (chizilgan)
           <input className="input" inputMode="numeric" value={f.oldPrice} onChange={set('oldPrice')} placeholder="ixtiyoriy" />
         </label>
         <label>

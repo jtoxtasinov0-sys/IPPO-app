@@ -1,12 +1,22 @@
-// 3 slayd: brend, qanday ishlaydi, yetkazish/to'lov — bir marta ko'rsatiladi
+// Birinchi kirish: 1) davlat (O'zbekiston / Koreya), 2) savdo turi (optom / dona).
+// Profildan yoki bosh sahifadagi tugmadan qayta ochib, o'zgartirish mumkin.
 import { useEffect, useState } from 'react';
 import Icon from '../components/Icon';
 import { useI18n } from '../lib/i18n';
 import { haptic, tg } from '../lib/telegram';
+import Flag from '../components/Flag';
 
-export default function Onboarding({ onDone }) {
+const MARKETS = ['uz', 'kr'].map((key) => ({ key }));
+const MODES = [
+  { key: 'wholesale', icon: 'box' },
+  { key: 'retail', icon: 'bag' },
+];
+
+export default function Onboarding({ initialMarket, initialMode, onDone, onCancel }) {
   const { t, lang, setLang } = useI18n();
-  const [i, setI] = useState(0);
+  const [step, setStep] = useState(0);
+  const [market, setMarket] = useState(initialMarket || null);
+  const [mode, setMode] = useState(initialMode || null);
 
   // Kirish ekrani och — Telegram sarlavhasi ham shu rangda, chiqqanda asl rangga qaytadi
   useEffect(() => {
@@ -20,22 +30,34 @@ export default function Onboarding({ onDone }) {
     };
   }, []);
 
-  const slides = [
-    { title: t.intro1Title, text: t.intro1Text, hero: true },
-    { title: t.intro2Title, text: t.intro2Text, icons: ['grid', 'bag', 'check'] },
-    { title: t.intro3Title, text: t.intro3Text, icons: ['truck', 'cash', 'card'] },
-  ];
-  const s = slides[i];
-  const last = i === slides.length - 1;
-
-  function next() {
-    haptic('light');
-    last ? onDone() : setI(i + 1);
+  function chooseMarket(m) {
+    haptic('select');
+    setMarket(m);
+    setTimeout(() => setStep(1), 160);
   }
+
+  function chooseMode(m) {
+    haptic('success');
+    setMode(m);
+    setTimeout(() => onDone(market, m), 160);
+  }
+
+  const isMarket = step === 0;
 
   return (
     <div className="intro">
       <div className="intro-top">
+        {step === 1 ? (
+          <button className="intro-skip intro-back" onClick={() => setStep(0)}>
+            <Icon name="chevron" size={16} stroke={2.4} /> {t.back}
+          </button>
+        ) : onCancel ? (
+          <button className="intro-skip intro-back" onClick={onCancel}>
+            <Icon name="chevron" size={16} stroke={2.4} /> {t.back}
+          </button>
+        ) : (
+          <span />
+        )}
         <div className="lang-switch">
           {['uz', 'ru'].map((l) => (
             <button key={l} className={lang === l ? 'on' : ''} onClick={() => setLang(l)}>
@@ -43,43 +65,61 @@ export default function Onboarding({ onDone }) {
             </button>
           ))}
         </div>
-        {!last && (
-          <button className="intro-skip" onClick={onDone}>
-            {t.introSkip}
-          </button>
-        )}
       </div>
 
-      <div className="intro-visual" key={i}>
-        {s.hero ? (
-          <div className="intro-logo-wrap">
-            <img className="intro-logo" src="/logo.png" alt="IPPO by Fotima Zuhra" />
-          </div>
-        ) : (
-          <div className="intro-icons">
-            {s.icons.map((n, k) => (
-              <div key={n} className="intro-ic" style={{ animationDelay: `${k * 90}ms` }}>
-                <Icon name={n} size={30} stroke={1.6} />
-              </div>
-            ))}
-          </div>
-        )}
-      </div>
-
-      <div className="intro-text" key={'t' + i}>
-        <h1>{s.title}</h1>
-        <p>{s.text}</p>
-      </div>
-
-      <div className="intro-bottom">
-        <div className="intro-dots">
-          {slides.map((_, k) => (
-            <span key={k} className={k === i ? 'on' : ''} />
-          ))}
+      <div className="intro-visual intro-visual-sm" key={'v' + step}>
+        <div className="intro-logo-wrap">
+          <img className="intro-logo" src="/logo.png" alt="IPPO by Fotima Zuhra" />
         </div>
-        <button className="btn primary block lg" onClick={next}>
-          {last ? t.introStart : t.introNext}
-        </button>
+      </div>
+
+      <div className="intro-text" key={'t' + step}>
+        <h1>{isMarket ? t.chooseMarketTitle : t.chooseModeTitle}</h1>
+        <p>{isMarket ? t.chooseMarketText : t.chooseModeText}</p>
+      </div>
+
+      <div className="choice-list" key={'c' + step}>
+        {isMarket
+          ? MARKETS.map((m, k) => (
+              <button
+                key={m.key}
+                className={`choice ${market === m.key ? 'on' : ''}`}
+                style={{ animationDelay: `${k * 70}ms` }}
+                onClick={() => chooseMarket(m.key)}
+              >
+                <span className="choice-ic flagbox">
+                  <Flag market={m.key} size={32} />
+                </span>
+                <span className="choice-text">
+                  <b>{t.marketName[m.key]}</b>
+                  <small>{t.marketSub[m.key]}</small>
+                </span>
+                <Icon name="chevron" size={18} stroke={2.2} />
+              </button>
+            ))
+          : MODES.map((m, k) => (
+              <button
+                key={m.key}
+                className={`choice ${mode === m.key ? 'on' : ''}`}
+                style={{ animationDelay: `${k * 70}ms` }}
+                onClick={() => chooseMode(m.key)}
+              >
+                <span className="choice-ic">
+                  <Icon name={m.icon} size={24} stroke={1.8} />
+                </span>
+                <span className="choice-text">
+                  <b>{t.modeName[m.key]}</b>
+                  <small>{t.modeSub[m.key]}</small>
+                </span>
+                <Icon name="chevron" size={18} stroke={2.2} />
+              </button>
+            ))}
+      </div>
+
+      <div className="intro-dots">
+        {[0, 1].map((k) => (
+          <span key={k} className={k === step ? 'on' : ''} />
+        ))}
       </div>
     </div>
   );

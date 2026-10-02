@@ -1,0 +1,49 @@
+==============================================================
+  YANGI MAHSULOTLARNI QO'SHISH — QO'LLANMA
+==============================================================
+
+1) RASMNI TO'G'RI PAPKAGA TASHLANG
+   1-jenshen     2-kollagen    3-vitaminlar
+   4-soch        5-yuz         6-parfyum
+   (Yangi kategoriya kerak bo'lsa — shu yerda yangi papka oching,
+    masalan: 7-bolalar)
+
+2) RASM NOMINI SHU KO'RINISHDA YOZING (F2 — qayta nomlash)
+
+   Mahsulot nomi kr optom-dona uz optom-dona
+
+   kr = Koreyadagi narx (₩ von)
+   uz = O'zbekistondagi narx (so'm)
+   Har doim avval OPTOM, keyin chiziqcha (-), keyin DONA narxi.
+
+   NAMUNALAR:
+   Qizil jenshen kr 35000-49000 uz 850000-1200000.jpg
+   Jenshenli shampun kr 15000-18000 uz 160000-200000.jpg
+
+   uz narxini bilmasangiz — yozmang: O'zbekistonda «Narxini so'rang»
+   chiqadi, keyin admin paneldan (Ombor bo'limi) kiritasiz.
+
+3) BITTA MAHSULOTNING BIR NECHTA RASMI BO'LSA
+   Hammasini birga belgilang (Ctrl bosib turib bosing) -> F2 ->
+   nomni bir marta yozing -> Enter.
+   Windows o'zi oxiriga (1), (2), (3) qo'shadi — bu to'g'ri.
+   Birinchi (1) rasm — asosiy rasm bo'ladi.
+
+4) MA'LUMOT (TAVSIF) — IXTIYORIY
+   Rasm yoniga Bloknot (Notepad) fayl oching, nomi = mahsulot nomi:
+   Punggi qizil jenshen.txt
+   Ichiga mahsulot haqida yozing (nechta qator bo'lsa ham bo'ladi).
+   Ruscha tavsif kerak bo'lsa — bo'sh qatordan keyin  ---RU---  deb
+   yozib, pastiga ruschasini yozing.
+
+5) TEKSHIRISH
+   Shu papkadagi  TEKSHIRISH.bat  ni ikki marta bosing.
+   U har bir mahsulotni o'qib, xato bo'lsa ko'rsatadi va
+   TEKSHIRUV.csv faylini yaratadi (Excel'da ochiladi) —
+   narxlar to'g'ri tushganini ko'rib oling.
+
+ESLATMA:
+ - Raqamlarni bo'shliqsiz yozing: 25000 (25 000 ham bo'ladi, lekin
+   25000 ishonchliroq).
+ - Nomda  /  \  :  *  ?  "  <  >  |  belgilarini Windows qabul
+   qilmaydi — ishlatmang.
