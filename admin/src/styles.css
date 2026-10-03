@@ -999,6 +999,14 @@ select.ps-rejected {
   background: var(--bg);
   font-size: 13px;
 }
+.cover-cell .img-actions button {
+  min-width: 0;
+  height: 34px;
+  font-size: 15px;
+}
+.img-actions button:disabled {
+  opacity: 0.35;
+}
 .img-actions button.danger {
   color: var(--red);
   background: var(--red-soft);
@@ -1379,4 +1387,50 @@ code {
   .stock-prices {
     grid-template-columns: repeat(2, auto);
   }
+}
+/* Kategoriya uchun mahsulot rasmini tanlash */
+.chooser-title {
+  margin: 16px 0 8px;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.chooser-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(96px, 1fr));
+  gap: 8px;
+}
+.chooser-item {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 0;
+  border: 0;
+  background: none;
+  text-align: left;
+  cursor: pointer;
+}
+.chooser-item img {
+  width: 100%;
+  aspect-ratio: 1;
+  object-fit: cover;
+  border-radius: 12px;
+  border: 2px solid var(--line);
+  transition: border-color 0.15s, transform 0.15s;
+}
+.chooser-item:active img,
+.chooser-item:hover img {
+  border-color: var(--gold);
+  transform: scale(0.97);
+}
+.chooser-item span {
+  font-size: 11px;
+  line-height: 1.25;
+  color: var(--ink-2, #4a3a2b);
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
