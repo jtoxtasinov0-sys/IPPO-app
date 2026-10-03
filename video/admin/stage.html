@@ -1,0 +1,194 @@
+<!doctype html>
+<html lang="uz">
+<head>
+<meta charset="utf-8">
+<title>IPPO Admin — mahsulot qo‘shish</title>
+<link rel="stylesheet" href="../source/fonts/local.css">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{width:1080px;height:1920px;overflow:hidden;background:#FBFAF8}
+body{font-family:'Inter',sans-serif;color:#111;-webkit-font-smoothing:antialiased}
+#stage{position:absolute;inset:0;overflow:hidden;background:#FBFAF8}
+.abs{position:absolute}
+.serif{font-family:'Instrument Serif',serif;font-style:italic;font-weight:400}
+#nav{left:56px;right:56px;top:58px;height:60px;display:flex;align-items:center;justify-content:space-between}
+#nav .brand{font-family:'Inter Tight';font-weight:800;font-size:30px;letter-spacing:-.02em}
+#nav .links{display:flex;gap:10px;font-size:22px;font-weight:500;color:#555}
+#nav .links span{padding:10px 22px;border-radius:40px}
+#nav .links span.on{background:#111;color:#fff}
+#nav .cta{border:2px solid #111;border-radius:40px;padding:10px 22px;font-size:19px;font-weight:600;letter-spacing:.06em;display:flex;gap:10px;align-items:center}
+#head{left:0;right:0;top:170px;height:300px;text-align:center}
+.hblock{position:absolute;left:0;right:0;top:0}
+.tag{font-size:46px;color:#333;height:60px}
+.line{overflow:hidden;height:104px;margin-top:-4px}
+.line > div{font-family:'Inter Tight';font-weight:700;font-size:96px;letter-spacing:-.045em;line-height:104px;white-space:nowrap}
+.line .serif{font-size:108px;letter-spacing:-.01em}
+#band{left:-300px;width:1680px;top:640px;height:900px;filter:blur(70px)}
+.blob{position:absolute;border-radius:50%}
+#glow2{left:-200px;right:-200px;top:1500px;height:600px;filter:blur(90px)}
+
+.phone{position:absolute;left:290px;top:500px;width:500px;height:1030px;transform-origin:50% 60%}
+.shadow{position:absolute;left:40px;right:40px;bottom:-40px;height:80px;background:rgba(40,10,40,.35);filter:blur(30px);border-radius:50%}
+.frame{position:absolute;inset:0;border-radius:84px;background:linear-gradient(135deg,#f1f1f4,#9a9aa2 30%,#e4e4e8 55%,#7d7d86 80%,#d7d7dc)}
+.bezel{position:absolute;inset:4px;background:#0a0a0b;border-radius:80px}
+.screen{position:absolute;left:14px;top:14px;width:472px;height:1002px;overflow:hidden;background:#fffbf5;border-radius:70px}
+.island{position:absolute;left:50%;top:26px;width:122px;height:36px;margin-left:-61px;background:#000;border-radius:20px;z-index:50}
+.btn{position:absolute;width:6px;border-radius:3px;background:#a5a5ac}
+.status{position:absolute;left:0;right:0;top:0;height:54px;display:flex;justify-content:space-between;align-items:center;padding:6px 40px 0 48px;font-weight:600;font-size:18px;z-index:40;color:#23160b}
+.status .ic{display:flex;gap:6px;align-items:center}
+#strip{position:absolute;left:0;right:0;top:0;height:54px;background:#fffbf5}
+#stripDim{position:absolute;left:0;right:0;top:0;height:54px;background:rgba(20,10,3,.55)}
+.shot{position:absolute;left:0;top:54px;width:472px;height:948px}
+.gbar{position:absolute;left:50%;bottom:10px;width:150px;height:5px;margin-left:-75px;border-radius:3px;background:#111;z-index:45}
+
+/* keyboard */
+#kb{position:absolute;left:0;right:0;bottom:0;height:340px;background:#d1d3d9;padding:8px 4px 0;z-index:30}
+#kb .sug{height:44px;display:flex;justify-content:space-around;align-items:center;color:#333;font-size:17px;border-bottom:1px solid #c3c5cb;margin:0 4px 10px}
+#kb .r{display:flex;justify-content:center;gap:7px;margin-bottom:12px}
+#kb .k{width:39px;height:50px;border-radius:7px;background:#fff;box-shadow:0 1px 0 #898a8d;display:flex;align-items:center;justify-content:center;font-size:23px;color:#111}
+#kb .k.g{background:#abb0ba;font-size:16px}
+#kb .k.on{background:#abb0ba}
+
+/* photo picker */
+#pick{position:absolute;left:0;right:0;top:64px;bottom:0;background:#fff;border-radius:22px 22px 0 0;z-index:32;overflow:hidden}
+#pick .ph{height:64px;display:flex;align-items:center;justify-content:space-between;padding:0 20px;font-size:18px}
+#pick .ph b{font-weight:600}
+#pick .ph span{color:#007AFF}
+#pick .seg{margin:0 20px 10px;height:36px;border-radius:9px;background:#eeeef0;display:flex;padding:2px;font-size:15px;font-weight:500}
+#pick .seg div{flex:1;display:flex;align-items:center;justify-content:center;border-radius:7px}
+#pick .seg div.on{background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.15)}
+#pick .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:3px}
+#pick .grid div{aspect-ratio:1;background-size:cover;background-position:center;position:relative}
+#pick .chk{position:absolute;right:8px;bottom:8px;width:28px;height:28px;border-radius:50%;background:#007AFF;border:2px solid #fff;color:#fff;font-size:16px;font-weight:700;display:flex;align-items:center;justify-content:center}
+#pickDim{position:absolute;inset:0;background:rgba(0,0,0,.35);z-index:31}
+
+/* select menu */
+#menu{position:absolute;width:300px;background:rgba(249,249,250,.98);border-radius:16px;box-shadow:0 12px 40px rgba(0,0,0,.28);z-index:33;overflow:hidden;transform-origin:30% 0}
+#menu div{height:46px;display:flex;align-items:center;padding:0 16px 0 44px;font-size:17px;border-bottom:1px solid #e1e1e4;position:relative}
+#menu div:last-child{border:none}
+#menu div.on:before{content:'✓';position:absolute;left:16px;font-weight:600}
+#menu div.hl{background:#e3e3e8}
+
+.ring{position:absolute;border:3px solid #FF3B5C;border-radius:18px;z-index:29;pointer-events:none}
+.finger{position:absolute;width:0;height:0;z-index:60}
+.finger .dot{position:absolute;left:-30px;top:-30px;width:60px;height:60px;border-radius:50%;background:rgba(255,255,255,.55);border:3px solid rgba(255,255,255,.95);box-shadow:0 6px 20px rgba(0,0,0,.35),inset 0 0 0 2px rgba(0,0,0,.08)}
+.finger .rip{position:absolute;left:-30px;top:-30px;width:60px;height:60px;border-radius:50%;border:4px solid #fff}
+
+#cap{left:0;right:0;top:1600px;height:260px}
+.cblock{position:absolute;left:60px;right:60px;top:0;text-align:center}
+.cblock .meta{display:inline-flex;align-items:center;gap:14px;font-size:24px;font-weight:600;color:#666;letter-spacing:.04em;text-transform:uppercase}
+.cblock .meta .n{width:48px;height:48px;border-radius:50%;background:#111;color:#fff;display:flex;align-items:center;justify-content:center;font-family:'Inter Tight';font-size:24px;font-weight:700;letter-spacing:0}
+.cblock .main{font-family:'Inter Tight';font-weight:600;font-size:46px;letter-spacing:-.025em;line-height:1.12;margin-top:20px}
+.cblock .sub{font-size:28px;color:#6b6b6b;margin-top:12px}
+.cblock .main q{quotes:none;background:#111;color:#fff;padding:0 12px;border-radius:12px;white-space:nowrap}
+#dots{left:0;right:0;top:1858px;display:flex;justify-content:center;gap:10px}
+#dots i{width:12px;height:12px;border-radius:6px;background:#d4d4d4;display:block}
+#outro{left:0;right:0;top:1580px;text-align:center}
+#outro img{height:92px;filter:brightness(.55) saturate(1.3)}
+#outro .u{margin-top:22px;display:inline-block;font-size:30px;font-weight:600;border:2px solid #111;border-radius:40px;padding:14px 30px}
+#fade{inset:0;background:#FBFAF8;z-index:100}
+</style>
+</head>
+<body>
+<div id="stage">
+  <div id="band" class="abs"></div>
+  <div id="glow2" class="abs"></div>
+  <div id="nav" class="abs">
+    <div class="brand">IPPO</div>
+    <div class="links"><span id="nA">Admin</span><span>Do‘kon</span></div>
+    <div class="cta">QO‘LLANMA <svg width="20" height="14" viewBox="0 0 20 14"><path d="M1 7h17M12 1l6 6-6 6" stroke="#111" stroke-width="2.2" fill="none"/></svg></div>
+  </div>
+  <div id="head" class="abs"></div>
+
+  <div class="phone" id="phone">
+    <div class="shadow"></div>
+    <div class="btn" style="left:-3px;top:200px;height:44px"></div><div class="btn" style="left:-3px;top:270px;height:80px"></div><div class="btn" style="left:-3px;top:365px;height:80px"></div><div class="btn" style="right:-3px;top:300px;height:120px"></div>
+    <div class="frame"></div><div class="bezel"></div>
+    <div class="screen">
+      <div class="island"></div>
+      <div id="strip"></div><div id="stripDim"></div>
+      <div class="status"><span>13:05</span><span class="ic"><svg width="20" height="13" viewBox="0 0 20 13"><rect x="0" y="9" width="3.4" height="4" rx="1" fill="#23160b"/><rect x="5.4" y="6" width="3.4" height="7" rx="1" fill="#23160b"/><rect x="10.8" y="3" width="3.4" height="10" rx="1" fill="#23160b"/><rect x="16.2" y="0" width="3.4" height="13" rx="1" fill="#23160b"/></svg><b style="font-size:15px">LTE</b><svg width="28" height="14" viewBox="0 0 28 14"><rect x="1" y="1" width="23" height="12" rx="4" stroke="#23160b" stroke-width="1.4" fill="none" opacity=".5"/><rect x="3" y="3" width="15" height="8" rx="2" fill="#23160b"/></svg></span></div>
+      <img class="shot" id="cur"><img class="shot" id="prev">
+      <div class="ring" id="ring"></div>
+      <div id="kb">
+        <div class="sug"><span>Punggi</span><span>Jenshen</span><span>Gold</span></div>
+        <div class="r">QWERTYUIOP</div><div class="r" style="padding:0 20px">ASDFGHJKL</div>
+        <div class="r"><span class="k g">⇧</span>ZXCVBNM<span class="k g">⌫</span></div>
+        <div class="r"><span class="k g" style="width:88px">123</span><span class="k" style="width:200px;font-size:16px">probel</span><span class="k g" style="width:88px">Tayyor</span></div>
+      </div>
+      <div id="pickDim"></div>
+      <div id="pick">
+        <div class="ph"><span>Отменить</span><b>Фото</b><span id="pickAdd" style="font-weight:600">Добавить</span></div>
+        <div class="seg"><div class="on">Фото</div><div>Коллекции</div></div>
+        <div class="grid" id="pgrid"></div>
+      </div>
+      <div id="menu"></div>
+      <div class="gbar"></div>
+      <div class="finger" id="F"><div class="rip"></div><div class="dot"></div></div>
+    </div>
+  </div>
+
+  <div id="cap" class="abs"></div>
+  <div id="dots" class="abs"></div>
+  <div id="outro" class="abs"><img src="logo.png"><br><div class="u">IPPO Admin</div></div>
+  <div id="fade" class="abs"></div>
+</div>
+<script>
+const $=s=>document.querySelector(s);
+const st=(el,o)=>{for(const k in o)el.style[k]=o[k]};
+// keyboard letters
+document.querySelectorAll('#kb .r').forEach(r=>{r.innerHTML=r.innerHTML.replace(/>([A-Z]+)</g,(m,s)=>'>'+[...s].map(c=>`<span class="k">${c}</span>`).join('')+'<').replace(/^([A-Z]+)$/,s=>[...s].map(c=>`<span class="k">${c}</span>`).join(''))});
+
+const BLOBS=[
+  {c:'#ff4fa3',x:120,y:330,w:620,h:300},{c:'#8f5bff',x:520,y:260,w:620,h:320},
+  {c:'#ff9b3d',x:980,y:350,w:640,h:300},{c:'#ffd45c',x:1240,y:400,w:420,h:240},
+  {c:'#f24ccf',x:760,y:420,w:520,h:260},{c:'#5a7dff',x:300,y:450,w:400,h:200},
+];
+$('#band').innerHTML=BLOBS.map((b,i)=>`<div class="blob" id="b${i}" style="background:${b.c};width:${b.w}px;height:${b.h}px"></div>`).join('');
+$('#glow2').innerHTML=`<div class="blob" style="left:0;top:150px;width:700px;height:300px;background:#ffc6ea"></div><div class="blob" style="left:700px;top:180px;width:800px;height:300px;background:#ffe2a8"></div>`;
+
+window.setup=(cfg)=>{
+  $('#head').innerHTML=cfg.heads.map((h,i)=>`<div class="hblock" id="h${i}"><div class="tag serif">${h.t}</div><div class="line"><div>${h.a}</div></div><div class="line"><div>${h.b}</div></div></div>`).join('');
+  $('#cap').innerHTML=cfg.caps.map((c,i)=>`<div class="cblock"><div class="meta"><span class="n">${i+1}</span>${i+1}/${cfg.caps.length}-qadam</div><div class="main">${c.m}</div><div class="sub">${c.s}</div></div>`).join('');
+  $('#dots').innerHTML=cfg.caps.map(()=>'<i></i>').join('');
+  $('#pgrid').innerHTML=cfg.photos.map((p,i)=>`<div style="background-image:url('${p}')">${i===0?'<span class="chk" id="pchk">✓</span>':''}</div>`).join('');
+};
+
+// s: per-frame state computed by the harness
+window.render=async(s)=>{
+  BLOBS.forEach((b,i)=>{const t=s.t;
+    st($('#b'+i),{left:(b.x-b.w/2+Math.sin(t*.35+i*1.7)*70)+'px',top:(b.y-b.h/2+Math.cos(t*.28+i*1.1)*40)+'px',transform:`scale(${1+Math.sin(t*.5+i)*.08})`})});
+  st($('#band'),{opacity:s.band*.85,transform:`translateY(${s.bandY}px)`});
+  st($('#glow2'),{opacity:s.band*.7});
+  st($('#nav'),{opacity:s.nav});
+  $('#nA').className=s.navOn?'on':'';
+  s.heads.forEach((h,i)=>{const el=$('#h'+i);el.style.visibility=h.vis?'visible':'hidden';
+    st(el.querySelector('.tag'),{opacity:h.tag,transform:`translateY(${h.tagY}px)`});
+    el.querySelectorAll('.line > div').forEach((ln,k)=>st(ln,{transform:`translateY(${h.lines[k]}px)`}))});
+  st($('#phone'),{transform:s.phone});
+  if(s.cur){const c=$('#cur');c.src=s.cur;await c.decode().catch(()=>{});}
+  if(s.prev){const p=$('#prev');p.src=s.prev;await p.decode().catch(()=>{});}
+  st($('#prev'),{opacity:s.prevOp});
+  st($('#stripDim'),{opacity:s.dim});
+  st($('#kb'),{transform:`translateY(${(1-s.kb)*345}px)`,visibility:s.kb>0?'visible':'hidden'});
+  [...document.querySelectorAll('#kb .k')].forEach(k=>k.classList.toggle('on',k.textContent===s.key));
+  st($('#pick'),{transform:`translateY(${(1-s.pick)*960}px)`,visibility:s.pick>0?'visible':'hidden'});
+  st($('#pickDim'),{opacity:s.pick});
+  st($('#pchk'),{opacity:s.pchk,transform:`scale(${.5+.5*s.pchk})`});
+  const m=$('#menu');
+  if(s.menu){m.innerHTML=s.menu.items.map((x,i)=>`<div class="${i===s.menu.on?'on':''} ${i===s.menu.hl?'hl':''}">${x}</div>`).join('');
+    st(m,{left:s.menu.x+'px',top:s.menu.y+'px',opacity:s.menu.op,transform:`scale(${.85+.15*s.menu.op})`,visibility:'visible'});}
+  else m.style.visibility='hidden';
+  if(s.ring) st($('#ring'),{left:s.ring.x+'px',top:s.ring.y+'px',width:s.ring.w+'px',height:s.ring.h+'px',opacity:s.ring.op});
+  else $('#ring').style.opacity=0;
+  const F=$('#F');st(F,{opacity:s.f.op,transform:`translate(${s.f.x}px,${s.f.y}px)`});
+  st(F.children[1],{transform:`scale(${s.f.sc})`});st(F.children[0],{transform:`scale(${s.f.rs})`,opacity:s.f.ro*.9});
+  [...document.querySelectorAll('.cblock')].forEach((el,k)=>{const c=s.caps[k];st(el,{opacity:c.op,transform:`translateY(${c.y}px)`,visibility:c.op>0?'visible':'hidden'})});
+  [...document.querySelectorAll('#dots i')].forEach((d,j)=>st(d,{width:(j===s.cur_step?36:12)+'px',background:j<=s.cur_step?'#111':'#d4d4d4'}));
+  st($('#dots'),{opacity:s.dots});
+  st($('#outro'),{opacity:s.outro,transform:`translateY(${(1-s.outro)*30}px)`});
+  st($('#fade'),{opacity:s.fade});
+};
+</script>
+</body>
+</html>

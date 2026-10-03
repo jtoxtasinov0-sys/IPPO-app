@@ -1,8 +1,10 @@
 // Synthesised soundtrack (music + UI sound effects) for the install videos.
 // Usage: DEV=ios|and node audio.js  -> writes audio-<dev>.wav
+//        EVENTS=events.json OUT=x.wav node audio.js  (custom timeline, see admin/events.json)
 const fs = require('fs');
 
-const SR = 44100, DUR = 27.5, N = Math.round(SR * DUR);
+const EV = process.env.EVENTS ? JSON.parse(fs.readFileSync(process.env.EVENTS, 'utf8')) : null;
+const SR = 44100, DUR = EV ? EV.dur : 27.5, N = Math.round(SR * DUR);
 const DEV = process.env.DEV === 'and' ? 'and' : 'ios';
 
 // ---------- buffers: dry music, music reverb send, sfx, sfx reverb send ----------
@@ -156,6 +158,11 @@ const CH = [ // [bass, pad notes]
   [40, [55, 59, 62, 66]], // Em9
   [38, [54, 57, 61, 64]], // Dmaj9 (resolution)
 ];
+{ // longer timelines: repeat the first 7 bars, keep Dmaj9 as the final bar
+  const bars = Math.ceil((DUR - 1.8) / 3.2), last = CH.pop();
+  for (let k = CH.length; k < bars - 1; k++) CH.push(CH[k % 7]);
+  CH.length = bars - 1; CH.push(last);
+}
 // intro pad swell on Gmaj9
 CH[0][1].forEach((m) => pad(0.0, START + 0.2, m, 0.55));
 riser(0.2, START - 0.2, 0.22);
@@ -186,6 +193,17 @@ CH.forEach(([b, notes], bar) => {
 });
 
 // ---------- sound effects (timed to the animation) ----------
+if (EV) {
+  (EV.taps || []).forEach((t) => tap(t));
+  (EV.keys || []).forEach((t) => tap(t, 0.32));
+  (EV.up || []).forEach((t) => swoosh(t - 0.05, 0.6, 250, 2600, 0.26));
+  (EV.down || []).forEach((t) => swoosh(t - 0.05, 0.6, 2600, 300, 0.24));
+  (EV.pops || []).forEach((t) => { pop(t); chime(t + 0.02, [81, 88], 0.08, 0.08); });
+  (EV.steps || []).forEach((t, j) => pluck(sfx, sfxVerb, t + 0.05, [86, 88, 90, 93, 95, 98][j % 6], 0.045, 0.5, 0.3, 4, 0.8));
+  swoosh(0.45, 1.3, 180, 2200, 0.32);
+  (EV.heads || []).forEach((t) => swoosh(t - 0.1, 0.8, 600, 3500, 0.15, 0.6, 0.4));
+  chime(EV.done, [74, 78, 81, 85, 88, 93], 0.085, 0.07);
+} else {
 swoosh(0.45, 1.3, 180, 2200, 0.32);                // phone rises in
 swoosh(4.3, 0.7, 600, 3500, 0.16, 0.6, 0.4);       // headline change
 [5.0, 8.2, 11.4, 15.6, 18.8].forEach((t, j) => pluck(sfx, sfxVerb, t + 0.05, [86, 88, 90, 93, 98][j], 0.05, 0.5, 0.3, 4, 0.8)); // step tick
@@ -206,6 +224,7 @@ if (DEV === 'ios') {
 swoosh(21.05, 0.75, 300, 5000, 0.3);              // app opens
 chime(22.45, [74, 78, 81, 85, 88, 93], 0.085, 0.07); // "tayyor" sparkle
 swoosh(22.35, 0.9, 500, 3000, 0.14, 0.4, 0.6);
+}
 
 // ---------- reverb (Schroeder/Freeverb-lite) ----------
 function reverb(src, room = 0.86, damp = 0.35) {
@@ -258,5 +277,6 @@ for (let i = 0; i < N; i++) {
   buf.writeInt16LE(Math.round(L[i] * g * 32767), 44 + i * 4);
   buf.writeInt16LE(Math.round(R[i] * g * 32767), 46 + i * 4);
 }
-fs.writeFileSync(`audio-${DEV}.wav`, buf);
-console.log('wrote', `audio-${DEV}.wav`, 'peak', peak.toFixed(3));
+const OUT = process.env.OUT || `audio-${DEV}.wav`;
+fs.writeFileSync(OUT, buf);
+console.log('wrote', OUT, 'peak', peak.toFixed(3));
