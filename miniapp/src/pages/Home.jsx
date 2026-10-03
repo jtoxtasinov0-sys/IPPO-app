@@ -1,6 +1,7 @@
 import Stories from '../components/Stories';
 import ProductCard from '../components/ProductCard';
 import Img from '../components/Img';
+import HeroShowcase from '../components/HeroShowcase';
 import Icon from '../components/Icon';
 import { useI18n } from '../lib/i18n';
 import { tgUser } from '../lib/telegram';
@@ -12,8 +13,6 @@ export default function Home({ config, market, mode, onMarketChange, products, s
   const featured = products.filter((p) => p.isFeatured).slice(0, 6);
   const popular = featured.length ? featured : products.slice(0, 6);
   const onSale = products.filter((p) => p.tag === 'sale' || (p.oldPrice && p.oldPrice > p.price)).slice(0, 8);
-
-  const heroImg = popular[0]?.images?.[0];
 
   const catCover = (key) => products.find((p) => p.category === key)?.images?.[0];
   const catCount = (key) => products.filter((p) => p.category === key).length;
@@ -54,10 +53,7 @@ export default function Home({ config, market, mode, onMarketChange, products, s
             {t.heroBtn} <Icon name="chevron" size={14} stroke={2.6} />
           </span>
         </div>
-        <div className="hero-art">
-          <span className="hero-disc" />
-          <Img src={heroImg} width={360} alt="" />
-        </div>
+        <HeroShowcase />
       </section>
 
       <div className="trust-row">
