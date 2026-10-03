@@ -1,0 +1,581 @@
+<!doctype html>
+<html lang="uz">
+<head>
+<meta charset="utf-8">
+<title>IPPO — ilovani o‘rnatish</title>
+<link rel="stylesheet" href="fonts/local.css">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{width:1080px;height:1920px;overflow:hidden;background:#FBFAF8}
+body{font-family:'Inter',sans-serif;color:#111;-webkit-font-smoothing:antialiased}
+#stage{position:absolute;inset:0;overflow:hidden;background:#FBFAF8}
+.abs{position:absolute}
+.serif{font-family:'Instrument Serif',serif;font-style:italic;font-weight:400}
+
+/* ---------- top nav ---------- */
+#nav{left:56px;right:56px;top:58px;height:60px;display:flex;align-items:center;justify-content:space-between}
+#nav .brand{font-family:'Inter Tight';font-weight:800;font-size:30px;letter-spacing:-.02em}
+#nav .links{display:flex;gap:10px;font-size:22px;font-weight:500;color:#555}
+#nav .links span{padding:10px 22px;border-radius:40px}
+#nav .links span.on{background:#111;color:#fff}
+#nav .cta{border:2px solid #111;border-radius:40px;padding:10px 22px;font-size:19px;font-weight:600;letter-spacing:.06em;display:flex;gap:10px;align-items:center}
+
+/* ---------- headline ---------- */
+#head{left:0;right:0;top:170px;height:300px;text-align:center}
+.hblock{position:absolute;left:0;right:0;top:0}
+.tag{font-size:46px;color:#333;height:60px}
+.line{overflow:hidden;height:104px;margin-top:-4px}
+.line > div{font-family:'Inter Tight';font-weight:700;font-size:96px;letter-spacing:-.045em;line-height:104px;white-space:nowrap}
+.line .serif{font-size:108px;letter-spacing:-.01em}
+
+/* ---------- gradient band ---------- */
+#band{left:-300px;width:1680px;top:640px;height:900px;filter:blur(70px);pointer-events:none}
+.blob{position:absolute;border-radius:50%}
+#glow2{left:-200px;right:-200px;top:1500px;height:600px;filter:blur(90px)}
+
+/* ---------- phones ---------- */
+.phone{position:absolute;left:290px;top:500px;width:500px;height:1030px;transform-origin:50% 60%}
+.shadow{position:absolute;left:40px;right:40px;bottom:-40px;height:80px;background:rgba(40,10,40,.35);filter:blur(30px);border-radius:50%}
+.frame{position:absolute;inset:0;padding:4px}
+.bezel{position:absolute;inset:4px;background:#0a0a0b}
+.screen{position:absolute;left:14px;top:14px;width:472px;height:1002px;overflow:hidden;background:#000}
+.ios .frame{border-radius:84px;background:linear-gradient(135deg,#f1f1f4,#9a9aa2 30%,#e4e4e8 55%,#7d7d86 80%,#d7d7dc)}
+.ios .bezel{border-radius:80px}
+.ios .screen{border-radius:70px}
+.ios .island{position:absolute;left:50%;top:26px;width:122px;height:36px;margin-left:-61px;background:#000;border-radius:20px;z-index:50}
+.and .frame{border-radius:58px;background:linear-gradient(135deg,#4a4d55,#22242a 35%,#5a5d66 60%,#1c1d22)}
+.and .bezel{border-radius:54px}
+.and .screen{border-radius:44px}
+.and .hole{position:absolute;left:50%;top:26px;width:22px;height:22px;margin-left:-11px;background:#000;border-radius:50%;z-index:50;box-shadow:0 0 0 2px #111}
+.btn{position:absolute;width:6px;border-radius:3px}
+.ios .btn{background:#a5a5ac}
+.and .btn{background:#33353b}
+
+.layer{position:absolute;inset:0}
+.status{position:absolute;left:0;right:0;top:0;height:54px;display:flex;justify-content:space-between;align-items:center;padding:6px 40px 0 48px;font-weight:600;font-size:18px;z-index:40}
+.and .status{height:44px;padding:4px 26px 0 30px;font-size:15px;font-weight:500}
+.status .ic{display:flex;gap:6px;align-items:center}
+
+/* ---------- mini app mock ---------- */
+.app{position:absolute;left:0;right:0;background:#1E1006;color:#EAC87A;overflow:hidden}
+.app .ahead{height:72px;display:flex;align-items:center;justify-content:center;border-bottom:1px solid rgba(209,169,85,.18)}
+.app .ahead img{height:40px}
+.app .search{margin:16px 18px 0;height:44px;border-radius:22px;background:rgba(209,169,85,.10);border:1px solid rgba(209,169,85,.25);display:flex;align-items:center;gap:10px;padding:0 16px;color:#9D804C;font-size:15px}
+.app .hero{margin:16px 18px 0;height:200px;border-radius:24px;background:radial-gradient(circle at 80% 40%,#4a2c10,#1E1006 70%);border:1px solid rgba(209,169,85,.3);position:relative;overflow:hidden}
+.app .hero .t{position:absolute;left:20px;top:26px;width:220px;font-family:'Inter Tight';font-weight:700;font-size:25px;line-height:1.12;letter-spacing:-.02em;background:linear-gradient(135deg,#EAC87A,#D1A955 50%,#9D804C);-webkit-background-clip:text;color:transparent}
+.app .hero .b{position:absolute;left:20px;bottom:22px;background:linear-gradient(135deg,#EAC87A,#D1A955);color:#1E1006;font-weight:700;font-size:13px;padding:9px 16px;border-radius:20px}
+.app .hero img{position:absolute;right:-6px;top:20px;height:180px}
+.app .chips{display:flex;gap:8px;margin:16px 18px 0;font-size:14px;font-weight:600}
+.app .chips span{padding:8px 14px;border-radius:18px;border:1px solid rgba(209,169,85,.3);color:#D1A955;white-space:nowrap}
+.app .chips span.on{background:#D1A955;color:#1E1006;border-color:#D1A955}
+.app .ttl{margin:18px 18px 10px;font-family:'Inter Tight';font-weight:700;font-size:20px;color:#EAC87A}
+.app .grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:0 18px}
+.app .card{border-radius:20px;background:rgba(209,169,85,.07);border:1px solid rgba(209,169,85,.2);padding:10px 10px 14px;height:290px}
+.app .card .im{height:170px;border-radius:14px;background:radial-gradient(circle,#3a230d,#241307);display:flex;align-items:center;justify-content:center}
+.app .card .im img{max-height:150px;max-width:92%}
+.app .card .n{font-size:14px;color:#e9dcc0;margin-top:10px;line-height:1.25;height:36px}
+.app .card .p{font-weight:700;font-size:16px;margin-top:8px;color:#EAC87A}
+
+/* ---------- iOS safari ---------- */
+.sbar{position:absolute;left:0;right:0;bottom:0;height:116px;background:rgba(248,248,250,.94);border-top:1px solid #ddd;color:#007AFF}
+.sbar .url{position:absolute;left:16px;right:16px;top:10px;height:48px;border-radius:14px;background:#E6E6EB;display:flex;align-items:center;justify-content:space-between;padding:0 16px;color:#111;font-size:17px}
+.sbar .url b{font-weight:500}
+.sbar .tools{position:absolute;left:0;right:0;top:66px;height:40px}
+.sbar .tools svg{position:absolute;top:4px}
+
+/* iOS share sheet */
+.dim{position:absolute;inset:0;background:rgba(0,0,0,.35)}
+.sheet{position:absolute;left:0;right:0;top:90px;height:1000px;background:#F2F2F7;border-radius:30px 30px 0 0;color:#111}
+.sheet .row{position:absolute;left:0;right:0}
+.sh-head{top:22px;height:80px;display:flex;align-items:center;gap:14px;padding:0 20px}
+.sh-head .ico{width:66px;height:66px;border-radius:15px;background:#fff;display:flex;align-items:center;justify-content:center;box-shadow:0 1px 3px rgba(0,0,0,.1)}
+.sh-head .ico img{width:44px;border-radius:9px}
+.sh-head .nm{font-weight:700;font-size:19px}
+.sh-head .u{color:#8a8a8e;font-size:16px;margin-top:2px}
+.sh-head .x{margin-left:auto;width:34px;height:34px;border-radius:50%;background:#E3E3E8;display:flex;align-items:center;justify-content:center;color:#666;font-size:18px;font-weight:700}
+.apps{top:150px;display:flex;justify-content:space-around;padding:0 6px}
+.apps div{text-align:center;font-size:13px;color:#222;width:100px}
+.apps i{display:block;width:64px;height:64px;border-radius:50%;margin:0 auto 8px}
+.divi{top:262px;left:20px!important;right:20px!important;height:1px;background:#d6d6db}
+.acts{top:282px;display:flex;justify-content:space-around;padding:0 6px}
+.acts div{text-align:center;font-size:13px;color:#222;width:100px;line-height:1.25}
+.acts i{display:flex;width:64px;height:64px;border-radius:50%;margin:0 auto 8px;background:#E3E3E8;align-items:center;justify-content:center}
+.grp{left:16px!important;right:16px!important;background:#fff;border-radius:14px;overflow:hidden}
+.grp div{height:56px;display:flex;align-items:center;gap:16px;padding:0 16px;font-size:17px;border-bottom:1px solid #e6e6ea;position:relative}
+.grp div:last-child{border-bottom:none}
+.grp div.hl{background:#E8F0FF}
+.hlring{position:absolute;border:3px solid #FF3B5C;border-radius:16px;pointer-events:none}
+
+/* iOS add dialog */
+.addv{position:absolute;left:0;right:0;top:60px;height:1000px;background:#F2F2F7;border-radius:30px 30px 0 0;color:#111}
+.addv .nav{height:64px;display:flex;align-items:center;justify-content:space-between;padding:0 18px;font-size:17px}
+.addv .nav .c{color:#007AFF}
+.addv .nav .t{font-weight:600;font-size:15px}
+.addv .nav .a{color:#007AFF;font-weight:700;padding:6px 10px;border-radius:10px;position:relative}
+.addv .card{margin:14px 16px 0;background:#fff;border-radius:14px;display:flex;gap:14px;padding:14px}
+.addv .card img{width:76px;height:76px;border-radius:18px}
+.addv .card .f{flex:1}
+.addv .card .f div{height:38px;border-bottom:1px solid #e6e6ea;display:flex;align-items:center;font-size:17px}
+.addv .card .f div:last-child{border:none;color:#8a8a8e;font-size:15px}
+.addv .note{margin:10px 30px 0;color:#8a8a8e;font-size:13px;line-height:1.35}
+.addv .tg{margin:22px 16px 0;background:#fff;border-radius:14px;height:52px;display:flex;align-items:center;justify-content:space-between;padding:0 16px;font-size:17px}
+.toggle{width:52px;height:32px;border-radius:16px;background:#34C759;position:relative}
+.toggle:after{content:'';position:absolute;right:2px;top:2px;width:28px;height:28px;border-radius:50%;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.25)}
+
+/* home screens */
+.home{position:absolute;inset:0}
+.hicon{position:absolute;width:74px;text-align:center;color:#fff;font-size:12.5px;font-weight:500;text-shadow:0 1px 3px rgba(0,0,0,.3)}
+.hicon i{display:flex;width:74px;height:74px;border-radius:18px;margin-bottom:6px;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(0,0,0,.15)}
+.and .hicon i{border-radius:24px}
+.hicon i img{width:100%;height:100%;border-radius:inherit}
+.dock{position:absolute;left:14px;right:14px;bottom:18px;height:104px;border-radius:36px;background:rgba(255,255,255,.28);backdrop-filter:blur(10px)}
+.splash{position:absolute;overflow:hidden;background:url(img/logo.png) center 46%/78% auto no-repeat,radial-gradient(circle at 50% 45%,#3a2410,#1E1006 60%,#140801)}
+
+/* android chrome */
+.cbar{position:absolute;left:0;right:0;top:44px;height:64px;background:#fff;border-bottom:1px solid #e3e3e3}
+.cbar .url{position:absolute;left:58px;width:296px;top:10px;height:44px;border-radius:22px;background:#F1F3F4;display:flex;align-items:center;gap:10px;padding:0 14px;font-size:15.5px;color:#202124}
+.cmenu{position:absolute;left:168px;width:296px;top:50px;background:#fff;border-radius:18px;box-shadow:0 8px 30px rgba(0,0,0,.25);transform-origin:95% 0;overflow:hidden;color:#202124}
+.cmenu .icons{height:56px;display:flex;justify-content:space-around;align-items:center;border-bottom:1px solid #eee}
+.cmenu .it{height:48px;display:flex;align-items:center;gap:16px;padding:0 18px;font-size:15.5px;white-space:nowrap}
+.cmenu .it.hl{background:#E8F0FE}
+.cmenu .it svg{flex:none}
+.cdlg{position:absolute;left:30px;right:30px;top:330px;background:#fff;border-radius:28px;padding:28px 26px 20px;color:#202124}
+.cdlg h3{font-size:23px;font-weight:500;margin-bottom:22px}
+.cdlg .r{display:flex;align-items:center;gap:16px}
+.cdlg .r img{width:60px;height:60px;border-radius:50%}
+.cdlg .r b{font-weight:600;font-size:17px;display:block}
+.cdlg .r span{color:#5f6368;font-size:14.5px}
+.cdlg .bt{display:flex;justify-content:flex-end;gap:8px;margin-top:30px;font-size:16px;font-weight:600}
+.cdlg .bt span{padding:12px 18px;border-radius:24px;color:#0B57D0;position:relative}
+.cdlg .bt span.p{background:#0B57D0;color:#fff}
+.gbar{position:absolute;left:50%;bottom:10px;width:130px;height:5px;margin-left:-65px;border-radius:3px;z-index:45}
+
+/* finger */
+.finger{position:absolute;width:0;height:0;z-index:60;pointer-events:none}
+.finger .dot{position:absolute;left:-30px;top:-30px;width:60px;height:60px;border-radius:50%;background:rgba(255,255,255,.55);border:3px solid rgba(255,255,255,.95);box-shadow:0 6px 20px rgba(0,0,0,.35),inset 0 0 0 2px rgba(0,0,0,.08)}
+.finger .rip{position:absolute;left:-30px;top:-30px;width:60px;height:60px;border-radius:50%;border:4px solid #fff}
+
+/* captions */
+#cap{left:0;right:0;top:1600px;height:260px}
+.cblock{position:absolute;left:70px;right:70px;top:0;text-align:center}
+.cblock .meta{display:inline-flex;align-items:center;gap:14px;font-size:24px;font-weight:600;color:#666;letter-spacing:.04em;text-transform:uppercase}
+.cblock .meta .n{width:48px;height:48px;border-radius:50%;background:#111;color:#fff;display:flex;align-items:center;justify-content:center;font-family:'Inter Tight';font-size:26px;font-weight:700;letter-spacing:0}
+.cblock .main{font-family:'Inter Tight';font-weight:600;font-size:46px;letter-spacing:-.025em;line-height:1.12;margin-top:20px;color:#111}
+.cblock .sub{font-size:28px;color:#6b6b6b;margin-top:12px}
+.cblock .main q{quotes:none;background:#111;color:#fff;padding:0 12px;border-radius:12px;font-weight:600;white-space:nowrap;box-decoration-break:clone;-webkit-box-decoration-break:clone}
+#dots{left:0;right:0;top:1858px;display:flex;justify-content:center;gap:12px}
+#dots i{width:12px;height:12px;border-radius:6px;background:#d4d4d4;display:block}
+
+#outro{left:0;right:0;top:1580px;text-align:center}
+#outro img{height:92px}
+#outro .u{margin-top:22px;display:inline-block;font-size:30px;font-weight:600;border:2px solid #111;border-radius:40px;padding:14px 30px}
+#fade{inset:0;background:#FBFAF8}
+</style>
+</head>
+<body>
+<div id="stage">
+  <div id="band" class="abs"></div>
+  <div id="glow2" class="abs"></div>
+
+  <div id="nav" class="abs">
+    <div class="brand">IPPO</div>
+    <div class="links"><span id="nIos">iPhone</span><span id="nAnd">Samsung</span></div>
+    <div class="cta">ILOVA <svg width="20" height="14" viewBox="0 0 20 14"><path d="M1 7h17M12 1l6 6-6 6" stroke="#111" stroke-width="2.2" fill="none"/></svg></div>
+  </div>
+
+  <div id="head" class="abs"></div>
+
+  <div id="phones"></div>
+
+  <div id="cap" class="abs"></div>
+  <div id="dots" class="abs"><i></i><i></i><i></i><i></i><i></i></div>
+  <div id="outro" class="abs"><img src="img/logo.png" style="filter:brightness(.55) saturate(1.3)"><br><div class="u">ippo-miniapp.vercel.app</div></div>
+  <div id="fade" class="abs"></div>
+</div>
+
+<script>
+/* ===================== helpers ===================== */
+const E={
+  lin:x=>x,
+  out:x=>1-Math.pow(1-x,3),
+  in:x=>x*x*x,
+  io:x=>x<.5?4*x*x*x:1-Math.pow(-2*x+2,3)/2,
+  back:x=>{const c1=1.6,c3=c1+1;return 1+c3*Math.pow(x-1,3)+c1*Math.pow(x-1,2)}
+};
+const cl=(x,a=0,b=1)=>Math.max(a,Math.min(b,x));
+const P=(t,a,b,e=E.io)=>t<=a?0:t>=b?1:e((t-a)/(b-a));
+const L=(a,b,x)=>a+(b-a)*x;
+const W=(t,a,b,d=.35)=>Math.min(P(t,a,a+d,E.out),1-P(t,b-d,b,E.out));
+// keyframes [[t,v],...] -> value
+function K(t,kf,e=E.io){
+  if(t<=kf[0][0])return kf[0][1];
+  for(let i=1;i<kf.length;i++){if(t<=kf[i][0]){const[a,va]=kf[i-1],[b,vb]=kf[i];return L(va,vb,e((t-a)/(b-a)))}}
+  return kf[kf.length-1][1];
+}
+const $=s=>document.querySelector(s);
+const st=(el,o)=>{for(const k in o)el.style[k]=o[k]};
+
+/* ===================== icons ===================== */
+const I={
+  share:c=>`<svg width="30" height="32" viewBox="0 0 30 32"><path d="M15 3v18M8 10l7-7 7 7" stroke="${c}" stroke-width="2.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M10 14H6v15h18V14h-4" stroke="${c}" stroke-width="2.6" fill="none" stroke-linejoin="round"/></svg>`,
+  back:c=>`<svg width="30" height="30" viewBox="0 0 30 30"><path d="M19 4L8 15l11 11" stroke="${c}" stroke-width="2.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
+  fwd:c=>`<svg width="30" height="30" viewBox="0 0 30 30"><path d="M11 4l11 11-11 11" stroke="${c}" stroke-width="2.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
+  book:c=>`<svg width="32" height="30" viewBox="0 0 32 30"><path d="M16 7c-3-2.5-8-3-13-2v20c5-1 10-.5 13 2 3-2.5 8-3 13-2V5c-5-1-10-.5-13 2zM16 7v20" stroke="${c}" stroke-width="2.4" fill="none" stroke-linejoin="round"/></svg>`,
+  tabs:c=>`<svg width="30" height="30" viewBox="0 0 30 30"><rect x="3" y="8" width="19" height="19" rx="4" stroke="${c}" stroke-width="2.4" fill="none"/><path d="M8 4h14a4 4 0 014 4v14" stroke="${c}" stroke-width="2.4" fill="none"/></svg>`,
+  search:c=>`<svg width="18" height="18" viewBox="0 0 18 18"><circle cx="7.5" cy="7.5" r="5.5" stroke="${c}" stroke-width="2" fill="none"/><path d="M12 12l4.5 4.5" stroke="${c}" stroke-width="2" stroke-linecap="round"/></svg>`,
+  plusq:c=>`<svg width="26" height="26" viewBox="0 0 26 26"><rect x="2" y="2" width="22" height="22" rx="6" stroke="${c}" stroke-width="2.2" fill="none"/><path d="M13 7.5v11M7.5 13h11" stroke="${c}" stroke-width="2.2" stroke-linecap="round"/></svg>`,
+  star:c=>`<svg width="26" height="26" viewBox="0 0 26 26"><path d="M13 2.5l3.2 6.7 7.3.9-5.4 5 1.4 7.3L13 18.8l-6.5 3.6 1.4-7.3-5.4-5 7.3-.9z" stroke="${c}" stroke-width="2" fill="none" stroke-linejoin="round"/></svg>`,
+  bookO:c=>`<svg width="26" height="26" viewBox="0 0 32 30"><path d="M16 7c-3-2.5-8-3-13-2v20c5-1 10-.5 13 2 3-2.5 8-3 13-2V5c-5-1-10-.5-13 2zM16 7v20" stroke="${c}" stroke-width="2.6" fill="none" stroke-linejoin="round"/></svg>`,
+  find:c=>`<svg width="26" height="26" viewBox="0 0 26 26"><path d="M5 2h12l4 4v8M5 2v22h9" stroke="${c}" stroke-width="2" fill="none" stroke-linejoin="round"/><circle cx="18" cy="19" r="4" stroke="${c}" stroke-width="2" fill="none"/><path d="M21 22l3 3" stroke="${c}" stroke-width="2" stroke-linecap="round"/></svg>`,
+  pen:c=>`<svg width="26" height="26" viewBox="0 0 26 26"><circle cx="13" cy="13" r="11" stroke="${c}" stroke-width="2" fill="none"/><path d="M9 20l4-12 4 12M10.5 16h5" stroke="${c}" stroke-width="2" fill="none"/></svg>`,
+  print:c=>`<svg width="26" height="26" viewBox="0 0 26 26"><rect x="3" y="9" width="20" height="10" rx="3" stroke="${c}" stroke-width="2" fill="none"/><path d="M7 9V3h12v6M7 15h12v8H7z" stroke="${c}" stroke-width="2" fill="none"/></svg>`,
+  copy:c=>`<svg width="26" height="26" viewBox="0 0 26 26"><rect x="8" y="8" width="14" height="16" rx="3" stroke="${c}" stroke-width="2.2" fill="none"/><path d="M5 18V5a3 3 0 013-3h9" stroke="${c}" stroke-width="2.2" fill="none"/></svg>`,
+  bmk:c=>`<svg width="22" height="26" viewBox="0 0 22 26"><path d="M3 2h16v22l-8-6-8 6z" stroke="${c}" stroke-width="2.4" fill="none" stroke-linejoin="round"/></svg>`,
+  glass:c=>`<svg width="34" height="18" viewBox="0 0 34 18"><circle cx="8" cy="10" r="6" stroke="${c}" stroke-width="2.4" fill="none"/><circle cx="26" cy="10" r="6" stroke="${c}" stroke-width="2.4" fill="none"/><path d="M14 9h6M2 8H0M34 8h-2" stroke="${c}" stroke-width="2.4"/></svg>`,
+  up:c=>`<svg width="24" height="16" viewBox="0 0 24 16"><path d="M2 13L12 3l10 10" stroke="${c}" stroke-width="2.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
+  dots:c=>`<svg width="8" height="26" viewBox="0 0 8 26"><circle cx="4" cy="4" r="2.6" fill="${c}"/><circle cx="4" cy="13" r="2.6" fill="${c}"/><circle cx="4" cy="22" r="2.6" fill="${c}"/></svg>`,
+  home:c=>`<svg width="26" height="26" viewBox="0 0 26 26"><path d="M3 12L13 3l10 9M6 10v13h5v-7h4v7h5V10" stroke="${c}" stroke-width="2.2" fill="none" stroke-linejoin="round"/></svg>`,
+  lock:c=>`<svg width="16" height="18" viewBox="0 0 16 18"><rect x="2" y="8" width="12" height="9" rx="2" fill="${c}"/><path d="M5 8V5a3 3 0 016 0v3" stroke="${c}" stroke-width="2" fill="none"/></svg>`,
+  tabn:c=>`<svg width="24" height="24" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="4" stroke="${c}" stroke-width="2.2" fill="none"/><text x="12" y="16.5" font-size="11" font-weight="700" text-anchor="middle" fill="${c}" font-family="Inter">3</text></svg>`,
+  addHome:c=>`<svg width="22" height="24" viewBox="0 0 22 24"><rect x="3" y="1.5" width="16" height="21" rx="3" stroke="${c}" stroke-width="2" fill="none"/><path d="M11 8v8M7 12h8" stroke="${c}" stroke-width="2" stroke-linecap="round"/></svg>`,
+  gen:c=>`<svg width="22" height="22" viewBox="0 0 22 22"><circle cx="11" cy="11" r="8" stroke="${c}" stroke-width="2" fill="none"/></svg>`,
+  sig:c=>`<svg width="20" height="13" viewBox="0 0 20 13"><rect x="0" y="9" width="3.4" height="4" rx="1" fill="${c}"/><rect x="5.4" y="6" width="3.4" height="7" rx="1" fill="${c}"/><rect x="10.8" y="3" width="3.4" height="10" rx="1" fill="${c}"/><rect x="16.2" y="0" width="3.4" height="13" rx="1" fill="${c}"/></svg>`,
+  bat:c=>`<svg width="28" height="14" viewBox="0 0 28 14"><rect x="1" y="1" width="23" height="12" rx="4" stroke="${c}" stroke-width="1.4" fill="none" opacity=".5"/><rect x="3" y="3" width="15" height="8" rx="2" fill="${c}"/><rect x="25.5" y="4.5" width="2" height="5" rx="1" fill="${c}" opacity=".5"/></svg>`,
+};
+const statusBar=(c,cls='')=>`<div class="status ${cls}" style="color:${c}"><span>11:42</span><span class="ic">${I.sig(c)}<b style="font-size:15px">LTE</b>${I.bat(c)}</span></div>`;
+
+/* ===================== mini app mock ===================== */
+const appMock=(top,h)=>`<div class="app" style="top:${top}px;height:${h}px">
+  <div class="ahead"><img src="img/logo.png"></div>
+  <div class="search">${I.search('#9D804C')} Mahsulot qidirish…</div>
+  <div class="hero"><div class="t">Koreyadan original kosmetika va jenshen</div><div class="b">Katalogni ko‘rish</div><img src="img/ginseng.png"></div>
+  <div class="chips"><span class="on">Hammasi</span><span>Kosmetika</span><span>Jenshen</span><span>Kollagen</span></div>
+  <div class="ttl">Mashhur mahsulotlar</div>
+  <div class="grid">
+    <div class="card"><div class="im"><img src="img/ginseng.png"></div><div class="n">Qizil jenshen ekstrakti Gold</div><div class="p">489 000 so‘m</div></div>
+    <div class="card"><div class="im"><img src="img/suncream.png"></div><div class="n">Quyoshdan himoya kremi SPF50+</div><div class="p">159 000 so‘m</div></div>
+  </div></div>`;
+
+/* home grid icons (generic, no brands) */
+const GEN=[['#34C759','Telefon'],['#0A84FF','Xabarlar'],['#FF9F0A','Rasmlar'],['#5E5CE6','Kamera'],
+           ['#FF375F','Musiqa'],['#30B0C7','Ob-havo'],['#8E8E93','Sozlamalar'],['#FFD60A','Eslatma'],
+           ['#64D2FF','Pochta'],['#BF5AF2','Podkast'],['#FF453A','Kalendar']];
+const glyph=i=>{const s=['<circle cx="20" cy="20" r="9" fill="#fff"/>','<rect x="11" y="11" width="18" height="18" rx="5" fill="#fff"/>','<path d="M20 9l11 20H9z" fill="#fff"/>','<path d="M9 20h22M20 9v22" stroke="#fff" stroke-width="5" stroke-linecap="round"/>'][i%4];return `<svg width="40" height="40" viewBox="0 0 40 40" opacity=".9">${s}</svg>`};
+function homeGrid(x0,dx,y0,dy,startIdx){
+  let h='';
+  GEN.forEach(([c,n],i)=>{const r=Math.floor(i/4),k=i%4;
+    h+=`<div class="hicon" style="left:${x0+k*dx-37}px;top:${y0+r*dy}px"><i style="background:linear-gradient(160deg,${c},${c}cc)">${glyph(i)}</i>${n}</div>`});
+  const r=Math.floor(11/4),k=11%4;
+  h+=`<div class="hicon ippo" style="left:${x0+k*dx-37}px;top:${y0+r*dy}px"><i><img src="img/icon-512.png"></i>IPPO</div>`;
+  return h;
+}
+
+/* ===================== build phones ===================== */
+const IOS_HOME_SLOT={x:66+3*113.3,y:120+2*124+37};
+const AND_HOME_SLOT={x:64+3*115,y:300+2*122+37};
+
+$('#phones').innerHTML=`
+<div class="phone ios" id="pIos">
+  <div class="shadow"></div>
+  <div class="btn" style="left:-3px;top:200px;height:44px"></div><div class="btn" style="left:-3px;top:270px;height:80px"></div><div class="btn" style="left:-3px;top:365px;height:80px"></div><div class="btn" style="right:-3px;top:300px;height:120px"></div>
+  <div class="frame"></div><div class="bezel"></div>
+  <div class="screen">
+    <div class="island"></div>
+    <!-- safari -->
+    <div class="layer" id="iWeb" style="background:#1E1006">
+      ${statusBar('#EAC87A')}
+      ${appMock(54,836)}
+      <div class="sbar">
+        <div class="url" id="iUrl"><span style="font-size:15px;font-weight:600">aA</span><b>${I.lock('#555')} ippo-miniapp.vercel.app</b><span style="color:#555">↻</span></div>
+        <div class="tools">
+          <span style="position:absolute;left:37px;top:0">${I.back('#007AFF')}</span>
+          <span style="position:absolute;left:129px;top:0">${I.fwd('#b5b5bb')}</span>
+          <span style="position:absolute;left:221px;top:-2px" id="iShare">${I.share('#007AFF')}</span>
+          <span style="position:absolute;left:313px;top:0">${I.book('#007AFF')}</span>
+          <span style="position:absolute;left:405px;top:0">${I.tabs('#007AFF')}</span>
+        </div>
+      </div>
+      <div class="dim" id="iDim"></div>
+      <div class="sheet" id="iSheet">
+        <div class="row sh-head"><div class="ico"><img src="img/icon-512.png"></div><div><div class="nm">IPPO by Fotima Zuhra</div><div class="u">ippo-miniapp.vercel.app</div></div><div class="x">✕</div></div>
+        <div class="row apps"><div><i style="background:linear-gradient(#5AC8FA,#007AFF)"></i>AirDrop</div><div><i style="background:linear-gradient(#5FE07A,#30C04F)"></i>Сообщения</div><div><i style="background:linear-gradient(#4FA3FF,#1B6EF3)"></i>Почта</div><div><i style="background:linear-gradient(#FFF3B0,#FFD84A)"></i>Заметки</div></div>
+        <div class="row divi"></div>
+        <div class="row acts"><div><i>${I.copy('#111')}</i>Скопиро-<br>вать</div><div><i>${I.bmk('#111')}</i>Добавить<br>в закладки</div><div><i>${I.glass('#111')}</i>Список<br>для чтения</div><div><i>${I.up('#111')}</i>Показать<br>меньше</div></div>
+        <div class="row grp" style="top:430px">
+          <div>${I.bookO('#111')}Добавить закладку в папку…</div>
+          <div>${I.star('#111')}Добавить в Избранное</div>
+          <div>${I.find('#111')}Найти на странице</div>
+          <div id="iRow">${I.plusq('#111')}Добавить на экран «Домой»</div>
+        </div>
+        <div class="row grp" style="top:670px">
+          <div>${I.pen('#111')}Добавить разметку</div>
+          <div>${I.print('#111')}Напечатать</div>
+          <div>${I.gen('#111')}Действия с файлом</div>
+        </div>
+        <div class="hlring" id="iRing" style="left:10px;right:10px;top:600px;height:62px"></div>
+      </div>
+      <div class="addv" id="iAdd">
+        <div class="nav"><span class="c">Отменить</span><span class="t">На экран «Домой»</span><span class="a" id="iAddBtn">Добавить</span></div>
+        <div class="card"><img src="img/icon-512.png"><div class="f"><div>IPPO</div><div>ippo-miniapp.vercel.app</div></div></div>
+        <div class="note">Значок будет добавлен на экран «Домой» для быстрого доступа к этому веб‑сайту.</div>
+        <div class="tg"><span>Открыть как веб‑приложение</span><span class="toggle"></span></div>
+      </div>
+    </div>
+    <!-- iOS home -->
+    <div class="layer" id="iHome" style="background:radial-gradient(120% 80% at 20% 10%,#ff9ec7 0%,transparent 55%),radial-gradient(120% 80% at 90% 90%,#ffb36b 0%,transparent 55%),linear-gradient(160deg,#7b4dff,#c04bd8 50%,#ff7a59)">
+      ${statusBar('#fff')}
+      ${homeGrid(66,113.3,120,124)}
+      <div class="dock"></div>
+      <div class="gbar" style="background:#fff"></div>
+    </div>
+    <div class="splash" id="iSplash"></div>
+    <div class="finger" id="iF"><div class="rip"></div><div class="dot"></div></div>
+  </div>
+</div>
+
+<div class="phone and" id="pAnd">
+  <div class="shadow"></div>
+  <div class="btn" style="right:-3px;top:230px;height:110px"></div><div class="btn" style="right:-3px;top:370px;height:60px"></div>
+  <div class="frame"></div><div class="bezel"></div>
+  <div class="screen">
+    <div class="hole"></div>
+    <div class="layer" id="aWeb" style="background:#fff">
+      ${statusBar('#202124','and')}
+      <div class="cbar">
+        <span style="position:absolute;left:18px;top:19px">${I.home('#444')}</span>
+        <div class="url" id="aUrl">${I.lock('#5f6368')} ippo-miniapp.vercel.app</div>
+        <span style="position:absolute;left:378px;top:20px">${I.tabn('#444')}</span>
+        <span style="position:absolute;left:436px;top:19px" id="aDots">${I.dots('#444')}</span>
+      </div>
+      ${appMock(108,894)}
+      <div class="gbar" style="background:rgba(255,255,255,.6)"></div>
+      <div class="dim" id="aDim"></div>
+      <div class="cmenu" id="aMenu">
+        <div class="icons">${I.fwd('#444').replace('width="30" height="30"','width="22" height="22"')}${I.star('#444')}<svg width="22" height="22" viewBox="0 0 22 22"><path d="M11 2v13M5 10l6 6 6-6M3 20h16" stroke="#444" stroke-width="2.2" fill="none"/></svg><svg width="22" height="22" viewBox="0 0 22 22"><circle cx="11" cy="11" r="9" stroke="#444" stroke-width="2" fill="none"/><path d="M11 10v6M11 6v1" stroke="#444" stroke-width="2.2" stroke-linecap="round"/></svg><span style="font-size:22px;color:#444">↻</span></div>
+        ${['Новая вкладка','Новая вкладка инкогнито','История','Удалить данные','Загрузки','Закладки','Недавние вкладки','Поделиться…','Найти на странице','Перевести…'].map(s=>`<div class="it">${I.gen('#5f6368')}${s}</div>`).join('')}
+        <div class="it" id="aRow">${I.addHome('#202124')}<b style="font-weight:500">Добавить на главный экран</b></div>
+        <div class="it">${I.gen('#5f6368')}Версия для ПК</div>
+      </div>
+      <div class="hlring" id="aRing" style="left:166px;width:300px;top:${50+56+480-4}px;height:56px;border-radius:12px"></div>
+      <div class="cdlg" id="aDlg">
+        <h3>Установить приложение?</h3>
+        <div class="r"><img src="img/icon-512.png"><div><b>IPPO by Fotima Zuhra</b><span>ippo-miniapp.vercel.app</span></div></div>
+        <div class="bt"><span>Отмена</span><span class="p" id="aInst">Установить</span></div>
+      </div>
+    </div>
+    <div class="layer" id="aHome" style="background:radial-gradient(100% 60% at 80% 0%,#7fd1ff 0%,transparent 60%),radial-gradient(100% 70% at 0% 100%,#ff8fb1 0%,transparent 60%),linear-gradient(170deg,#3d5afe,#7c4dff 55%,#d16cff)">
+      ${statusBar('#fff','and')}
+      <div style="position:absolute;left:34px;top:92px;color:#fff;font-family:'Inter Tight';font-weight:300;font-size:84px;letter-spacing:-.03em;line-height:1">11:42</div>
+      <div style="position:absolute;left:38px;top:186px;color:#fff;font-size:18px;font-weight:500;opacity:.9">Shanba, 3 oktabr</div>
+      ${homeGrid(64,115,300,122)}
+      <div class="gbar" style="background:rgba(255,255,255,.8)"></div>
+    </div>
+    <div class="splash" id="aSplash"></div>
+    <div class="finger" id="aF"><div class="rip"></div><div class="dot"></div></div>
+  </div>
+</div>`;
+
+/* ===================== headline / captions ===================== */
+const HEADS=[
+  {t:'Bir bosishda, doim yoningizda.',a:'Saytni ilovaga',b:'<span class="serif">aylantiring</span>'},
+  {t:'1-qism · Apple',a:'iPhone’da',b:'<span class="serif">o‘rnatish</span>'},
+  {t:'2-qism · Android',a:'Samsung’da',b:'<span class="serif">o‘rnatish</span>'},
+  {t:'Hammasi tayyor!',a:'IPPO endi',b:'<span class="serif">ekraningizda</span>'},
+];
+$('#head').innerHTML=HEADS.map((h,i)=>`<div class="hblock" id="h${i}"><div class="tag serif">${h.t}</div><div class="line"><div>${h.a}</div></div><div class="line"><div>${h.b}</div></div></div>`).join('');
+
+const IOS=[
+  {m:'Safari’da saytni oching',s:'ippo-miniapp.vercel.app'},
+  {m:'Pastdagi <q>Ulashish</q> tugmasini bosing',s:'kvadrat ichida yuqoriga strelka'},
+  {m:'<q>Добавить на экран «Домой»</q>',s:'ya’ni “Bosh ekranga qo‘shish”'},
+  {m:'Yuqorida <q>Добавить</q> ni bosing',s:'ya’ni “Qo‘shish”'},
+  {m:'Tayyor! IPPO ilova bo‘lib turibdi',s:'endi bir bosishda ochiladi'},
+];
+const AND=[
+  {m:'Chrome’da saytni oching',s:'ippo-miniapp.vercel.app'},
+  {m:'Yuqori o‘ngdagi <q>⋮</q> ni bosing',s:'uchta nuqta — menyu'},
+  {m:'<q>Добавить на главный экран</q>',s:'ya’ni “Bosh ekranga qo‘shish”'},
+  {m:'<q>Установить</q> ni bosing',s:'ya’ni “O‘rnatish”'},
+  {m:'Tayyor! IPPO ilova bo‘lib turibdi',s:'endi bir bosishda ochiladi'},
+];
+const cap=(arr,dev)=>arr.map((c,i)=>`<div class="cblock" data-dev="${dev}"><div class="meta"><span class="n">${i+1}</span>${dev} · ${i+1}/5-qadam</div><div class="main">${c.m}</div><div class="sub">${c.s}</div></div>`).join('');
+$('#cap').innerHTML=cap(IOS,'iPhone')+cap(AND,'Samsung');
+const capEls=[...document.querySelectorAll('.cblock')];
+
+/* gradient band blobs */
+const BLOBS=[
+  {c:'#ff4fa3',x:120,y:330,w:620,h:300},{c:'#8f5bff',x:520,y:260,w:620,h:320},
+  {c:'#ff9b3d',x:980,y:350,w:640,h:300},{c:'#ffd45c',x:1240,y:400,w:420,h:240},
+  {c:'#f24ccf',x:760,y:420,w:520,h:260},{c:'#5a7dff',x:300,y:450,w:400,h:200},
+];
+$('#band').innerHTML=BLOBS.map((b,i)=>`<div class="blob" id="b${i}" style="background:${b.c};width:${b.w}px;height:${b.h}px"></div>`).join('');
+$('#glow2').innerHTML=`<div class="blob" style="left:0;top:150px;width:700px;height:300px;background:#ffc6ea"></div><div class="blob" style="left:700px;top:180px;width:800px;height:300px;background:#ffe2a8"></div>`;
+
+/* ===================== timeline ===================== */
+const T={intro:0, iosIn:4.4, i:[5.0,8.2,11.4,15.6,18.8,22.4], swap:22.4, a:[24.4,27.6,30.8,34.6,37.8,41.4], outro:41.4, end:46};
+const DURATION=T.end;
+
+function finger(el,t,segs){
+  // segs: [{show:[a,b], path:[[t,x,y]...], press:[...]}]
+  let op=0,x=0,y=0,sc=1,rs=0,ro=0;
+  for(const s of segs){
+    const w=W(t,s.show[0],s.show[1],.3);
+    if(t>=s.show[0]-.01&&t<=s.show[1]+.01){
+      op=w; x=K(t,s.path.map(p=>[p[0],p[1]])); y=K(t,s.path.map(p=>[p[0],p[2]]));
+      for(const pt of s.press){
+        const d=t-pt;
+        if(d>-.15&&d<.25) sc=Math.min(sc,1-.22*Math.sin(cl((d+.15)/.4)*Math.PI));
+        if(d>=0&&d<.7){rs=L(.6,2.6,E.out(d/.7));ro=1-d/.7}
+      }
+    }
+  }
+  st(el,{opacity:op,transform:`translate(${x}px,${y}px)`});
+  st(el.children[1],{transform:`scale(${sc})`});
+  st(el.children[0],{transform:`scale(${rs})`,opacity:ro*.9});
+}
+
+function render(t){
+  /* ---- band ---- */
+  BLOBS.forEach((b,i)=>{
+    const dx=Math.sin(t*.35+i*1.7)*70, dy=Math.cos(t*.28+i*1.1)*40, s=1+Math.sin(t*.5+i)*.08;
+    st($('#b'+i),{left:(b.x-b.w/2+dx)+'px',top:(b.y-b.h/2+dy)+'px',transform:`scale(${s})`});
+  });
+  const hue=K(t,[[22.2,0],[24,-38],[41,-38],[42.6,0]]);
+  const bandOp=P(t,.1,1.4,E.out)*K(t,[[41.2,1],[42.4,.85]]);
+  st($('#band'),{opacity:bandOp*.85,filter:`blur(70px) hue-rotate(${hue}deg) saturate(1.15)`,transform:`translateY(${K(t,[[41.2,0],[42.6,-60]])}px)`});
+  st($('#glow2'),{opacity:P(t,.4,2)*.7,filter:`blur(90px) hue-rotate(${hue}deg)`});
+
+  /* ---- nav ---- */
+  st($('#nav'),{opacity:P(t,.2,1,E.out),transform:`translateY(${L(-20,0,P(t,.2,1,E.out))}px)`});
+  const iosOn=t>=T.iosIn&&t<T.swap+.6, andOn=t>=T.swap+.6&&t<T.outro;
+  $('#nIos').className=iosOn?'on':''; $('#nAnd').className=andOn?'on':'';
+
+  /* ---- headlines ---- */
+  const hw=[[0,T.iosIn],[T.iosIn,T.swap+.4],[T.swap+.4,T.outro+.3],[T.outro+.3,99]];
+  hw.forEach(([a,b],i)=>{
+    const el=$('#h'+i);
+    const inP=i===0?P(t,.25,1.3,E.out):P(t,a,a+.8,E.out);
+    const outP=P(t,b-.35,b+.15,E.in);
+    const lines=el.querySelectorAll('.line > div');
+    st(el.querySelector('.tag'),{opacity:inP*(1-outP),transform:`translateY(${(1-inP)*20}px)`});
+    lines.forEach((ln,k)=>{
+      const ip=i===0?P(t,.35+k*.12,1.35+k*.12,E.out):P(t,a+.05+k*.1,a+.85+k*.1,E.out);
+      st(ln,{transform:`translateY(${(1-ip)*110 - outP*110}px)`});
+    });
+    el.style.visibility=(t<a-.5||t>b+.3)?'hidden':'visible';
+  });
+
+  /* ---- phones placement ---- */
+  const bobY=Math.sin(t*1.25)*7, bobR=Math.sin(t*.9)*.7;
+  {
+    const rise=P(t,.5,2.1,E.out);
+    const x=K(t,[[T.swap,0],[T.swap+1.1,-950],[T.outro+.2,-950],[T.outro+1.6,-215]]);
+    const r=K(t,[[.5,12],[2.1,-3],[T.swap,-3],[T.swap+1.1,-16],[T.outro+.2,-16],[T.outro+1.6,-7]]);
+    const s=K(t,[[T.outro+.2,1],[T.outro+1.6,.74]]);
+    const y=L(1000,0,rise)+K(t,[[T.outro+.2,0],[T.outro+1.6,-60]]);
+    st($('#pIos'),{transform:`translate(${x}px,${y+bobY}px) rotate(${r+bobR}deg) scale(${s})`,zIndex:1});
+  }
+  {
+    const x=K(t,[[T.swap+.3,950],[T.swap+1.6,0],[T.outro,0],[T.outro+1.4,215]]);
+    const r=K(t,[[T.swap+.3,16],[T.swap+1.6,3],[T.outro,3],[T.outro+1.4,7]]);
+    const s=K(t,[[T.outro,1],[T.outro+1.4,.74]]);
+    const y=K(t,[[T.outro,0],[T.outro+1.4,-40]]);
+    st($('#pAnd'),{transform:`translate(${x}px,${y-bobY}px) rotate(${r-bobR}deg) scale(${s})`,zIndex:2});
+  }
+
+  /* ---- iOS screen states ---- */
+  const i=T.i;
+  // splash at intro -> web
+  const iSplashIntro=1-P(t,T.iosIn+.1,T.iosIn+.7);
+  // web layer visible until home
+  const toHome=P(t,i[3]+2.0,i[3]+2.6);
+  st($('#iWeb'),{opacity:1-toHome,transform:`scale(${L(1,.92,toHome)})`});
+  st($('#iHome'),{opacity:toHome,transform:`scale(${L(1.12,1,toHome)})`});
+  st($('#iUrl'),{boxShadow:`0 0 0 ${3*W(t,i[0]+.9,i[1]-.3,.3)}px #FF3B5C`});
+  const sheetUp=P(t,i[1]+1.8,i[1]+2.4,E.out), sheetDown=P(t,i[2]+3.2,i[2]+3.7);
+  st($('#iDim'),{opacity:Math.max(sheetUp*(1-sheetDown),0)});
+  st($('#iSheet'),{transform:`translateY(${(1-sheetUp)*1000+sheetDown*1000}px)`});
+  const rowHl=P(t,i[2]+1.6,i[2]+1.9);
+  $('#iRow').className=rowHl>.5?'hl':'';
+  st($('#iRing'),{opacity:W(t,i[2]+.9,i[2]+3.4,.3)});
+  const addUp=P(t,i[2]+3.2,i[2]+3.8,E.out), addDown=P(t,i[3]+1.9,i[3]+2.4);
+  st($('#iAdd'),{transform:`translateY(${(1-addUp)*1000+addDown*1000}px)`});
+  st($('#iAddBtn'),{background:`rgba(0,122,255,${.15*W(t,i[3]+1.4,i[3]+1.9,.15)})`,boxShadow:`0 0 0 ${3*W(t,i[3]+.4,i[3]+1.9,.25)}px #FF3B5C`});
+  // icon pop
+  const ic=document.querySelector('#iHome .ippo');
+  const pop=P(t,i[3]+2.7,i[3]+3.3,E.back);
+  st(ic,{transform:`scale(${pop})`,opacity:cl(pop*2)});
+  st(ic.firstElementChild,{boxShadow:`0 0 0 ${5*W(t,i[3]+3.3,i[4]+1.4,.3)}px rgba(255,255,255,.85),0 6px 18px rgba(0,0,0,.25)`});
+  // open app
+  const iOpen=P(t,i[4]+2.3,i[4]+2.9,E.io);
+  splash($('#iSplash'),IOS_HOME_SLOT,iOpen,Math.max(iSplashIntro,0),70);
+  finger($('#iF'),t,[
+    {show:[i[1]+.3,i[1]+1.9],path:[[i[1]+.3,330,700],[i[1]+1.2,236,974]],press:[i[1]+1.4]},
+    {show:[i[2]+.5,i[2]+2.4],path:[[i[2]+.5,330,560],[i[2]+1.4,200,716]],press:[i[2]+1.7]},
+    {show:[i[3]+.2,i[3]+1.9],path:[[i[3]+.2,320,320],[i[3]+1.1,420,92]],press:[i[3]+1.5]},
+    {show:[i[4]+1.2,i[4]+2.6],path:[[i[4]+1.2,300,560],[i[4]+1.9,IOS_HOME_SLOT.x,IOS_HOME_SLOT.y]],press:[i[4]+2.1]},
+  ]);
+
+  /* ---- Android screen states ---- */
+  const a=T.a;
+  st($('#aUrl'),{boxShadow:`0 0 0 ${3*W(t,a[0]+.6,a[1]-.3,.3)}px #FF3B5C`});
+  const menu=P(t,a[1]+1.75,a[1]+2.15,E.out), menuOff=P(t,a[2]+2.0,a[2]+2.3);
+  st($('#aMenu'),{opacity:menu*(1-menuOff),transform:`scale(${L(.6,1,menu)})`});
+  st($('#aDim'),{opacity:.35*menu*(1-P(t,a[3]+1.8,a[3]+2.2))});
+  $('#aRow').className='it'+(P(t,a[2]+1.4,a[2]+1.6)>.5?' hl':'');
+  st($('#aRing'),{opacity:W(t,a[2]+.6,a[2]+2.0,.3)});
+  const dlg=P(t,a[2]+2.3,a[2]+2.8,E.back), dlgOff=P(t,a[3]+1.7,a[3]+2.1);
+  st($('#aDlg'),{opacity:Math.min(1,dlg*2)*(1-dlgOff),transform:`scale(${L(.85,1,dlg)})`});
+  st($('#aInst'),{boxShadow:`0 0 0 ${3*W(t,a[3]+.3,a[3]+1.7,.25)}px #FF3B5C`});
+  const aHome=P(t,a[3]+2.1,a[3]+2.7);
+  st($('#aWeb'),{opacity:1-aHome,transform:`scale(${L(1,.92,aHome)})`});
+  st($('#aHome'),{opacity:aHome,transform:`scale(${L(1.12,1,aHome)})`});
+  const aic=document.querySelector('#aHome .ippo');
+  const apop=P(t,a[3]+2.8,a[3]+3.4,E.back);
+  st(aic,{transform:`scale(${apop})`,opacity:cl(apop*2)});
+  st(aic.firstElementChild,{boxShadow:`0 0 0 ${5*W(t,a[3]+3.4,a[4]+1.4,.3)}px rgba(255,255,255,.85),0 6px 18px rgba(0,0,0,.25)`});
+  const aOpen=P(t,a[4]+2.3,a[4]+2.9);
+  splash($('#aSplash'),AND_HOME_SLOT,aOpen,0,44);
+  finger($('#aF'),t,[
+    {show:[a[1]+.3,a[1]+1.8],path:[[a[1]+.3,300,420],[a[1]+1.1,440,76]],press:[a[1]+1.4]},
+    {show:[a[2]+.3,a[2]+2.1],path:[[a[2]+.3,250,300],[a[2]+1.1,320,614]],press:[a[2]+1.5]},
+    {show:[a[3]+.1,a[3]+1.7],path:[[a[3]+.1,250,700],[a[3]+.9,372,575]],press:[a[3]+1.3]},
+    {show:[a[4]+1.2,a[4]+2.6],path:[[a[4]+1.2,240,700],[a[4]+1.9,AND_HOME_SLOT.x,AND_HOME_SLOT.y]],press:[a[4]+2.1]},
+  ]);
+
+  /* ---- captions ---- */
+  capEls.forEach((el,k)=>{
+    const arr=k<5?i:a, j=k%5;
+    const s=arr[j]+.05, e=arr[j+1]-.05;
+    const w=W(t,s,e,.35);
+    const inP=P(t,s,s+.5,E.out);
+    st(el,{opacity:w,transform:`translateY(${(1-inP)*26}px)`,visibility:w>0?'visible':'hidden'});
+  });
+  const dots=[...document.querySelectorAll('#dots i')];
+  let cur=-1;
+  [i,a].forEach(arr=>{for(let j=0;j<5;j++)if(t>=arr[j]&&t<arr[j+1])cur=j});
+  const dotsOn=W(t,T.i[0]-.2,T.swap+.2,.3)+W(t,T.a[0]-.2,T.outro,.3);
+  dots.forEach((d,j)=>st(d,{width:(j===cur?40:12)+'px',background:j<=cur?'#111':'#d4d4d4'}));
+  st($('#dots'),{opacity:dotsOn});
+
+  /* ---- outro ---- */
+  const o=P(t,T.outro+1.0,T.outro+1.8,E.out);
+  st($('#outro'),{opacity:o,transform:`translateY(${(1-o)*30}px)`});
+  st($('#fade'),{opacity:1-P(t,0,.35)+P(t,T.end-.6,T.end)});
+}
+
+function splash(el,slot,open,full,rad){
+  // open: 0 -> hidden (tiny at icon slot), 1 -> full screen. full overrides to fullscreen.
+  const f=Math.max(full,0);
+  const k=Math.max(open,f);
+  if(k<=0){el.style.opacity=0;return}
+  const w=L(74,472,open),h=L(74,1002,open);
+  let x=L(slot.x-37,0,open),y=L(slot.y-37,0,open);
+  if(f>0&&open===0){st(el,{opacity:f,left:'0px',top:'0px',width:'472px',height:'1002px',borderRadius:rad+'px'});return}
+  st(el,{opacity:cl(open*3),left:x+'px',top:y+'px',width:w+'px',height:h+'px',borderRadius:L(18,rad,open)+'px'});
+}
+window.render=render; window.DURATION=DURATION;
+render(Number(new URLSearchParams(location.search).get('t')||0));
+</script>
+</body>
+</html>
