@@ -4,9 +4,9 @@ import Img from '../components/Img';
 import Icon from '../components/Icon';
 import { useI18n } from '../lib/i18n';
 import { tgUser } from '../lib/telegram';
-import Flag from '../components/Flag';
+import MarketSwitch from '../components/MarketSwitch';
 
-export default function Home({ config, market, mode, onMarket, products, stories, seenStories, user, onStory, onOpen, onCatalog }) {
+export default function Home({ config, market, mode, onMarketChange, products, stories, seenStories, user, onStory, onOpen, onCatalog, onSearch }) {
   const { t, label } = useI18n();
   const name = tgUser?.first_name || user?.firstName || '';
   const featured = products.filter((p) => p.isFeatured).slice(0, 6);
@@ -23,14 +23,12 @@ export default function Home({ config, market, mode, onMarket, products, stories
       <header className="home-head">
         <div className="home-head-row">
           <img className="home-logo" src="/logo.png" alt="IPPO" />
-          <button className="market-pill" onClick={onMarket}>
-            <Flag market={market} size={18} /> {t.modeName[mode]} <Icon name="chevron" size={14} stroke={2.4} />
-          </button>
+          <MarketSwitch market={market} mode={mode} onChange={onMarketChange} />
         </div>
         <div className="home-hello">
           {t.hello}, <b>{name || t.guest}</b> 👋
         </div>
-        <button className="search-pill" onClick={() => onCatalog({ focus: true })}>
+        <button className="search-pill" onClick={onSearch}>
           <Icon name="search" size={19} />
           <span>{t.searchPh}</span>
           <span className="search-go">

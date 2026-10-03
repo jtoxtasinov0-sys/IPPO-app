@@ -43,7 +43,14 @@
   --serif: 'Cormorant Garamond', Georgia, 'Times New Roman', serif;
 
   --safe-b: env(safe-area-inset-bottom, 0px);
-  --nav-h: 64px;
+  /* Yuqori xavfsiz zona: iPhone soati/batareya ostiga kirib qolmaslik uchun
+     (Telegram to'liq ekran rejimi o'z o'zgaruvchilarini beradi) */
+  --safe-t: max(
+    env(safe-area-inset-top, 0px),
+    calc(var(--tg-safe-area-inset-top, 0px) + var(--tg-content-safe-area-inset-top, 0px))
+  );
+  --nav-h: 66px;
+  --nav-gap: 12px;
 }
 
 * {
@@ -97,7 +104,20 @@ a {
 
 .app {
   min-height: 100vh;
-  padding-bottom: calc(var(--nav-h) + var(--safe-b) + 16px);
+  padding-top: var(--safe-t);
+  padding-bottom: calc(var(--nav-h) + var(--safe-b) + var(--nav-gap) + 30px);
+}
+/* Status-bar ostida aylanayotgan kontent ko'rinmasin */
+.app::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: var(--safe-t);
+  background: var(--bg);
+  z-index: 15;
+  pointer-events: none;
 }
 .page {
   padding: 0 16px;
@@ -754,7 +774,7 @@ a {
 /* ——— Katalog ——— */
 .catalog-head {
   position: sticky;
-  top: 0;
+  top: var(--safe-t);
   z-index: 5;
   background: var(--bg);
   margin: 0 -16px 12px;
@@ -1200,7 +1220,7 @@ a {
 }
 .storyv-bars {
   position: absolute;
-  top: 10px;
+  top: calc(10px + var(--safe-t));
   left: 10px;
   right: 10px;
   display: flex;
@@ -1235,7 +1255,7 @@ a {
   }
 }
 .storyv-close {
-  top: 24px;
+  top: calc(24px + var(--safe-t));
 }
 .storyv-media {
   flex: 1;
@@ -1361,7 +1381,7 @@ a {
 }
 .sticky-cta {
   position: sticky;
-  bottom: calc(var(--nav-h) + var(--safe-b) + 10px);
+  bottom: calc(var(--nav-h) + var(--safe-b) + var(--nav-gap) + 12px);
   margin-top: 16px;
   z-index: 4;
 }
@@ -1906,33 +1926,63 @@ a {
   filter: drop-shadow(0 2px 6px rgba(201, 160, 78, 0.3)) brightness(0.85);
 }
 
-/* ——— Pastki menyu ——— */
+/* ——— Pastki menyu: suzuvchi oltin panel ——— */
 .bottom-nav {
+  --spring: cubic-bezier(0.34, 1.56, 0.64, 1);
   position: fixed;
-  left: 0;
-  right: 0;
-  bottom: 0;
+  left: var(--nav-gap);
+  right: var(--nav-gap);
+  bottom: calc(var(--safe-b) + var(--nav-gap));
   z-index: 20;
-  display: flex;
-  height: calc(var(--nav-h) + var(--safe-b));
-  padding-bottom: var(--safe-b);
-  background: rgba(255, 255, 255, 0.96);
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
-  border-radius: 24px 24px 0 0;
-  box-shadow: 0 -10px 30px -14px rgba(120, 84, 30, 0.3);
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  height: var(--nav-h);
+  padding: 0 6px;
+  max-width: 520px;
+  margin: 0 auto;
+  border-radius: 28px;
+  background: rgba(255, 255, 255, 0.94);
+  backdrop-filter: blur(16px) saturate(1.4);
+  -webkit-backdrop-filter: blur(16px) saturate(1.4);
+  border: 1px solid rgba(234, 200, 122, 0.45);
+  box-shadow: 0 18px 40px -16px rgba(120, 84, 30, 0.45), 0 2px 8px rgba(120, 84, 30, 0.06);
 }
-.bottom-nav button {
-  flex: 1;
+/* Faol tab ostidagi siljiydigan pufak */
+.nav-blob {
+  position: absolute;
+  top: 7px;
+  bottom: 7px;
+  left: 6px;
+  width: calc((100% - 12px) / 5);
+  pointer-events: none;
+  transition: transform 0.5s var(--spring), opacity 0.25s;
+}
+.nav-blob::before {
+  content: '';
+  position: absolute;
+  inset: 0 5px;
+  border-radius: 20px;
+  background: linear-gradient(180deg, #fdf5e4 0%, var(--gold-tint) 100%);
+  box-shadow: inset 0 0 0 1px rgba(234, 200, 122, 0.5);
+  transition: transform 0.3s var(--spring);
+}
+.nav-blob.hide {
+  opacity: 0;
+}
+.nav-blob.hide::before {
+  transform: scale(0.6);
+}
+.nav-tab {
+  position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 3px;
-  color: #a8998a;
-  transition: color 0.15s;
+  gap: 2px;
+  color: #ab9c8b;
+  transition: color 0.25s;
 }
-.bottom-nav button.on {
+.nav-tab.on {
   color: var(--gold-deep);
 }
 .nav-ic {
@@ -1940,41 +1990,184 @@ a {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 46px;
-  height: 30px;
-  border-radius: 99px;
-  transition: background 0.2s;
+  height: 28px;
+  transition: transform 0.35s var(--spring);
 }
-.bottom-nav button.on .nav-ic {
-  background: var(--gold-tint);
+.nav-tab.on .nav-ic {
+  transform: translateY(-2px);
+  animation: navPop 0.55s var(--spring);
+}
+@keyframes navPop {
+  0% {
+    transform: translateY(0) scale(1);
+  }
+  35% {
+    transform: translateY(-6px) scale(1.18) rotate(-6deg);
+  }
+  70% {
+    transform: translateY(-1px) scale(0.96) rotate(3deg);
+  }
+  100% {
+    transform: translateY(-2px) scale(1);
+  }
 }
 .nav-label {
-  font-size: 11px;
+  font-size: 10.5px;
   font-weight: 700;
+  letter-spacing: 0.01em;
+  white-space: nowrap;
+  transition: font-weight 0.2s;
+}
+.nav-tab.on .nav-label {
+  font-weight: 800;
+}
+.nav-dot {
+  position: absolute;
+  bottom: 4px;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: var(--gold);
+  opacity: 0;
+  transform: scale(0);
+  transition: transform 0.35s var(--spring), opacity 0.2s;
+}
+.nav-tab.on .nav-dot {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* O'rtadagi ko'tarilgan savatcha tugmasi */
+.nav-fab-slot {
+  position: relative;
+  display: flex;
+  justify-content: center;
+}
+.nav-fab {
+  position: absolute;
+  top: -26px;
+  width: 66px;
+  height: 66px;
+  border-radius: 50%;
+  padding: 5px;
+  background: #fff;
+  box-shadow: 0 12px 26px -10px rgba(120, 84, 30, 0.55);
+  transition: transform 0.35s var(--spring);
+}
+.nav-fab-core {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  color: #fff;
+  background: var(--gold-btn);
+  box-shadow: inset 0 2px 0 rgba(255, 255, 255, 0.35), inset 0 -3px 8px rgba(90, 60, 20, 0.25);
+  overflow: hidden;
+  transition: background 0.3s;
+}
+/* Yaltirash chizig'i */
+.nav-fab-core::after {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -60%;
+  width: 40%;
+  height: 200%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.55), transparent);
+  transform: rotate(25deg);
+  animation: fabShine 4.5s ease-in-out infinite;
+}
+@keyframes fabShine {
+  0%,
+  70% {
+    left: -60%;
+  }
+  100% {
+    left: 130%;
+  }
+}
+.nav-fab-halo {
+  position: absolute;
+  inset: -6px;
+  border-radius: 50%;
+  border: 1.5px solid rgba(201, 160, 78, 0.45);
+  animation: fabHalo 2.8s ease-out infinite;
+  pointer-events: none;
+}
+@keyframes fabHalo {
+  0% {
+    transform: scale(0.92);
+    opacity: 0.9;
+  }
+  100% {
+    transform: scale(1.22);
+    opacity: 0;
+  }
+}
+.nav-fab.on {
+  transform: translateY(-3px);
+}
+.nav-fab.on .nav-fab-core {
+  background: linear-gradient(135deg, #3b2615 0%, #1e1006 100%);
+  color: var(--gold-light);
+}
+.nav-fab.on .nav-fab-core svg {
+  animation: navPop 0.55s var(--spring);
+}
+.nav-fab.bump .nav-fab-core {
+  animation: fabBump 0.5s var(--spring);
+}
+@keyframes fabBump {
+  30% {
+    transform: scale(1.15);
+  }
+  60% {
+    transform: scale(0.94);
+  }
 }
 .nav-badge {
   position: absolute;
-  top: -5px;
-  right: -9px;
-  min-width: 18px;
-  height: 18px;
-  padding: 0 5px;
+  top: -2px;
+  right: -4px;
+  min-width: 22px;
+  height: 22px;
+  padding: 0 6px;
   border-radius: 99px;
-  background: var(--gold-btn);
+  background: #c0392b;
   color: #fff;
-  font-size: 10.5px;
+  font-size: 11px;
   font-weight: 800;
   display: flex;
   align-items: center;
   justify-content: center;
-  border: 2px solid #fff;
+  border: 2.5px solid #fff;
+  animation: popIn 0.35s var(--spring);
+}
+.nav-fab.bump .nav-badge {
+  animation: badgeBump 0.5s var(--spring);
+}
+@keyframes badgeBump {
+  40% {
+    transform: scale(1.35);
+  }
+}
+
+/* Har bir tugma bosilganda "yumshoq bosilish" effekti (main.jsx dagi press.js) */
+@media (prefers-reduced-motion: reduce) {
+  .nav-fab-halo,
+  .nav-fab-core::after {
+    animation: none;
+  }
 }
 
 /* ——— Boshqa ——— */
 .toast {
   position: fixed;
   left: 50%;
-  bottom: calc(var(--nav-h) + var(--safe-b) + 18px);
+  bottom: calc(var(--nav-h) + var(--safe-b) + var(--nav-gap) + 18px);
   transform: translateX(-50%);
   z-index: 100;
   max-width: calc(100% - 32px);
@@ -2004,7 +2197,7 @@ a {
 }
 .waking {
   position: fixed;
-  top: 0;
+  top: var(--safe-t);
   left: 0;
   right: 0;
   z-index: 60;
@@ -2083,6 +2276,7 @@ a {
   color: var(--onb-ink);
   font-family: var(--font);
   overflow: hidden;
+  padding-top: calc(14px + var(--safe-t));
 }
 .onb > *:not(.onb-spark):not(.onb-dotgrid) {
   position: relative;
@@ -2434,22 +2628,132 @@ a {
 
 
 /* Bosh sahifadagi "🇺🇿 O'zbekiston · Optom" tugmasi */
+.mswitch {
+  position: relative;
+  z-index: 12;
+}
 .market-pill {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
-  padding: 6px 12px;
+  gap: 7px;
+  height: 40px;
+  padding: 0 12px 0 10px;
   border-radius: 99px;
-  border: 0;
+  border: 1px solid var(--line);
   background: var(--card);
   box-shadow: var(--shadow-sm);
   color: var(--ink);
   font-size: 13px;
   font-weight: 800;
-  padding: 8px 12px;
+  transition: box-shadow 0.2s, border-color 0.2s;
 }
-.market-pill svg {
+.market-pill.open {
+  border-color: var(--gold-light);
+  box-shadow: 0 0 0 4px var(--gold-tint), var(--shadow-sm);
+}
+.market-pill > svg {
+  color: var(--gold-deep);
   transform: rotate(90deg);
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+.market-pill.open > svg {
+  transform: rotate(-90deg);
+}
+.market-flag {
+  display: flex;
+  border-radius: 4px;
+  overflow: hidden;
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.08);
+  animation: flagFlip 0.45s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+.market-flag .flag {
+  border-radius: 0;
+}
+.market-mode {
+  animation: fadeIn 0.3s ease;
+}
+@keyframes flagFlip {
+  from {
+    transform: rotateY(90deg) scale(0.7);
+  }
+  to {
+    transform: none;
+  }
+}
+.mswitch-pop {
+  position: absolute;
+  top: calc(100% + 10px);
+  right: 0;
+  width: 248px;
+  padding: 12px;
+  border-radius: 20px;
+  background: var(--card);
+  border: 1px solid var(--line);
+  box-shadow: var(--shadow-md), 0 24px 48px -20px rgba(120, 84, 30, 0.35);
+  transform-origin: top right;
+  animation: popIn 0.32s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+.mswitch-pop::before {
+  content: '';
+  position: absolute;
+  top: -6px;
+  right: 26px;
+  width: 12px;
+  height: 12px;
+  background: var(--card);
+  border-left: 1px solid var(--line);
+  border-top: 1px solid var(--line);
+  transform: rotate(45deg);
+}
+@keyframes popIn {
+  from {
+    opacity: 0;
+    transform: scale(0.85) translateY(-6px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+.mswitch-label {
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin: 2px 4px 7px;
+}
+.mswitch-seg + .mswitch-label {
+  margin-top: 12px;
+}
+.mswitch-seg {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4px;
+  padding: 4px;
+  border-radius: 14px;
+  background: var(--bg);
+  border: 1px solid var(--line);
+}
+.mswitch-seg button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  height: 38px;
+  border-radius: 11px;
+  font-size: 12.5px;
+  font-weight: 700;
+  color: var(--ink-2);
+  transition: background 0.25s, color 0.25s, box-shadow 0.25s;
+}
+.mswitch-seg button.on {
+  background: var(--gold-btn);
+  color: #fff;
+  box-shadow: 0 6px 14px -6px rgba(166, 124, 50, 0.7);
+}
+.mswitch-seg button.on .flag {
+  box-shadow: 0 0 0 1.5px #fff;
 }
 .market-row {
   display: flex;

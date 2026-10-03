@@ -72,6 +72,8 @@ export default function App() {
   const [waking, setWaking] = useState(false);
 
   const [tab, setTab] = useState('home');
+  // Pastki menyudagi faol tugma (Qidiruv ham katalogni ochadi, lekin o'zi yonadi)
+  const [navKey, setNavKey] = useState('home');
   const [filter, setFilter] = useState({ category: null, tag: null, q: '' });
   const [openProductId, setOpenProductId] = useState(null);
   const [storyIndex, setStoryIndex] = useState(null);
@@ -139,14 +141,28 @@ export default function App() {
     api.updateMe({ seenIntro: true, market: m, mode: md }).catch(() => {});
   }
 
+  function changeMarket(m, md) {
+    setMarket(m);
+    setMode(md);
+    ls.set('ippo_market', m);
+    ls.set('ippo_mode', md);
+    api.updateMe({ market: m, mode: md }).catch(() => {});
+  }
+
   function goTab(next) {
     setTab(next);
+    setNavKey(next);
     window.scrollTo({ top: 0 });
   }
 
   function openCatalog(patch = {}) {
     setFilter({ category: null, tag: null, q: '', ...patch });
     goTab('catalog');
+  }
+
+  function openSearch() {
+    openCatalog({ focus: true });
+    setNavKey('search');
   }
 
   function markSeen(id) {
@@ -203,7 +219,7 @@ export default function App() {
         config={config}
         market={market}
         mode={mode}
-        onMarket={() => setShowIntro(true)}
+        onMarketChange={changeMarket}
         products={shown}
         stories={stories}
         seenStories={seenStories}
@@ -211,6 +227,7 @@ export default function App() {
         onStory={setStoryIndex}
         onOpen={(p) => setOpenProductId(p.id)}
         onCatalog={openCatalog}
+        onSearch={openSearch}
       />
     );
   } else if (tab === 'catalog') {
@@ -260,7 +277,7 @@ export default function App() {
         <>
           {waking && !products && <div className="waking">{t.waking}</div>}
           <main className="app">{page}</main>
-          <BottomNav tab={tab} onTab={goTab} />
+          <BottomNav tab={navKey} onTab={goTab} onSearch={openSearch} />
 
           <ProductSheet
             product={openProduct}
