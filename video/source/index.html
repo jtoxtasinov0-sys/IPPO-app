@@ -4,6 +4,7 @@
 <meta charset="utf-8">
 <title>IPPO — ilovani o‘rnatish</title>
 <link rel="stylesheet" href="fonts/local.css">
+<link rel="stylesheet" href="fonts/app.css">
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 html,body{width:1080px;height:1920px;overflow:hidden;background:#FBFAF8}
@@ -56,25 +57,50 @@ body{font-family:'Inter',sans-serif;color:#111;-webkit-font-smoothing:antialiase
 .and .status{height:44px;padding:4px 26px 0 30px;font-size:15px;font-weight:500}
 .status .ic{display:flex;gap:6px;align-items:center}
 
-/* ---------- mini app mock ---------- */
-.app{position:absolute;left:0;right:0;background:#1E1006;color:#EAC87A;overflow:hidden}
-.app .ahead{height:72px;display:flex;align-items:center;justify-content:center;border-bottom:1px solid rgba(209,169,85,.18)}
-.app .ahead img{height:40px}
-.app .search{margin:16px 18px 0;height:44px;border-radius:22px;background:rgba(209,169,85,.10);border:1px solid rgba(209,169,85,.25);display:flex;align-items:center;gap:10px;padding:0 16px;color:#9D804C;font-size:15px}
-.app .hero{margin:16px 18px 0;height:200px;border-radius:24px;background:radial-gradient(circle at 80% 40%,#4a2c10,#1E1006 70%);border:1px solid rgba(209,169,85,.3);position:relative;overflow:hidden}
-.app .hero .t{position:absolute;left:20px;top:26px;width:220px;font-family:'Inter Tight';font-weight:700;font-size:25px;line-height:1.12;letter-spacing:-.02em;background:linear-gradient(135deg,#EAC87A,#D1A955 50%,#9D804C);-webkit-background-clip:text;color:transparent}
-.app .hero .b{position:absolute;left:20px;bottom:22px;background:linear-gradient(135deg,#EAC87A,#D1A955);color:#1E1006;font-weight:700;font-size:13px;padding:9px 16px;border-radius:20px}
-.app .hero img{position:absolute;right:-6px;top:20px;height:180px}
-.app .chips{display:flex;gap:8px;margin:16px 18px 0;font-size:14px;font-weight:600}
-.app .chips span{padding:8px 14px;border-radius:18px;border:1px solid rgba(209,169,85,.3);color:#D1A955;white-space:nowrap}
-.app .chips span.on{background:#D1A955;color:#1E1006;border-color:#D1A955}
-.app .ttl{margin:18px 18px 10px;font-family:'Inter Tight';font-weight:700;font-size:20px;color:#EAC87A}
-.app .grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:0 18px}
-.app .card{border-radius:20px;background:rgba(209,169,85,.07);border:1px solid rgba(209,169,85,.2);padding:10px 10px 14px;height:290px}
-.app .card .im{height:170px;border-radius:14px;background:radial-gradient(circle,#3a230d,#241307);display:flex;align-items:center;justify-content:center}
-.app .card .im img{max-height:150px;max-width:92%}
-.app .card .n{font-size:14px;color:#e9dcc0;margin-top:10px;line-height:1.25;height:36px}
-.app .card .p{font-weight:700;font-size:16px;margin-top:8px;color:#EAC87A}
+/* ---------- mini app mock (real IPPO light theme, authored at 393px, scaled 1.2) ---------- */
+.app{position:absolute;left:0;right:0;background:#fffbf5;overflow:hidden}
+.ap{position:absolute;left:0;top:0;width:393px;transform:scale(1.201);transform-origin:0 0;font-family:'Manrope',sans-serif;color:#23160b;background:#fffbf5;overflow:hidden}
+.ap .hd{padding:12px 16px 4px;position:relative}
+.ap .hd:after{content:'';position:absolute;top:58px;right:18px;width:54px;height:27px;background-image:radial-gradient(rgba(201,160,78,.5) 1.3px,transparent 1.5px);background-size:9px 9px}
+.ap .rw{display:flex;align-items:center;justify-content:space-between}
+.ap .logo{height:42px;filter:brightness(.9) saturate(1.15)}
+.ap .mp{display:inline-flex;align-items:center;gap:7px;height:40px;padding:0 12px 0 10px;border-radius:99px;border:1px solid #f0e7d7;background:#fff;box-shadow:0 8px 22px -12px rgba(120,84,30,.24),0 1px 3px rgba(120,84,30,.05);font-size:13px;font-weight:800}
+.ap .hello{margin:14px 0;font-size:22px;font-weight:800;letter-spacing:-.02em}
+.ap .hello b{background:linear-gradient(135deg,#d4a64f,#a67c32);-webkit-background-clip:text;color:transparent}
+.ap .sp{display:flex;align-items:center;gap:10px;height:52px;padding:0 6px 0 16px;border-radius:18px;background:#fff;box-shadow:0 14px 34px -14px rgba(120,84,30,.32),0 2px 6px rgba(120,84,30,.05);color:#8c7b69;font-size:14px}
+.ap .sp span{flex:1}
+.ap .go{flex:none!important;width:40px;height:40px;border-radius:14px;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#dcb05a,#c0913f 55%,#9f7530);box-shadow:0 6px 14px -4px rgba(166,124,50,.6)}
+.ap .stories{display:flex;gap:14px;padding:16px 16px 4px;overflow:hidden}
+.ap .st{flex:0 0 auto;width:70px;display:flex;flex-direction:column;align-items:center;gap:6px}
+.ap .st i{width:68px;height:68px;border-radius:50%;padding:2.5px;background:#efe3cc;display:block}
+.ap .st img{width:100%;height:100%;border-radius:50%;object-fit:cover;border:2.5px solid #fffbf5;display:block}
+.ap .st span{font-size:11.5px;font-weight:600;color:#3b2a18;max-width:70px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ap .hero{position:relative;overflow:hidden;display:flex;align-items:center;margin:16px 16px 0;padding:20px 14px 20px 20px;min-height:172px;border-radius:26px;background:linear-gradient(135deg,#f7dc9a,#e6bd66 48%,#c99a45);box-shadow:0 18px 40px -18px rgba(166,124,50,.65)}
+.ap .hero .tx{flex:1;position:relative;z-index:1}
+.ap .kick{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:17px;font-weight:700;color:#7a5520}
+.ap .ht{font-size:21px;line-height:1.15;font-weight:800;letter-spacing:-.02em;margin:4px 0 6px}
+.ap .hs{font-size:11.5px;color:rgba(34,22,10,.68);margin-bottom:12px}
+.ap .hb{display:inline-flex;align-items:center;gap:4px;padding:7px 10px 7px 13px;border-radius:99px;background:rgba(255,255,255,.88);color:#a67c32;font-size:12.5px;font-weight:800}
+.ap .hero img{width:138px;flex:none;filter:drop-shadow(0 10px 14px rgba(80,50,10,.35))}
+.ap .hdots{position:absolute;right:52px;bottom:12px;display:flex;gap:5px}
+.ap .hdots i{width:6px;height:6px;border-radius:3px;background:rgba(255,255,255,.6)}.ap .hdots i:first-child{width:18px;background:#fff}
+.ap .trust{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:16px 16px 0}
+.ap .trust div{display:flex;flex-direction:column;align-items:center;text-align:center;gap:7px;padding:12px 6px;border-radius:18px;background:#fff;box-shadow:0 8px 22px -12px rgba(120,84,30,.24),0 1px 3px rgba(120,84,30,.05);font-size:11.5px;font-weight:700}
+.ap .tic{width:34px;height:34px;border-radius:12px;display:flex;align-items:center;justify-content:center;background:#fbf0dc}
+.ap h2{font-size:18px;font-weight:800;letter-spacing:-.01em;margin:24px 16px 12px}
+.ap .cg{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:0 16px}
+.ap .ct{position:relative;background:#fff;border-radius:20px;padding:6px 6px 10px;text-align:center;box-shadow:0 8px 22px -12px rgba(120,84,30,.24)}
+.ap .ct img{width:100%;aspect-ratio:1;object-fit:cover;border-radius:15px;display:block}
+.ap .ct b{display:block;margin-top:8px;font-size:12.5px;font-weight:700}
+.ap .ct em{position:absolute;top:10px;right:10px;min-width:22px;height:22px;border-radius:99px;background:linear-gradient(135deg,#dcb05a,#9f7530);color:#fff;font-size:11px;font-weight:800;font-style:normal;display:flex;align-items:center;justify-content:center}
+.ap .bn{position:absolute;left:12px;right:12px;bottom:12px;height:66px;display:grid;grid-template-columns:repeat(5,1fr);padding:0 6px;border-radius:28px;background:rgba(255,255,255,.96);border:1px solid rgba(234,200,122,.45);box-shadow:0 18px 40px -16px rgba(120,84,30,.45),0 2px 8px rgba(120,84,30,.06)}
+.ap .bn .tb{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;color:#ab9c8b;font-size:11px;font-weight:700;position:relative}
+.ap .bn .tb.on{color:#a67c32}
+.ap .bn .tb.on:before{content:'';position:absolute;inset:7px 5px;border-radius:20px;background:#fbf0dc;box-shadow:inset 0 0 0 1px rgba(234,200,122,.6)}
+.ap .bn .tb > *{position:relative}
+.ap .fab{position:relative}
+.ap .fab div{position:absolute;left:50%;top:-26px;margin-left:-33px;width:66px;height:66px;border-radius:50%;padding:5px;background:#fff;box-shadow:0 12px 26px -10px rgba(120,84,30,.55)}
+.ap .fab span{display:flex;width:100%;height:100%;border-radius:50%;align-items:center;justify-content:center;background:linear-gradient(135deg,#dcb05a,#c0913f 55%,#9f7530);box-shadow:inset 0 2px 0 rgba(255,255,255,.35),inset 0 -3px 8px rgba(90,60,20,.25)}
 
 /* ---------- iOS safari ---------- */
 .sbar{position:absolute;left:0;right:0;bottom:0;height:116px;background:rgba(248,248,250,.94);border-top:1px solid #ddd;color:#007AFF}
@@ -129,7 +155,8 @@ body{font-family:'Inter',sans-serif;color:#111;-webkit-font-smoothing:antialiase
 .and .hicon i{border-radius:24px}
 .hicon i img{width:100%;height:100%;border-radius:inherit}
 .dock{position:absolute;left:14px;right:14px;bottom:18px;height:104px;border-radius:36px;background:rgba(255,255,255,.28);backdrop-filter:blur(10px)}
-.splash{position:absolute;overflow:hidden;background:url(img/logo.png) center 46%/78% auto no-repeat,radial-gradient(circle at 50% 45%,#3a2410,#1E1006 60%,#140801)}
+.splash{position:absolute;left:0;top:0;width:472px;height:1002px;overflow:hidden;background:#fffbf5;transform-origin:0 0}
+.splash .sicon{position:absolute;inset:0;width:100%;height:100%}
 
 /* android chrome */
 .cbar{position:absolute;left:0;right:0;top:44px;height:64px;background:#fff;border-bottom:1px solid #e3e3e3}
@@ -194,6 +221,7 @@ body{font-family:'Inter',sans-serif;color:#111;-webkit-font-smoothing:antialiase
 </div>
 
 <script>
+const DEV=new URLSearchParams(location.search).get('dev')||'ios';
 /* ===================== helpers ===================== */
 const E={
   lin:x=>x,
@@ -244,17 +272,33 @@ const I={
 };
 const statusBar=(c,cls='')=>`<div class="status ${cls}" style="color:${c}"><span>11:42</span><span class="ic">${I.sig(c)}<b style="font-size:15px">LTE</b>${I.bat(c)}</span></div>`;
 
-/* ===================== mini app mock ===================== */
-const appMock=(top,h)=>`<div class="app" style="top:${top}px;height:${h}px">
-  <div class="ahead"><img src="img/logo.png"></div>
-  <div class="search">${I.search('#9D804C')} Mahsulot qidirish…</div>
-  <div class="hero"><div class="t">Koreyadan original kosmetika va jenshen</div><div class="b">Katalogni ko‘rish</div><img src="img/ginseng.png"></div>
-  <div class="chips"><span class="on">Hammasi</span><span>Kosmetika</span><span>Jenshen</span><span>Kollagen</span></div>
-  <div class="ttl">Mashhur mahsulotlar</div>
-  <div class="grid">
-    <div class="card"><div class="im"><img src="img/ginseng.png"></div><div class="n">Qizil jenshen ekstrakti Gold</div><div class="p">489 000 so‘m</div></div>
-    <div class="card"><div class="im"><img src="img/suncream.png"></div><div class="n">Quyoshdan himoya kremi SPF50+</div><div class="p">159 000 so‘m</div></div>
-  </div></div>`;
+/* ===================== mini app mock (real IPPO home) ===================== */
+const ic=(d,c='currentColor',sz=24,w=1.8)=>`<svg width="${sz}" height="${sz}" viewBox="0 0 24 24" fill="none" stroke="${c}" stroke-width="${w}" stroke-linecap="round" stroke-linejoin="round">${d}</svg>`;
+const AP={
+  search:'<circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/>',
+  grid:'<rect x="3.5" y="3.5" width="7" height="7" rx="2"/><rect x="13.5" y="3.5" width="7" height="7" rx="2"/><rect x="3.5" y="13.5" width="7" height="7" rx="2"/><rect x="13.5" y="13.5" width="7" height="7" rx="2"/>',
+  home:'<path d="M3 10.5 12 3l9 7.5V20a1 1 0 0 1-1 1h-5v-6h-6v6H4a1 1 0 0 1-1-1z"/>',
+  bag:'<path d="M5 8h14l-1.2 11.1a2 2 0 0 1-2 1.9H8.2a2 2 0 0 1-2-1.9z"/><path d="M9 8V6.5a3 3 0 0 1 6 0V8"/>',
+  user:'<circle cx="12" cy="8" r="4"/><path d="M4 21c1.5-4 4.5-6 8-6s6.5 2 8 6"/>',
+  chev:'<path d="M9 5l7 7-7 7"/>',
+  shield:'<path d="M12 3l8 3v6c0 4.5-3.4 8.2-8 9-4.6-.8-8-4.5-8-9V6z"/><path d="M8.5 12l2.5 2.5 4.5-5"/>',
+  truck:'<path d="M2.5 6.5h11v10h-11zM13.5 10h4l3 3.5v3h-7"/><circle cx="6.5" cy="17.5" r="1.8"/><circle cx="17" cy="17.5" r="1.8"/>',
+  card:'<rect x="2.5" y="5" width="19" height="14" rx="2.5"/><path d="M2.5 10h19M6.5 15h4"/>',
+};
+const KR=`<svg width="26" height="18" viewBox="0 0 26 18" style="border-radius:4px;box-shadow:0 0 0 1px rgba(0,0,0,.08)"><rect width="26" height="18" fill="#fff"/><circle cx="13" cy="9" r="4.4" fill="#CD2E3A"/><path d="M8.6 9a4.4 4.4 0 0 0 8.8 0 2.2 2.2 0 0 0-4.4 0 2.2 2.2 0 0 1-4.4 0z" fill="#0047A0"/><g stroke="#111" stroke-width="1"><path d="M3.5 4.5l2-2.6M4.6 5.3l2-2.6M19.4 2.7l2 2.6M20.5 1.9l2 2.6M3.5 13.5l2 2.6M19.4 15.3l2-2.6"/></g></svg>`;
+const appMock=(top,h)=>`<div class="app" style="top:${top}px;height:${h}px"><div class="ap" style="height:${h/1.201}px">
+  <div class="hd">
+    <div class="rw"><img class="logo" src="img/logo.png"><div class="mp">${KR}<span>Dona</span>${ic(AP.chev,'#a67c32',14,2.6).replace('<svg','<svg style="transform:rotate(90deg)"')}</div></div>
+    <div class="hello">Salom, <b>mehmon</b> 👋</div>
+    <div class="sp">${ic(AP.search,'#8c7b69',19)}<span>Mahsulot qidirish...</span><span class="go">${ic(AP.grid,'#fff',17,2)}</span></div>
+  </div>
+  <div class="stories">${[['st1','Jenshen'],['st2','Qora jenshen'],['st3','Kollagen'],['st4','Dr.IPPO'],['st5','24K Gold']].map(([i,n])=>`<div class="st"><i><img src="img/${i}.jpg"></i><span>${n}</span></div>`).join('')}</div>
+  <div class="hero"><div class="tx"><div class="kick">Made in Korea</div><div class="ht">Koreyadan original go‘zallik</div><div class="hs">Jenshen · Kollagen · Kosmetika · Parfyum</div><span class="hb">Katalogni ochish ${ic(AP.chev,'#a67c32',14,2.6)}</span></div><img src="img/ginseng.png"><div class="hdots"><i></i><i></i></div></div>
+  <div class="trust"><div><span class="tic">${ic(AP.shield,'#a67c32',19)}</span>100% original</div><div><span class="tic">${ic(AP.truck,'#a67c32',19)}</span>Koreya bo‘ylab yetkazish</div><div><span class="tic">${ic(AP.card,'#a67c32',19)}</span>Naqd yoki karta</div></div>
+  <h2>Kategoriyalar</h2>
+  <div class="cg"><div class="ct"><img src="img/st1.jpg"><em>4</em><b>Jenshen</b></div><div class="ct"><img src="img/st3.jpg"><em>3</em><b>Kollagen</b></div><div class="ct"><img src="img/st6.jpg"><em>3</em><b>Vitaminlar</b></div></div>
+  <div class="bn"><div class="tb on">${ic(AP.home,'currentColor',23,2.2)}<span>Asosiy</span></div><div class="tb">${ic(AP.grid,'currentColor',23,1.7)}<span>Katalog</span></div><div class="fab"><div><span>${ic(AP.bag,'#fff',25,2)}</span></div></div><div class="tb">${ic(AP.search,'currentColor',23,1.7)}<span>Qidiruv</span></div><div class="tb">${ic(AP.user,'currentColor',23,1.7)}<span>Profil</span></div></div>
+</div></div>`;
 
 /* home grid icons (generic, no brands) */
 const GEN=[['#34C759','Telefon'],['#0A84FF','Xabarlar'],['#FF9F0A','Rasmlar'],['#5E5CE6','Kamera'],
@@ -282,8 +326,8 @@ $('#phones').innerHTML=`
   <div class="screen">
     <div class="island"></div>
     <!-- safari -->
-    <div class="layer" id="iWeb" style="background:#1E1006">
-      ${statusBar('#EAC87A')}
+    <div class="layer" id="iWeb" style="background:#fffbf5">
+      ${statusBar('#23160b')}
       ${appMock(54,836)}
       <div class="sbar">
         <div class="url" id="iUrl"><span style="font-size:15px;font-weight:600">aA</span><b>${I.lock('#555')} ippo-miniapp.vercel.app</b><span style="color:#555">↻</span></div>
@@ -328,7 +372,7 @@ $('#phones').innerHTML=`
       <div class="dock"></div>
       <div class="gbar" style="background:#fff"></div>
     </div>
-    <div class="splash" id="iSplash"></div>
+    <div class="splash" id="iSplash">${statusBar('#23160b')}${appMock(54,948)}<img class="sicon" src="img/icon-512.png"></div>
     <div class="finger" id="iF"><div class="rip"></div><div class="dot"></div></div>
   </div>
 </div>
@@ -370,7 +414,7 @@ $('#phones').innerHTML=`
       ${homeGrid(64,115,300,122)}
       <div class="gbar" style="background:rgba(255,255,255,.8)"></div>
     </div>
-    <div class="splash" id="aSplash"></div>
+    <div class="splash" id="aSplash">${statusBar('#23160b','and')}${appMock(44,958)}<img class="sicon" src="img/icon-512.png"></div>
     <div class="finger" id="aF"><div class="rip"></div><div class="dot"></div></div>
   </div>
 </div>`;
@@ -378,8 +422,7 @@ $('#phones').innerHTML=`
 /* ===================== headline / captions ===================== */
 const HEADS=[
   {t:'Bir bosishda, doim yoningizda.',a:'Saytni ilovaga',b:'<span class="serif">aylantiring</span>'},
-  {t:'1-qism · Apple',a:'iPhone’da',b:'<span class="serif">o‘rnatish</span>'},
-  {t:'2-qism · Android',a:'Samsung’da',b:'<span class="serif">o‘rnatish</span>'},
+  DEV==='ios'?{t:'Apple · iPhone',a:'iPhone’da',b:'<span class="serif">o‘rnatish</span>'}:{t:'Android · Samsung',a:'Samsung’da',b:'<span class="serif">o‘rnatish</span>'},
   {t:'Hammasi tayyor!',a:'IPPO endi',b:'<span class="serif">ekraningizda</span>'},
 ];
 $('#head').innerHTML=HEADS.map((h,i)=>`<div class="hblock" id="h${i}"><div class="tag serif">${h.t}</div><div class="line"><div>${h.a}</div></div><div class="line"><div>${h.b}</div></div></div>`).join('');
@@ -399,7 +442,8 @@ const AND=[
   {m:'Tayyor! IPPO ilova bo‘lib turibdi',s:'endi bir bosishda ochiladi'},
 ];
 const cap=(arr,dev)=>arr.map((c,i)=>`<div class="cblock" data-dev="${dev}"><div class="meta"><span class="n">${i+1}</span>${dev} · ${i+1}/5-qadam</div><div class="main">${c.m}</div><div class="sub">${c.s}</div></div>`).join('');
-$('#cap').innerHTML=cap(IOS,'iPhone')+cap(AND,'Samsung');
+$('#cap').innerHTML=DEV==='ios'?cap(IOS,'iPhone'):cap(AND,'Samsung');
+$(DEV==='ios'?'#pAnd':'#pIos').style.display='none';
 const capEls=[...document.querySelectorAll('.cblock')];
 
 /* gradient band blobs */
@@ -412,7 +456,7 @@ $('#band').innerHTML=BLOBS.map((b,i)=>`<div class="blob" id="b${i}" style="backg
 $('#glow2').innerHTML=`<div class="blob" style="left:0;top:150px;width:700px;height:300px;background:#ffc6ea"></div><div class="blob" style="left:700px;top:180px;width:800px;height:300px;background:#ffe2a8"></div>`;
 
 /* ===================== timeline ===================== */
-const T={intro:0, iosIn:4.4, i:[5.0,8.2,11.4,15.6,18.8,22.4], swap:22.4, a:[24.4,27.6,30.8,34.6,37.8,41.4], outro:41.4, end:46};
+const T={intro:0, iosIn:4.4, i:[5.0,8.2,11.4,15.6,18.8,22.4], a:[5.0,8.2,11.4,15.6,18.8,22.4], outro:22.4, end:27.5};
 const DURATION=T.end;
 
 function finger(el,t,segs){
@@ -437,56 +481,48 @@ function finger(el,t,segs){
 function render(t){
   /* ---- band ---- */
   BLOBS.forEach((b,i)=>{
-    const dx=Math.sin(t*.35+i*1.7)*70, dy=Math.cos(t*.28+i*1.1)*40, s=1+Math.sin(t*.5+i)*.08;
-    st($('#b'+i),{left:(b.x-b.w/2+dx)+'px',top:(b.y-b.h/2+dy)+'px',transform:`scale(${s})`});
+    const dx=Math.sin(t*.35+i*1.7)*70, dy=Math.cos(t*.28+i*1.1)*40, sc=1+Math.sin(t*.5+i)*.08;
+    st($('#b'+i),{left:(b.x-b.w/2+dx)+'px',top:(b.y-b.h/2+dy)+'px',transform:`scale(${sc})`});
   });
-  const hue=K(t,[[22.2,0],[24,-38],[41,-38],[42.6,0]]);
-  const bandOp=P(t,.1,1.4,E.out)*K(t,[[41.2,1],[42.4,.85]]);
-  st($('#band'),{opacity:bandOp*.85,filter:`blur(70px) hue-rotate(${hue}deg) saturate(1.15)`,transform:`translateY(${K(t,[[41.2,0],[42.6,-60]])}px)`});
+  const hue=DEV==='ios'?0:-38;
+  const bandOp=P(t,.1,1.4,E.out);
+  st($('#band'),{opacity:bandOp*.85,filter:`blur(70px) hue-rotate(${hue}deg) saturate(1.15)`,transform:`translateY(${K(t,[[T.outro,0],[T.outro+1.2,-90]])}px)`});
   st($('#glow2'),{opacity:P(t,.4,2)*.7,filter:`blur(90px) hue-rotate(${hue}deg)`});
 
   /* ---- nav ---- */
   st($('#nav'),{opacity:P(t,.2,1,E.out),transform:`translateY(${L(-20,0,P(t,.2,1,E.out))}px)`});
-  const iosOn=t>=T.iosIn&&t<T.swap+.6, andOn=t>=T.swap+.6&&t<T.outro;
-  $('#nIos').className=iosOn?'on':''; $('#nAnd').className=andOn?'on':'';
+  const on=t>=T.iosIn;
+  $('#nIos').className=on&&DEV==='ios'?'on':''; $('#nAnd').className=on&&DEV!=='ios'?'on':'';
 
   /* ---- headlines ---- */
-  const hw=[[0,T.iosIn],[T.iosIn,T.swap+.4],[T.swap+.4,T.outro+.3],[T.outro+.3,99]];
+  const hw=[[0,T.iosIn],[T.iosIn,T.outro+.3],[T.outro+.3,99]];
   hw.forEach(([a,b],i)=>{
     const el=$('#h'+i);
     const inP=i===0?P(t,.25,1.3,E.out):P(t,a,a+.8,E.out);
     const outP=P(t,b-.35,b+.15,E.in);
-    const lines=el.querySelectorAll('.line > div');
     st(el.querySelector('.tag'),{opacity:inP*(1-outP),transform:`translateY(${(1-inP)*20}px)`});
-    lines.forEach((ln,k)=>{
+    el.querySelectorAll('.line > div').forEach((ln,k)=>{
       const ip=i===0?P(t,.35+k*.12,1.35+k*.12,E.out):P(t,a+.05+k*.1,a+.85+k*.1,E.out);
       st(ln,{transform:`translateY(${(1-ip)*110 - outP*110}px)`});
     });
     el.style.visibility=(t<a-.5||t>b+.3)?'hidden':'visible';
   });
 
-  /* ---- phones placement ---- */
+  /* ---- phone placement ---- */
   const bobY=Math.sin(t*1.25)*7, bobR=Math.sin(t*.9)*.7;
   {
     const rise=P(t,.5,2.1,E.out);
-    const x=K(t,[[T.swap,0],[T.swap+1.1,-950],[T.outro+.2,-950],[T.outro+1.6,-215]]);
-    const r=K(t,[[.5,12],[2.1,-3],[T.swap,-3],[T.swap+1.1,-16],[T.outro+.2,-16],[T.outro+1.6,-7]]);
-    const s=K(t,[[T.outro+.2,1],[T.outro+1.6,.74]]);
-    const y=L(1000,0,rise)+K(t,[[T.outro+.2,0],[T.outro+1.6,-60]]);
-    st($('#pIos'),{transform:`translate(${x}px,${y+bobY}px) rotate(${r+bobR}deg) scale(${s})`,zIndex:1});
-  }
-  {
-    const x=K(t,[[T.swap+.3,950],[T.swap+1.6,0],[T.outro,0],[T.outro+1.4,215]]);
-    const r=K(t,[[T.swap+.3,16],[T.swap+1.6,3],[T.outro,3],[T.outro+1.4,7]]);
-    const s=K(t,[[T.outro,1],[T.outro+1.4,.74]]);
-    const y=K(t,[[T.outro,0],[T.outro+1.4,-40]]);
-    st($('#pAnd'),{transform:`translate(${x}px,${y-bobY}px) rotate(${r-bobR}deg) scale(${s})`,zIndex:2});
+    const r=K(t,[[.5,12],[2.1,DEV==='ios'?-3:3]]);
+    const sc=K(t,[[T.outro,1],[T.outro+1.2,.84]]);
+    const y=L(1000,0,rise)+K(t,[[T.outro,0],[T.outro+1.2,-80]]);
+    st($(DEV==='ios'?'#pIos':'#pAnd'),{transform:`translate(0px,${y+bobY}px) rotate(${r+bobR}deg) scale(${sc})`});
   }
 
   /* ---- iOS screen states ---- */
   const i=T.i;
   // splash at intro -> web
   const iSplashIntro=1-P(t,T.iosIn+.1,T.iosIn+.7);
+  const aSplashIntro=iSplashIntro;
   // web layer visible until home
   const toHome=P(t,i[3]+2.0,i[3]+2.6);
   st($('#iWeb'),{opacity:1-toHome,transform:`scale(${L(1,.92,toHome)})`});
@@ -535,7 +571,7 @@ function render(t){
   st(aic,{transform:`scale(${apop})`,opacity:cl(apop*2)});
   st(aic.firstElementChild,{boxShadow:`0 0 0 ${5*W(t,a[3]+3.4,a[4]+1.4,.3)}px rgba(255,255,255,.85),0 6px 18px rgba(0,0,0,.25)`});
   const aOpen=P(t,a[4]+2.3,a[4]+2.9);
-  splash($('#aSplash'),AND_HOME_SLOT,aOpen,0,44);
+  splash($('#aSplash'),AND_HOME_SLOT,aOpen,Math.max(aSplashIntro,0),44);
   finger($('#aF'),t,[
     {show:[a[1]+.3,a[1]+1.8],path:[[a[1]+.3,300,420],[a[1]+1.1,440,76]],press:[a[1]+1.4]},
     {show:[a[2]+.3,a[2]+2.1],path:[[a[2]+.3,250,300],[a[2]+1.1,320,614]],press:[a[2]+1.5]},
@@ -545,7 +581,7 @@ function render(t){
 
   /* ---- captions ---- */
   capEls.forEach((el,k)=>{
-    const arr=k<5?i:a, j=k%5;
+    const arr=DEV==='ios'?i:a, j=k%5;
     const s=arr[j]+.05, e=arr[j+1]-.05;
     const w=W(t,s,e,.35);
     const inP=P(t,s,s+.5,E.out);
@@ -553,26 +589,26 @@ function render(t){
   });
   const dots=[...document.querySelectorAll('#dots i')];
   let cur=-1;
-  [i,a].forEach(arr=>{for(let j=0;j<5;j++)if(t>=arr[j]&&t<arr[j+1])cur=j});
-  const dotsOn=W(t,T.i[0]-.2,T.swap+.2,.3)+W(t,T.a[0]-.2,T.outro,.3);
+  for(let j=0;j<5;j++)if(t>=i[j]&&t<i[j+1])cur=j;
+  const dotsOn=W(t,T.i[0]-.2,T.outro+.2,.3);
   dots.forEach((d,j)=>st(d,{width:(j===cur?40:12)+'px',background:j<=cur?'#111':'#d4d4d4'}));
   st($('#dots'),{opacity:dotsOn});
 
   /* ---- outro ---- */
-  const o=P(t,T.outro+1.0,T.outro+1.8,E.out);
+  const o=P(t,T.outro+.6,T.outro+1.4,E.out);
   st($('#outro'),{opacity:o,transform:`translateY(${(1-o)*30}px)`});
   st($('#fade'),{opacity:1-P(t,0,.35)+P(t,T.end-.6,T.end)});
 }
 
 function splash(el,slot,open,full,rad){
-  // open: 0 -> hidden (tiny at icon slot), 1 -> full screen. full overrides to fullscreen.
-  const f=Math.max(full,0);
-  const k=Math.max(open,f);
-  if(k<=0){el.style.opacity=0;return}
-  const w=L(74,472,open),h=L(74,1002,open);
-  let x=L(slot.x-37,0,open),y=L(slot.y-37,0,open);
-  if(f>0&&open===0){st(el,{opacity:f,left:'0px',top:'0px',width:'472px',height:'1002px',borderRadius:rad+'px'});return}
-  st(el,{opacity:cl(open*3),left:x+'px',top:y+'px',width:w+'px',height:h+'px',borderRadius:L(18,rad,open)+'px'});
+  // full: app already open (intro). open: 0 -> icon-sized at slot, 1 -> fullscreen app.
+  const ico=el.querySelector('.sicon');
+  if(full>0&&open===0){st(el,{opacity:full,transform:'none',borderRadius:'0px'});ico.style.opacity=0;return}
+  if(open<=0){el.style.opacity=0;return}
+  const sx=L(74/472,1,open), sy=L(74/1002,1,open);
+  const x=L(slot.x-37,0,open), y=L(slot.y-37,0,open), r=L(18,0,open);
+  st(el,{opacity:cl(open*6),transform:`translate(${x}px,${y}px) scale(${sx},${sy})`,borderRadius:`${r/sx}px / ${r/sy}px`});
+  ico.style.opacity=1-P(open,0,.45,E.lin);
 }
 window.render=render; window.DURATION=DURATION;
 render(Number(new URLSearchParams(location.search).get('t')||0));
