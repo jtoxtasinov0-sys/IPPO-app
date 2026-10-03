@@ -126,8 +126,8 @@ export default function Settings() {
       <section className="panel">
         <h3>🖼 Kategoriya rasmlari {coverMsg && <span className="ok-text small">{coverMsg}</span>}</h3>
         <p className="muted small">
-          Bosh sahifadagi kategoriya kartochkalari. Rasm yuklanmasa — shu kategoriyadagi birinchi mahsulot rasmi chiqadi. Rasmni bosib
-          joylashini o‘zgartiring.
+          Bosh sahifadagi kategoriya kartochkalari. Rasm tanlanmasa — shu kategoriyadagi birinchi mahsulot rasmi chiqadi. 🖼 — mahsulot rasmlaridan
+          tanlash, ⤒ — telefondan yuklash, ✎ — kattalashtirish va surish, ✕ — avtomatikka qaytarish.
         </p>
         <CategoryCovers value={parseCovers(f.categoryCovers)} onChange={saveCovers} />
       </section>
