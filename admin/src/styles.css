@@ -1036,6 +1036,90 @@ select.ps-rejected {
   touch-action: none;
   border: 1px solid var(--line);
 }
+.frame-wrap {
+  position: relative;
+  width: 240px;
+  margin: 0 auto;
+}
+.frame-wrap .frame-preview {
+  width: 100%;
+}
+.zoom-btns {
+  position: absolute;
+  right: 8px;
+  bottom: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.zoom-btns button {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  border: 0;
+  background: rgba(255, 255, 255, 0.92);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.18);
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 1;
+  color: var(--ink);
+  cursor: pointer;
+}
+.zoom-btns button:disabled {
+  opacity: 0.4;
+}
+/* Kategoriya muqovalari (Sozlamalar) */
+.cover-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  gap: 12px;
+}
+.cover-cell {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.cover-thumb {
+  position: relative;
+  aspect-ratio: 1;
+  border-radius: 14px;
+  overflow: hidden;
+  background: var(--bg);
+  border: 1px solid var(--line);
+  cursor: pointer;
+}
+.cover-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.cover-tag {
+  position: absolute;
+  left: 6px;
+  top: 6px;
+  padding: 2px 7px;
+  border-radius: 99px;
+  font-size: 10.5px;
+  font-weight: 700;
+  background: rgba(255, 255, 255, 0.9);
+  color: var(--muted);
+}
+.cover-tag.own {
+  background: var(--gold, #c9a04e);
+  color: #fff;
+}
+.cover-empty {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+}
+.cover-name {
+  font-size: 13px;
+  font-weight: 700;
+}
 .frame-preview img {
   width: 100%;
   height: 100%;

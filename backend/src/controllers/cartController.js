@@ -31,7 +31,10 @@ async function getConfig(_req, res) {
   );
   res.json({
     company: cfg.company,
-    categories: cfg.categories,
+    categories: cfg.categories.map((c) => {
+      const cover = Setting.covers(s)[c.key];
+      return cover ? { ...c, cover: cover.image, coverFrame: cover.frame } : c;
+    }),
     tags: cfg.tags,
     markets,
     modes: cfg.modes,

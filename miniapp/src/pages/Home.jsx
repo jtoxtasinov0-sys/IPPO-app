@@ -83,7 +83,7 @@ export default function Home({ config, market, mode, onMarketChange, products, s
           {config?.categories?.filter((c) => catCount(c.key) > 0).map((c) => (
             <button key={c.key} className="cat-tile" onClick={() => onCatalog({ category: c.key })}>
               <div className="cat-img">
-                <Img src={catCover(c.key)} width={320} alt="" />
+                <Img src={c.cover || catCover(c.key)} frame={c.cover ? c.coverFrame : undefined} width={320} alt="" />
               </div>
               <div className="cat-name">{label(c)}</div>
               <div className="cat-count">{catCount(c.key)}</div>

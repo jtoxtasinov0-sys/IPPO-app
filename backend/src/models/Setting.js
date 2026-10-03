@@ -15,7 +15,37 @@ const DEFAULTS = {
   deliveryFeeUz: '0', // so'm
   freeDeliveryFromUz: '0',
   shopNote: '', // Mini App'da ko'rinadigan qisqa e'lon (ixtiyoriy)
+  categoryCovers: '{}', // JSON: { [kategoriya kaliti]: { image, frame: {z,x,y} } }
 };
+
+// Kategoriya muqovalari: faqat mavjud kategoriyalar, rasm yo'li va to'g'ri joylashuv saqlanadi
+const num = (v, min, max, def) => (Number.isFinite(+v) ? Math.max(min, Math.min(max, +v)) : def);
+function cleanCovers(raw) {
+  let obj = raw;
+  if (typeof raw === 'string') {
+    try {
+      obj = JSON.parse(raw);
+    } catch {
+      obj = {};
+    }
+  }
+  const out = {};
+  for (const c of cfg.categories) {
+    const v = obj?.[c.key];
+    if (!v || typeof v.image !== 'string' || !v.image || v.image.length > 500) continue;
+    const f = v.frame || {};
+    out[c.key] = { image: v.image, frame: { z: num(f.z, 1, 4, 1), x: num(f.x, 0, 100, 50), y: num(f.y, 0, 100, 50) } };
+  }
+  return JSON.stringify(out);
+}
+
+function covers(s) {
+  try {
+    return JSON.parse(s.categoryCovers || '{}') || {};
+  } catch {
+    return {};
+  }
+}
 
 let cache = null;
 let cacheAt = 0;
@@ -34,7 +64,7 @@ async function setMany(obj) {
   const keys = Object.keys(DEFAULTS);
   for (const [key, raw] of Object.entries(obj || {})) {
     if (!keys.includes(key)) continue;
-    const value = String(raw ?? '').slice(0, 2000);
+    const value = key === 'categoryCovers' ? cleanCovers(raw) : String(raw ?? '').slice(0, 2000);
     await prisma.setting.upsert({ where: { key }, update: { value }, create: { key, value } });
   }
   cache = null;
@@ -64,4 +94,4 @@ async function delivery(market) {
   };
 }
 
-module.exports = { all, setMany, payment, delivery, DEFAULTS };
+module.exports = { all, setMany, payment, delivery, covers, DEFAULTS };

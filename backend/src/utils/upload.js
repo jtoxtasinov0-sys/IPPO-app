@@ -8,7 +8,7 @@ const prisma = require('../database/connection');
 
 const UPLOAD_DIR = path.join(__dirname, '../../uploads');
 const THUMB_DIR = path.join(UPLOAD_DIR, '_thumbs');
-const FOLDERS = ['products', 'stories', 'receipts', 'broadcast'];
+const FOLDERS = ['products', 'stories', 'receipts', 'broadcast', 'categories'];
 const THUMB_WIDTHS = [160, 320, 480, 800];
 
 for (const f of [...FOLDERS, '_thumbs']) fs.mkdirSync(path.join(UPLOAD_DIR, f), { recursive: true });

@@ -1,28 +1,69 @@
-// Rasmni kartochkada joylash: kattalashtirish va markazni surish (sudrab yoki slayder bilan)
+// Rasmni kartochkada joylash: ikki barmoq bilan kattalashtirish/kichraytirish,
+// bir barmoq bilan surish (kompyuterda — sichqoncha g'ildiragi), slayderlar ham bor
 import { useRef, useState } from 'react';
 import Modal from './Modal';
 import { imageUrl, frameStyle } from '../lib/api';
 
-export default function ImageEditor({ src, frame, onSave, onClose }) {
+const Z_MIN = 1;
+const Z_MAX = 4;
+const clampZ = (z) => Math.max(Z_MIN, Math.min(Z_MAX, z));
+const clamp100 = (n) => Math.max(0, Math.min(100, n));
+
+export default function ImageEditor({ src, frame, onSave, onClose, aspect = '4 / 5', title = 'Rasmni joylash', hint }) {
   const [f, setF] = useState({ z: 1, x: 50, y: 50, ...(frame || {}) });
-  const drag = useRef(null);
+  const pointers = useRef(new Map());
+  const gesture = useRef(null);
+  const latest = useRef(f);
+  latest.current = f;
+
+  // Barmoqlar soni o'zgarganda gestni yangidan boshlaymiz — rasm "sakramaydi"
+  function startGesture(el, cur) {
+    const pts = [...pointers.current.values()];
+    if (pts.length === 1) {
+      gesture.current = { kind: 'pan', x: pts[0].x, y: pts[0].y, f: cur, w: el.clientWidth, h: el.clientHeight };
+    } else if (pts.length >= 2) {
+      const [a, b] = pts;
+      gesture.current = { kind: 'pinch', dist: Math.hypot(a.x - b.x, a.y - b.y) || 1, f: cur };
+    } else {
+      gesture.current = null;
+    }
+  }
 
   function onDown(e) {
-    drag.current = { x: e.clientX, y: e.clientY, fx: f.x, fy: f.y, w: e.currentTarget.clientWidth, h: e.currentTarget.clientHeight };
     e.currentTarget.setPointerCapture(e.pointerId);
+    pointers.current.set(e.pointerId, { x: e.clientX, y: e.clientY });
+    startGesture(e.currentTarget, latest.current);
   }
   function onMove(e) {
-    const d = drag.current;
-    if (!d) return;
-    const dx = ((e.clientX - d.x) / d.w) * 100;
-    const dy = ((e.clientY - d.y) / d.h) * 100;
-    const clamp = (n) => Math.max(0, Math.min(100, n));
-    setF((p) => ({ ...p, x: clamp(d.fx - dx), y: clamp(d.fy - dy) }));
+    if (!pointers.current.has(e.pointerId)) return;
+    pointers.current.set(e.pointerId, { x: e.clientX, y: e.clientY });
+    const g = gesture.current;
+    if (!g) return;
+    const pts = [...pointers.current.values()];
+    if (g.kind === 'pinch' && pts.length >= 2) {
+      const [a, b] = pts;
+      const dist = Math.hypot(a.x - b.x, a.y - b.y);
+      setF((p) => ({ ...p, z: clampZ(g.f.z * (dist / g.dist)) }));
+    } else if (g.kind === 'pan') {
+      // Kattalashtirilganda surish sezgirligi kamayadi — barmoq ostidagi nuqta bilan yuradi
+      const k = 100 / Math.max(1, g.f.z);
+      const dx = ((pts[0].x - g.x) / g.w) * k;
+      const dy = ((pts[0].y - g.y) / g.h) * k;
+      setF((p) => ({ ...p, x: clamp100(g.f.x - dx), y: clamp100(g.f.y - dy) }));
+    }
   }
+  function onUp(e) {
+    pointers.current.delete(e.pointerId);
+    startGesture(e.currentTarget, latest.current);
+  }
+  function onWheel(e) {
+    setF((p) => ({ ...p, z: clampZ(p.z * (e.deltaY < 0 ? 1.08 : 1 / 1.08)) }));
+  }
+  const zoomBy = (k) => setF((p) => ({ ...p, z: clampZ(+(p.z * k).toFixed(2)) }));
 
   return (
     <Modal
-      title="Rasmni joylash"
+      title={title}
       onClose={onClose}
       footer={
         <>
@@ -35,13 +76,33 @@ export default function ImageEditor({ src, frame, onSave, onClose }) {
         </>
       }
     >
-      <p className="muted small">Kartochkada (4:5) qanday ko‘rinishi. Rasmni sudrab suring.</p>
-      <div className="frame-preview" onPointerDown={onDown} onPointerMove={onMove} onPointerUp={() => (drag.current = null)}>
-        <img src={imageUrl(src, 800)} alt="" style={frameStyle(f)} draggable={false} />
+      <p className="muted small">
+        {hint || 'Kartochkada qanday ko‘rinishi.'} Ikki barmoq bilan kattalashtiring yoki kichraytiring, bir barmoq bilan suring.
+      </p>
+      <div className="frame-wrap">
+        <div
+          className="frame-preview"
+          style={{ aspectRatio: aspect }}
+          onPointerDown={onDown}
+          onPointerMove={onMove}
+          onPointerUp={onUp}
+          onPointerCancel={onUp}
+          onWheel={onWheel}
+        >
+          <img src={imageUrl(src, 800)} alt="" style={frameStyle(f)} draggable={false} />
+        </div>
+        <div className="zoom-btns">
+          <button type="button" onClick={() => zoomBy(1.15)} disabled={f.z >= Z_MAX} aria-label="Kattalashtirish">
+            +
+          </button>
+          <button type="button" onClick={() => zoomBy(1 / 1.15)} disabled={f.z <= Z_MIN} aria-label="Kichraytirish">
+            −
+          </button>
+        </div>
       </div>
       <label className="range">
         Kattalashtirish: {f.z.toFixed(2)}×
-        <input type="range" min="1" max="3" step="0.05" value={f.z} onChange={(e) => setF({ ...f, z: +e.target.value })} />
+        <input type="range" min={Z_MIN} max={Z_MAX} step="0.05" value={f.z} onChange={(e) => setF({ ...f, z: +e.target.value })} />
       </label>
       <label className="range">
         Gorizontal: {Math.round(f.x)}%

@@ -209,7 +209,7 @@ async function deleteProduct(req, res) {
 
 async function uploadImage(req, res) {
   if (!req.file) return res.status(400).json({ error: 'Rasm tanlang' });
-  const folder = ['products', 'stories', 'broadcast'].includes(req.body.folder) ? req.body.folder : 'products';
+  const folder = ['products', 'stories', 'broadcast', 'categories'].includes(req.body.folder) ? req.body.folder : 'products';
   res.json({ path: await saveImage(req.file.buffer, folder) });
 }
 

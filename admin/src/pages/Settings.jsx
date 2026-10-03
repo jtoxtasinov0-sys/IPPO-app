@@ -1,6 +1,15 @@
 // Sozlamalar: to'lov kartasi, yetkazish narxi, e'lon
 import { useEffect, useState } from 'react';
 import { api } from '../lib/api';
+import CategoryCovers from '../components/CategoryCovers';
+
+function parseCovers(raw) {
+  try {
+    return JSON.parse(raw || '{}') || {};
+  } catch {
+    return {};
+  }
+}
 
 export default function Settings() {
   const [f, setF] = useState(null);
@@ -16,6 +25,22 @@ export default function Settings() {
     setSaved(false);
     setF({ ...f, [k]: e.target.value });
   };
+
+  // Kategoriya rasmlari darhol saqlanadi (alohida "Saqlash" shart emas)
+  const [coverMsg, setCoverMsg] = useState('');
+  async function saveCovers(next) {
+    const raw = JSON.stringify(next);
+    setF((prev) => ({ ...prev, categoryCovers: raw }));
+    setCoverMsg('Saqlanmoqda…');
+    try {
+      const r = await api.saveSettings({ categoryCovers: raw });
+      setF((prev) => ({ ...prev, categoryCovers: r.categoryCovers }));
+      setCoverMsg('✓ Saqlandi');
+    } catch (e) {
+      setCoverMsg('');
+      setError(e.message);
+    }
+  }
 
   async function save() {
     setBusy(true);
@@ -96,6 +121,15 @@ export default function Settings() {
             <input className="input" inputMode="numeric" value={f.freeDeliveryFrom} onChange={set('freeDeliveryFrom')} placeholder="0 = chegara yo‘q" />
           </label>
         </div>
+      </section>
+
+      <section className="panel">
+        <h3>🖼 Kategoriya rasmlari {coverMsg && <span className="ok-text small">{coverMsg}</span>}</h3>
+        <p className="muted small">
+          Bosh sahifadagi kategoriya kartochkalari. Rasm yuklanmasa — shu kategoriyadagi birinchi mahsulot rasmi chiqadi. Rasmni bosib
+          joylashini o‘zgartiring.
+        </p>
+        <CategoryCovers value={parseCovers(f.categoryCovers)} onChange={saveCovers} />
       </section>
 
       <section className="panel">
