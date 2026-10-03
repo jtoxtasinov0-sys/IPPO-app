@@ -5,6 +5,7 @@ import { useI18n } from '../lib/i18n';
 import { cart } from '../lib/store';
 import { haptic } from '../lib/telegram';
 import { toast } from './Toast';
+import { flyToCart } from '../lib/flyToCart';
 
 export default function ProductCard({ p, tags, onOpen }) {
   const { t, pick, label } = useI18n();
@@ -17,6 +18,7 @@ export default function ProductCard({ p, tags, onOpen }) {
     if (!canQuickAdd) return onOpen(p);
     cart.add(p.id, p.variants?.[0] || null, 1);
     haptic('light');
+    flyToCart(e.currentTarget.closest('.pcard')?.querySelector('.pcard-media img'));
     toast(t.added);
   }
 

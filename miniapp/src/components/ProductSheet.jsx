@@ -6,6 +6,7 @@ import Icon from './Icon';
 import PriceTag from './PriceTag';
 import PhotoViewer from './PhotoViewer';
 import { toast } from './Toast';
+import { flyToCart } from '../lib/flyToCart';
 import { useI18n } from '../lib/i18n';
 import { cart, useCart } from '../lib/store';
 import { haptic, openLink } from '../lib/telegram';
@@ -65,7 +66,10 @@ function ProductBody({ p, config, market, onClose, onGoCart }) {
     cart.add(p.id, variant, qty);
     haptic('success');
     toast(t.added);
-    setQty(1);
+    // Oyna yopilib, ko'rinib turgan rasm savatchaga "uchib" tushadi
+    const img = track.current?.children[slide]?.querySelector('img');
+    flyToCart(img);
+    onClose();
   }
 
   const adminLink = `https://t.me/${config?.company?.telegram || 'fotimazuhrashop'}`;

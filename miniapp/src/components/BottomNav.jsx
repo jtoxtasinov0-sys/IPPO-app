@@ -1,8 +1,9 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import Icon from './Icon';
 import { useI18n } from '../lib/i18n';
 import { useCart, cartCount } from '../lib/store';
 import { haptic } from '../lib/telegram';
+import { CART_LAND } from '../lib/flyToCart';
 
 // Suzuvchi menyu: o'rtada ko'tarilgan oltin savatcha tugmasi, faol tab ostida siljiydigan pufak
 export default function BottomNav({ tab, onTab, onSearch }) {
@@ -17,18 +18,22 @@ export default function BottomNav({ tab, onTab, onSearch }) {
   ];
   const active = slots.findIndex((x) => x.key === tab);
 
-  // Savatchaga mahsulot qo'shilganda badge "sakraydi"
+  // Savatchaga mahsulot "uchib tushganda" tugma va badge sakraydi
   const [bump, setBump] = useState(false);
-  const prev = useRef(count);
   useEffect(() => {
-    if (count > prev.current) {
-      setBump(true);
-      const id = setTimeout(() => setBump(false), 500);
-      prev.current = count;
-      return () => clearTimeout(id);
-    }
-    prev.current = count;
-  }, [count]);
+    let id;
+    const onLand = () => {
+      setBump(false);
+      requestAnimationFrame(() => setBump(true));
+      clearTimeout(id);
+      id = setTimeout(() => setBump(false), 550);
+    };
+    window.addEventListener(CART_LAND, onLand);
+    return () => {
+      window.removeEventListener(CART_LAND, onLand);
+      clearTimeout(id);
+    };
+  }, []);
 
   function go(key) {
     haptic(key === 'cart' ? 'medium' : 'select');

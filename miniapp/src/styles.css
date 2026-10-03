@@ -2269,7 +2269,7 @@ a {
 .toast {
   position: fixed;
   left: 50%;
-  bottom: calc(var(--nav-h) + var(--safe-b) + var(--nav-gap) + 18px);
+  bottom: calc(var(--nav-h) + var(--safe-b) + var(--nav-gap) + 40px);
   transform: translateX(-50%);
   z-index: 100;
   max-width: calc(100% - 32px);
@@ -2874,4 +2874,17 @@ a {
   align-items: center;
   gap: 6px;
   margin: -6px 0 12px;
+}
+
+/* Savatga uchayotgan mahsulot rasmi */
+.fly-cart {
+  position: fixed;
+  z-index: 200;
+  pointer-events: none;
+  background-size: cover;
+  background-position: center;
+  background-color: #fff;
+  border-radius: 12%;
+  box-shadow: 0 14px 30px -8px rgba(80, 52, 15, 0.55), 0 0 0 3px #fff;
+  will-change: transform;
 }
