@@ -10,7 +10,38 @@ import MarketSwitch from '../components/MarketSwitch';
 
 export default function Home({ config, market, mode, onMarketChange, products, stories, seenStories, user, onStory, onOpen, onCatalog, onSearch }) {
   const { t, label } = useI18n();
-  const first = firstOrderInfo(user, config?.markets?.find((m) => m.key === market), mode);
+  const marketCfg = config?.markets?.find((m) => m.key === market);
+  const first = firstOrderInfo(user, marketCfg, mode);
+  const cb = marketCfg?.cashback;
+  const tiers = [...(config?.wholesaleTiers || [])].sort((a, b) => a.min - b.min);
+
+  // Aksiyalar: birinchi xarid (yangi mijozga), cashback, optom chegirmalari — hammaga ko'rinadi
+  const promos = [];
+  if (first)
+    promos.push({
+      key: 'first',
+      green: true,
+      icon: 'gift',
+      title: t.promoFirst(first.percent),
+      sub: first.minOrder ? t.promoFrom(money(first.minOrder)) : t.promoFirstSub,
+      onClick: () => onCatalog({}),
+    });
+  if (cb?.percent > 0)
+    promos.push({
+      key: 'cashback',
+      icon: 'sparkle',
+      title: t.promoCashback(cb.percent),
+      sub: user?.cashback?.[market] ? t.cashbackAvailable(money(user.cashback[market])) : cb.minOrder ? t.promoFrom(money(cb.minOrder)) : t.promoCashbackSub,
+      onClick: () => onCatalog({}),
+    });
+  if (tiers.length)
+    promos.push({
+      key: 'optom',
+      icon: 'box',
+      title: t.promoOptom(Math.max(...tiers.map((x) => x.pct))),
+      sub: tiers.map((x) => `${x.min}+ −${x.pct}%`).join(' · '),
+      onClick: () => (mode === 'wholesale' ? onCatalog({}) : onMarketChange(market, 'wholesale')),
+    });
   const name = tgUser?.first_name || user?.firstName || '';
   const featured = products.filter((p) => p.isFeatured).slice(0, 6);
   const popular = featured.length ? featured : products.slice(0, 6);
@@ -40,9 +71,19 @@ export default function Home({ config, market, mode, onMarketChange, products, s
 
       <Stories stories={stories} seen={seenStories} onOpen={onStory} />
 
-      {first && (
-        <div className="note-bar first-order-bar" onClick={() => onCatalog({})}>
-          <Icon name="gift" size={18} /> {t.firstOrderBanner(first.percent, first.minOrder ? money(first.minOrder) : null)}
+      {promos.length > 0 && (
+        <div className="promos">
+          {promos.map((x) => (
+            <button key={x.key} className={`promo ${x.green ? 'green' : ''}`} onClick={x.onClick}>
+              <span className="promo-ic">
+                <Icon name={x.icon} size={20} />
+              </span>
+              <span className="promo-text">
+                <b>{x.title}</b>
+                <small>{x.sub}</small>
+              </span>
+            </button>
+          ))}
         </div>
       )}
 

@@ -232,11 +232,6 @@ a {
 }
 .home > .section,
 .home > .trust-row,
-.note-bar.first-order-bar {
-  background: var(--green-soft);
-  color: var(--green);
-  cursor: pointer;
-}
 .home > .note-bar {
   margin-left: 16px;
   margin-right: 16px;
@@ -1687,6 +1682,66 @@ a {
 .pay-method.on .pm-check {
   border-color: var(--gold);
   background: var(--gold);
+}
+
+/* ——— Bosh sahifa: aksiyalar ——— */
+.promos {
+  display: flex;
+  gap: 10px;
+  overflow-x: auto;
+  padding: 14px 16px 2px;
+  scroll-snap-type: x mandatory;
+  scroll-padding-inline: 16px;
+  scrollbar-width: none;
+}
+.promos::-webkit-scrollbar {
+  display: none;
+}
+.promo {
+  flex: 0 0 auto;
+  width: 78%;
+  max-width: 300px;
+  scroll-snap-align: start;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 14px;
+  border-radius: var(--r-lg);
+  background: var(--gold-tint);
+  color: var(--bronze);
+  text-align: left;
+}
+.promos .promo:only-child {
+  width: 100%;
+  max-width: none;
+}
+.promo.green {
+  background: var(--green-soft);
+  color: var(--green);
+}
+.promo-ic {
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+}
+.promo-text {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+.promo-text b {
+  font-size: 15px;
+  font-weight: 800;
+}
+.promo-text small {
+  font-size: 12.5px;
+  font-weight: 600;
+  opacity: 0.85;
 }
 
 /* ——— To'lov ——— */
