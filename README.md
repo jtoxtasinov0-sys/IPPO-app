@@ -4,6 +4,7 @@ Koreya bo'ylab original kosmetika sotish uchun: **Telegram bot + Mini App (do'ko
 
 - Bot: **@IPPO_by_fotimazuhrabot**
 - To'lov: **kartaga o'tkazma** (mijoz chek rasmini yuboradi, admin tasdiqlaydi)
+- Birinchi xarid: dona bo'limida yangi mijozga chegirma (telefon raqami bo'yicha bir marta; standart 🇺🇿 250 000 so'mdan 10%, 🇰🇷 50 000 ₩ dan 10%)
 - Cashback: to'langan xariddan foiz balansga qo'shiladi, keyingi xaridda ishlatiladi (Admin → Sozlamalar, har davlatga alohida)
 - Yetkazish: belgilangan summadan oshsa bepul (Admin → Sozlamalar)
 - Optom: bitta mahsulotdan 3 / 5 / 10+ dona olinsa narx avtomatik tushadi (foizlar — Admin → Sozlamalar)

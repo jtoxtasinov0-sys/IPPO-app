@@ -14,6 +14,7 @@ function toPublic(o) {
     totalQty: o.totalQty,
     subtotal: o.subtotal,
     deliveryFee: o.deliveryFee,
+    firstOrderDiscount: o.firstOrderDiscount || 0,
     cashbackUsed: o.cashbackUsed || 0,
     cashbackEarned: o.cashbackEarned || 0,
     total: o.total,

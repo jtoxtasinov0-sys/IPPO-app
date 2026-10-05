@@ -127,8 +127,9 @@ export default function Profile({ config, user, market, mode, onMarket, refreshK
                   </span>
                   {o.paymentMethod === 'card' && <span className={`pay-status ps-${o.paymentStatus}`}>{t.payStatus[o.paymentStatus]}</span>}
                 </div>
-                {(o.cashbackUsed > 0 || o.cashbackEarned > 0) && (
+                {(o.firstOrderDiscount > 0 || o.cashbackUsed > 0 || o.cashbackEarned > 0) && (
                   <div className="order-cashback small">
+                    {o.firstOrderDiscount > 0 && <span>{t.firstOrder}: −{money(o.firstOrderDiscount, o.market)}</span>}
                     {o.cashbackUsed > 0 && <span>{t.cashbackUsedLine(money(o.cashbackUsed, o.market))}</span>}
                     {o.cashbackEarned > 0 && <span className="green">{t.cashbackEarnedLine(money(o.cashbackEarned, o.market))}</span>}
                   </div>

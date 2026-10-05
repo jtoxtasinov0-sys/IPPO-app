@@ -232,6 +232,11 @@ a {
 }
 .home > .section,
 .home > .trust-row,
+.first-order-bar {
+  background: var(--green-soft);
+  color: var(--green);
+  cursor: pointer;
+}
 .home > .note-bar {
   margin-left: 16px;
   margin-right: 16px;

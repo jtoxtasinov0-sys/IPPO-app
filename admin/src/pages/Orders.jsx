@@ -160,6 +160,7 @@ export default function Orders({ meta }) {
                   </div>
                 ))}
                 {o.deliveryFee > 0 && <div className="muted small">🚚 Yetkazish: {money(o.deliveryFee, o.market)}</div>}
+                {o.firstOrderDiscount > 0 && <div className="muted small">🎉 Birinchi xarid chegirmasi: −{money(o.firstOrderDiscount, o.market)}</div>}
                 {o.cashbackUsed > 0 && <div className="muted small">🎁 Cashback ishlatildi: −{money(o.cashbackUsed, o.market)}</div>}
                 {o.cashbackEarned > 0 && <div className="muted small">🎁 Cashback berildi: +{money(o.cashbackEarned, o.market)}</div>}
               </div>

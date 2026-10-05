@@ -124,6 +124,32 @@ export default function Settings() {
       </section>
 
       <section className="panel">
+        <h3>🎉 Birinchi xarid chegirmasi</h3>
+        <p className="muted small">
+          Yangi mijozning birinchi buyurtmasiga (faqat dona bo‘limi) chegirma. Telefon raqami bo‘yicha bir marta beriladi. Bosh sahifada banner
+          chiqadi. 0% — o‘chiq.
+        </p>
+        <div className="form-grid">
+          <label>
+            🇺🇿 Chegirma (%)
+            <input className="input" inputMode="decimal" value={f.firstOrderPercentUz} onChange={set('firstOrderPercentUz')} placeholder="0 = o‘chiq" />
+          </label>
+          <label>
+            🇺🇿 Shu summadan boshlab (so‘m)
+            <input className="input" inputMode="numeric" value={f.firstOrderMinOrderUz} onChange={set('firstOrderMinOrderUz')} placeholder="0 = har qanday summa" />
+          </label>
+          <label>
+            🇰🇷 Chegirma (%)
+            <input className="input" inputMode="decimal" value={f.firstOrderPercent} onChange={set('firstOrderPercent')} placeholder="0 = o‘chiq" />
+          </label>
+          <label>
+            🇰🇷 Shu summadan boshlab (₩)
+            <input className="input" inputMode="numeric" value={f.firstOrderMinOrder} onChange={set('firstOrderMinOrder')} placeholder="0 = har qanday summa" />
+          </label>
+        </div>
+      </section>
+
+      <section className="panel">
         <h3>🎁 Cashback</h3>
         <p className="muted small">
           To‘lov tasdiqlanganda mijoz balansiga mahsulotlar summasidan (yetkazishsiz) foiz qo‘shiladi. Balans Mini App profilida ko‘rinadi va keyingi

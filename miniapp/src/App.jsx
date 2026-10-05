@@ -245,6 +245,7 @@ export default function App() {
       <Cart
         products={shown}
         config={config}
+        user={user}
         market={market}
         mode={mode}
         refreshKey={refreshKey}

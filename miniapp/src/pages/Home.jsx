@@ -5,10 +5,12 @@ import HeroShowcase from '../components/HeroShowcase';
 import Icon from '../components/Icon';
 import { useI18n } from '../lib/i18n';
 import { tgUser } from '../lib/telegram';
+import { money, firstOrderInfo } from '../lib/format';
 import MarketSwitch from '../components/MarketSwitch';
 
 export default function Home({ config, market, mode, onMarketChange, products, stories, seenStories, user, onStory, onOpen, onCatalog, onSearch }) {
   const { t, label } = useI18n();
+  const first = firstOrderInfo(user, config?.markets?.find((m) => m.key === market), mode);
   const name = tgUser?.first_name || user?.firstName || '';
   const featured = products.filter((p) => p.isFeatured).slice(0, 6);
   const popular = featured.length ? featured : products.slice(0, 6);
@@ -37,6 +39,12 @@ export default function Home({ config, market, mode, onMarketChange, products, s
       </header>
 
       <Stories stories={stories} seen={seenStories} onOpen={onStory} />
+
+      {first && (
+        <div className="note-bar first-order-bar" onClick={() => onCatalog({})}>
+          <Icon name="gift" size={18} /> {t.firstOrderBanner(first.percent, first.minOrder ? money(first.minOrder) : null)}
+        </div>
+      )}
 
       {config?.shopNote && (
         <div className="note-bar">

@@ -5,12 +5,12 @@ import Icon from '../components/Icon';
 import { api } from '../lib/api';
 import { cart, useCart } from '../lib/store';
 import { useI18n } from '../lib/i18n';
-import { money } from '../lib/format';
+import { money, firstOrderInfo, firstOrderDiscount } from '../lib/format';
 import { haptic } from '../lib/telegram';
 
 const keyOf = (productId, variant) => `${productId}|${variant || ''}`;
 
-export default function Cart({ products, config, market, mode, onCatalog, onCheckout, onOpen, refreshKey }) {
+export default function Cart({ products, config, user, market, mode, onCatalog, onCheckout, onOpen, refreshKey }) {
   const { t, pick } = useI18n();
   const items = useCart();
   const [calc, setCalc] = useState(null);
@@ -56,6 +56,8 @@ export default function Cart({ products, config, market, mode, onCatalog, onChec
   const lineMap = new Map((calc?.lines || []).map((l) => [keyOf(l.productId, l.variant), l]));
   const problemMap = new Map((calc?.problems || []).map((pr) => [keyOf(pr.productId, pr.variant), pr]));
   const hasBlocking = (calc?.problems || []).length > 0;
+  const first = firstOrderInfo(user, config?.markets?.find((m) => m.key === market), mode);
+  const firstDisc = calc ? firstOrderDiscount(first, calc.subtotal) : 0;
 
   // Optom: keyingi chegirma bosqichigacha qancha qolgani (bitta mahsulotning barcha turlari birga)
   const tiers = mode === 'wholesale' ? [...(config?.wholesaleTiers || [])].sort((a, b) => a.min - b.min) : [];
@@ -157,6 +159,12 @@ export default function Cart({ products, config, market, mode, onCatalog, onChec
               <span className="green">−{money(calc.savings)}</span>
             </div>
           )}
+          {firstDisc > 0 && (
+            <div className="sum-row">
+              <span>{t.firstOrder}</span>
+              <span className="green">−{money(firstDisc)}</span>
+            </div>
+          )}
           <div className="sum-row">
             <span>{t.delivery}</span>
             <span className={calc.deliveryFee ? '' : 'green'}>{calc.deliveryFee ? money(calc.deliveryFee) : t.free}</span>
@@ -164,9 +172,12 @@ export default function Cart({ products, config, market, mode, onCatalog, onChec
           {calc.deliveryFee > 0 && calc.freeFrom > 0 && (
             <div className="sum-hint">{t.freeLeft(money(calc.freeFrom - calc.subtotal), money(calc.freeFrom))}</div>
           )}
+          {first && !firstDisc && calc.subtotal > 0 && (
+            <div className="sum-hint">{t.firstOrderLeft(money(first.minOrder - calc.subtotal), first.percent)}</div>
+          )}
           <div className="sum-row total">
             <span>{t.total}</span>
-            <span>{money(calc.total)}</span>
+            <span>{money(calc.total - firstDisc)}</span>
           </div>
         </div>
       )}
@@ -181,7 +192,7 @@ export default function Cart({ products, config, market, mode, onCatalog, onChec
           </>
         ) : (
           <button className="btn primary block lg" disabled={!calc || !calc.lines.length} onClick={() => onCheckout(calc)}>
-            {t.checkout} {calc ? `· ${money(calc.total)}` : ''}
+            {t.checkout} {calc ? `· ${money(calc.total - firstDisc)}` : ''}
           </button>
         )}
       </div>

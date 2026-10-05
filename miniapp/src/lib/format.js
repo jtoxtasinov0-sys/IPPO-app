@@ -14,6 +14,15 @@ export function priceFor(p, market, mode) {
   return (mode === 'wholesale' ? p.priceOptom : p.price) || 0;
 }
 
+// Birinchi xarid chegirmasi (server ham qayta tekshiradi): faqat dona, yangi mijoz, summa chegaradan oshsa
+export function firstOrderInfo(user, marketCfg, mode) {
+  const f = marketCfg?.firstOrder;
+  return user?.firstOrder && mode === 'retail' && f?.percent > 0 ? f : null;
+}
+export function firstOrderDiscount(info, subtotal) {
+  return info && subtotal >= info.minOrder ? Math.floor((subtotal * info.percent) / 100) : 0;
+}
+
 export function formatDate(d, lang = 'uz') {
   const dt = new Date(d);
   const pad = (x) => String(x).padStart(2, '0');

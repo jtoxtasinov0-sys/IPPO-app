@@ -17,7 +17,7 @@ async function change(tx, userId, market, amount) {
 // Buyurtmadan beriladigan cashback: mahsulotlar uchun to'langan summa (yetkazishsiz) chegaradan oshsa — foiz
 async function earnedFor(order) {
   const c = await Setting.cashback(order.market);
-  const paid = Math.max(0, order.subtotal - (order.cashbackUsed || 0));
+  const paid = Math.max(0, order.subtotal - (order.firstOrderDiscount || 0) - (order.cashbackUsed || 0));
   if (!c.percent || paid < c.minOrder || paid <= 0) return 0;
   return Math.floor((paid * c.percent) / 100);
 }

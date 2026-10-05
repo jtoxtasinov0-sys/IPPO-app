@@ -44,6 +44,7 @@ const T = {
     orderCreated: (o) =>
       `✅ <b>Buyurtmangiz qabul qilindi — #${o.id}</b>\n\n` +
       `Summa: <b>${money(o.total, o.market)}</b>\n` +
+      (o.firstOrderDiscount ? `🎁 Birinchi xarid chegirmasi: −${money(o.firstOrderDiscount, o.market)}\n` : '') +
       (o.cashbackUsed ? `Cashback ishlatildi: −${money(o.cashbackUsed, o.market)}\n` : '') +
       `To‘lov: ${o.paymentMethod === 'card' ? 'kartaga o‘tkazma' : 'naqd pul'}\n\n` +
       `Tez orada siz bilan bog‘lanamiz. Rahmat! 🤍`,
@@ -95,6 +96,7 @@ const T = {
     orderCreated: (o) =>
       `✅ <b>Заказ принят — #${o.id}</b>\n\n` +
       `Сумма: <b>${money(o.total, o.market)}</b>\n` +
+      (o.firstOrderDiscount ? `🎁 Скидка на первый заказ: −${money(o.firstOrderDiscount, o.market)}\n` : '') +
       (o.cashbackUsed ? `Списано кэшбэка: −${money(o.cashbackUsed, o.market)}\n` : '') +
       `Оплата: ${o.paymentMethod === 'card' ? 'перевод на карту' : 'наличными'}\n\n` +
       `Скоро свяжемся с вами. Спасибо! 🤍`,
@@ -167,6 +169,7 @@ function adminOrderText(o, { title } = {}) {
     .join('\n');
   const delivery =
     (o.deliveryFee ? `\n🚚 Yetkazish: ${money(o.deliveryFee, o.market)}` : '') +
+    (o.firstOrderDiscount ? `\n🎁 Birinchi xarid chegirmasi: −${money(o.firstOrderDiscount, o.market)}` : '') +
     (o.cashbackUsed ? `\n🎁 Cashback ishlatildi: −${money(o.cashbackUsed, o.market)}` : '');
   return (
     `${title || '🆕 <b>Yangi buyurtma #' + o.id + '</b>'}\n\n` +

@@ -23,12 +23,18 @@ async function getConfig(_req, res) {
   const [markets, wholesaleTiers] = await Promise.all([
     Promise.all(
     cfg.markets.map(async (m) => {
-      const [pay, delivery, cb] = await Promise.all([Setting.payment(m.key), Setting.delivery(m.key), Setting.cashback(m.key)]);
+      const [pay, delivery, cb, first] = await Promise.all([
+        Setting.payment(m.key),
+        Setting.delivery(m.key),
+        Setting.cashback(m.key),
+        Setting.firstOrder(m.key),
+      ]);
       return {
         ...m,
         payment: { methods: cfg.payment.methods, card: pay.cardEnabled ? pay.card : null },
         delivery,
         cashback: cb,
+        firstOrder: first,
       };
     })
     ),
@@ -68,8 +74,17 @@ function webSession(_req, res) {
   res.json({ token: signWebToken() });
 }
 
-function me(req, res) {
+// Birinchi xarid: shu mijozning ham, shu telefon raqamining ham bekor qilinmagan buyurtmasi yo'q
+async function isFirstOrder(db, userId, phone) {
+  const or = [{ userId }];
+  if (phone) or.push({ phone });
+  const n = await db.order.count({ where: { status: { not: 'cancelled' }, OR: or } });
+  return n === 0;
+}
+
+async function me(req, res) {
   const u = req.user;
+  const firstOrder = await isFirstOrder(prisma, u.id, u.phone);
   res.json({
     id: u.id,
     firstName: u.firstName,
@@ -81,6 +96,7 @@ function me(req, res) {
     mode: u.mode,
     seenIntro: u.seenIntro,
     cashback: { kr: u.cashbackKr || 0, uz: u.cashbackUz || 0 },
+    firstOrder,
     isWeb: !!req.isWeb,
   });
 }
@@ -93,7 +109,7 @@ async function updateMe(req, res) {
   if (cfg.isMode(req.body.mode)) data.mode = req.body.mode;
   const u = await prisma.user.update({ where: { id: req.user.id }, data });
   req.user = u;
-  me(req, res);
+  await me(req, res);
 }
 
 /**
@@ -212,22 +228,28 @@ async function createOrder(req, res) {
   if (priced.problems.length) return res.status(409).json({ error: 'problems', problems: priced.problems });
 
   const phone = '+' + phoneDigits;
+  const first = await Setting.firstOrder(market);
   let order;
   try {
     order = await prisma.$transaction(async (tx) => {
       await takeStock(tx, priced.lines);
+      // Birinchi xarid chegirmasi: faqat dona, summa chegaradan oshsa, mijoz va telefon raqami yangi bo'lsa
+      let firstOrderDiscount = 0;
+      if (mode === 'retail' && first.percent > 0 && priced.subtotal >= first.minOrder && (await isFirstOrder(tx, req.user.id, phone))) {
+        firstOrderDiscount = Math.floor((priced.subtotal * first.percent) / 100);
+      }
       // Cashback: balansdan mahsulotlar summasigacha ayiriladi (yetkazish narxiga ishlatilmaydi)
       let cashbackUsed = 0;
       if (b.useCashback) {
         const f = cashback.field(market);
         const u = await tx.user.findUnique({ where: { id: req.user.id }, select: { [f]: true } });
-        cashbackUsed = Math.min(u?.[f] || 0, priced.subtotal);
+        cashbackUsed = Math.min(u?.[f] || 0, priced.subtotal - firstOrderDiscount);
         if (cashbackUsed > 0) {
           const r = await tx.user.updateMany({ where: { id: req.user.id, [f]: { gte: cashbackUsed } }, data: { [f]: { decrement: cashbackUsed } } });
           if (!r.count) cashbackUsed = 0;
         }
       }
-      const total = priced.total - cashbackUsed;
+      const total = priced.total - firstOrderDiscount - cashbackUsed;
       return tx.order.create({
         data: {
           userId: req.user.id,
@@ -237,6 +259,7 @@ async function createOrder(req, res) {
           totalQty: priced.totalQty,
           subtotal: priced.subtotal,
           deliveryFee: priced.deliveryFee,
+          firstOrderDiscount,
           cashbackUsed,
           total,
           // To'liq cashback bilan to'langan (summa 0) — to'lov kutilmaydi

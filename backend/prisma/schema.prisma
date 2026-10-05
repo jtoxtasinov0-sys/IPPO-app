@@ -68,6 +68,7 @@ model Order {
   totalQty      Int
   subtotal      Int
   deliveryFee   Int       @default(0)
+  firstOrderDiscount Int  @default(0) // birinchi xarid chegirmasi (summadan ayirilgan)
   cashbackUsed  Int       @default(0) // mijoz balansidan ishlatilgan cashback (summadan ayirilgan)
   cashbackEarned Int      @default(0) // to'lov tasdiqlanganda berilgan cashback
   total         Int

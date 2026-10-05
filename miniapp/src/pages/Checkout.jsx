@@ -6,7 +6,7 @@ import { toast } from '../components/Toast';
 import { api } from '../lib/api';
 import { cart } from '../lib/store';
 import { useI18n } from '../lib/i18n';
-import { money, formatPhone, onlyDigits } from '../lib/format';
+import { money, formatPhone, onlyDigits, firstOrderInfo, firstOrderDiscount } from '../lib/format';
 import { haptic, tgUser } from '../lib/telegram';
 import Flag from '../components/Flag';
 
@@ -32,11 +32,12 @@ export default function Checkout({ open, calc, market, mode, marketCfg, user, on
   const regions = marketCfg?.regions || [];
 
   // Cashback: balansdan mahsulotlar summasigacha ayiriladi (server qayta hisoblaydi)
+  const firstDisc = calc ? firstOrderDiscount(firstOrderInfo(user, marketCfg, mode), calc.subtotal) : 0;
   const balance = user?.cashback?.[market] || 0;
-  const cashbackUse = useCashback && calc ? Math.min(balance, calc.subtotal) : 0;
-  const payTotal = calc ? calc.total - cashbackUse : 0;
+  const cashbackUse = useCashback && calc ? Math.min(balance, calc.subtotal - firstDisc) : 0;
+  const payTotal = calc ? calc.total - firstDisc - cashbackUse : 0;
   const cb = marketCfg?.cashback;
-  const paidForGoods = calc ? calc.subtotal - cashbackUse : 0;
+  const paidForGoods = calc ? calc.subtotal - firstDisc - cashbackUse : 0;
   const willEarn = cb?.percent > 0 && paidForGoods > 0 && paidForGoods >= (cb.minOrder || 0) ? Math.floor((paidForGoods * cb.percent) / 100) : 0;
 
   // Davlat almashtirilsa — boshqa davlat hududi qolib ketmasin
@@ -265,6 +266,12 @@ export default function Checkout({ open, calc, market, mode, marketCfg, user, on
               <span>{t.delivery}</span>
               <span className={calc.deliveryFee ? '' : 'green'}>{calc.deliveryFee ? money(calc.deliveryFee) : t.free}</span>
             </div>
+            {firstDisc > 0 && (
+              <div className="sum-row">
+                <span>{t.firstOrder}</span>
+                <span className="green">−{money(firstDisc)}</span>
+              </div>
+            )}
             {cashbackUse > 0 && (
               <div className="sum-row">
                 <span>{t.cashback}</span>
