@@ -1164,6 +1164,24 @@ a {
 .ps-info .price {
   margin-top: 6px;
 }
+.ps-tiers {
+  margin-top: 12px;
+  padding: 10px 12px;
+  border-radius: var(--r-md);
+  background: var(--gold-tint);
+}
+.ps-tier {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 4px 0;
+  font-size: 13.5px;
+  color: var(--ink-2);
+}
+.ps-tier.on {
+  color: var(--green);
+  font-weight: 700;
+}
 .stock-note {
   display: inline-block;
   margin-top: 10px;
@@ -1446,6 +1464,16 @@ a {
   font-size: 12px;
   font-weight: 700;
   color: var(--red);
+}
+.cart-discount {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--green);
+}
+.cart-tier-hint {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--gold-muted);
 }
 .cart-row {
   margin-top: auto;

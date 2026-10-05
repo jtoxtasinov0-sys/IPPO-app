@@ -25,7 +25,7 @@ const T = {
       `Assalomu alaykum${name ? ', <b>' + esc(name) + '</b>' : ''}! 🤍\n\n` +
       `<b>IPPO by Fotima Zuhra</b> — Koreyadan original kosmetika, jenshen, kollagen va vitaminlar.\n\n` +
       `🛍 Do‘konni ochib, mahsulot tanlang — buyurtmangiz Koreya va O‘zbekiston bo‘ylab yetkaziladi.\n` +
-      `💳 To‘lov: naqd yoki kartaga o‘tkazma.`,
+      `💳 To‘lov: kartaga o‘tkazma.`,
     openShop: '🛍 Do‘konni ochish',
     adminPanel: '🛠 Admin panel',
     menuShop: 'Do‘kon',
@@ -53,6 +53,8 @@ const T = {
       (card.holder ? `Egasi: ${esc(card.holder)}\n` : '') +
       `Summa: <b>${money(o.total, o.market)}</b>\n\n` +
       `📸 O‘tkazmadan so‘ng chek rasmini shu yerga yuboring.`,
+    payCardSoon: (o) =>
+      `💳 Summa: <b>${money(o.total, o.market)}</b>\n\nKarta raqamini tez orada yuboramiz. O‘tkazmadan so‘ng chek rasmini shu yerga yuboring 📸`,
     receiptOk: (id) => `🧾 Chek qabul qilindi (buyurtma #${id}). Tekshirib, sizga xabar beramiz.`,
     noOrderForReceipt: 'Chek biriktiriladigan to‘lanmagan buyurtma topilmadi. Buyurtmani do‘kon orqali bering 👇',
     payApproved: (id) => `✅ Buyurtma #${id} bo‘yicha to‘lovingiz tasdiqlandi. Rahmat!`,
@@ -70,7 +72,7 @@ const T = {
       `Здравствуйте${name ? ', <b>' + esc(name) + '</b>' : ''}! 🤍\n\n` +
       `<b>IPPO by Fotima Zuhra</b> — оригинальная косметика, женьшень, коллаген и витамины из Кореи.\n\n` +
       `🛍 Откройте магазин и выберите товар — доставим по Корее и Узбекистану.\n` +
-      `💳 Оплата: наличными или переводом на карту.`,
+      `💳 Оплата: переводом на карту.`,
     openShop: '🛍 Открыть магазин',
     adminPanel: '🛠 Админ-панель',
     menuShop: 'Магазин',
@@ -98,6 +100,8 @@ const T = {
       (card.holder ? `Владелец: ${esc(card.holder)}\n` : '') +
       `Сумма: <b>${money(o.total, o.market)}</b>\n\n` +
       `📸 После перевода отправьте сюда фото чека.`,
+    payCardSoon: (o) =>
+      `💳 Сумма: <b>${money(o.total, o.market)}</b>\n\nРеквизиты карты скоро отправим. После перевода пришлите сюда фото чека 📸`,
     receiptOk: (id) => `🧾 Чек получен (заказ #${id}). Проверим и сообщим вам.`,
     noOrderForReceipt: 'Не найден неоплаченный заказ для этого чека. Оформите заказ через магазин 👇',
     payApproved: (id) => `✅ Оплата по заказу #${id} подтверждена. Спасибо!`,
@@ -149,7 +153,8 @@ function adminOrderText(o, { title } = {}) {
   const items = (o.items || [])
     .map((it, i) => {
       const variant = it.variant ? ` · 🎨 ${esc(it.variant)}` : '';
-      return `${i + 1}. <b>${esc(it.name)}</b> [${esc(it.article)}]${variant}\n    ${it.qty} × ${money(it.unitPrice, o.market)} = <b>${money(it.lineTotal, o.market)}</b>`;
+      const off = it.discountPct ? ` (−${it.discountPct}%)` : '';
+      return `${i + 1}. <b>${esc(it.name)}</b> [${esc(it.article)}]${variant}\n    ${it.qty} × ${money(it.unitPrice, o.market)}${off} = <b>${money(it.lineTotal, o.market)}</b>`;
     })
     .join('\n');
   const delivery = o.deliveryFee ? `\n🚚 Yetkazish: ${money(o.deliveryFee, o.market)}` : '';

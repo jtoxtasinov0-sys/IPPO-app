@@ -238,6 +238,7 @@ export default function App() {
     page = (
       <Cart
         products={shown}
+        config={config}
         market={market}
         mode={mode}
         refreshKey={refreshKey}
@@ -283,6 +284,7 @@ export default function App() {
             product={openProduct}
             config={config}
             market={market}
+            mode={mode}
             onClose={() => setOpenProductId(null)}
             onGoCart={() => {
               setOpenProductId(null);

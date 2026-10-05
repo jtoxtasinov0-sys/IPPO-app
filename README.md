@@ -3,7 +3,8 @@
 Koreya bo'ylab original kosmetika sotish uchun: **Telegram bot + Mini App (do'kon) + Admin panel**.
 
 - Bot: **@IPPO_by_fotimazuhrabot**
-- To'lov: **naqd pul** yoki **kartaga o'tkazma** (mijoz chek rasmini yuboradi, admin tasdiqlaydi)
+- To'lov: **kartaga o'tkazma** (mijoz chek rasmini yuboradi, admin tasdiqlaydi)
+- Optom: bitta mahsulotdan 3 / 5 / 10+ dona olinsa narx avtomatik tushadi (foizlar — Admin → Sozlamalar)
 - Valyuta: **₩ (KRW)**, yetkazish hududlari — Koreya viloyatlari
 - Tillar: o'zbek + rus
 

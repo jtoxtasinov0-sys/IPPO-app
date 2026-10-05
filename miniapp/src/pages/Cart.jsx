@@ -10,7 +10,7 @@ import { haptic } from '../lib/telegram';
 
 const keyOf = (productId, variant) => `${productId}|${variant || ''}`;
 
-export default function Cart({ products, market, mode, onCatalog, onCheckout, onOpen, refreshKey }) {
+export default function Cart({ products, config, market, mode, onCatalog, onCheckout, onOpen, refreshKey }) {
   const { t, pick } = useI18n();
   const items = useCart();
   const [calc, setCalc] = useState(null);
@@ -57,6 +57,16 @@ export default function Cart({ products, market, mode, onCatalog, onCheckout, on
   const problemMap = new Map((calc?.problems || []).map((pr) => [keyOf(pr.productId, pr.variant), pr]));
   const hasBlocking = (calc?.problems || []).length > 0;
 
+  // Optom: keyingi chegirma bosqichigacha qancha qolgani (bitta mahsulotning barcha turlari birga)
+  const tiers = mode === 'wholesale' ? [...(config?.wholesaleTiers || [])].sort((a, b) => a.min - b.min) : [];
+  const qtyOf = (productId) => items.filter((i) => i.productId === productId).reduce((s, i) => s + i.qty, 0);
+  function nextTier(productId) {
+    const q = qtyOf(productId);
+    const cur = tiers.filter((x) => q >= x.min).pop();
+    const next = tiers.find((x) => q < x.min && x.pct > (cur?.pct || 0));
+    return next ? t.tierMore(next.min - q, next.pct) : null;
+  }
+
   function problemText(pr) {
     if (!pr) return null;
     if (pr.reason === 'noPrice') return t.noPrice;
@@ -96,6 +106,8 @@ export default function Cart({ products, market, mode, onCatalog, onCheckout, on
                 <div className="cart-name">{title}</div>
                 {it.variant && <div className="cart-variant">{it.variant}</div>}
                 {pr && <div className="cart-problem">{problemText(pr)}</div>}
+                {!pr && line?.discountPct > 0 && <div className="cart-discount">−{line.discountPct}% · {money(line.unitPrice)}</div>}
+                {!pr && tiers.length > 0 && nextTier(it.productId) && <div className="cart-tier-hint">{nextTier(it.productId)}</div>}
                 <div className="cart-row">
                   <div className="cart-price">{line ? money(line.lineTotal) : p?.price ? money(p.price * it.qty) : '—'}</div>
                   <div className="stepper sm">
@@ -139,6 +151,12 @@ export default function Cart({ products, market, mode, onCatalog, onCheckout, on
             <span>{t.subtotal}</span>
             <span>{money(calc.subtotal)}</span>
           </div>
+          {calc.savings > 0 && (
+            <div className="sum-row">
+              <span>{t.savings}</span>
+              <span className="green">−{money(calc.savings)}</span>
+            </div>
+          )}
           <div className="sum-row">
             <span>{t.delivery}</span>
             <span className={calc.deliveryFee ? '' : 'green'}>{calc.deliveryFee ? money(calc.deliveryFee) : t.free}</span>

@@ -154,6 +154,7 @@ export default function Orders({ meta }) {
                       <div className="muted small">
                         {it.article}
                         {it.variant ? ` · ${it.variant}` : ''} · {it.qty} × {money(it.unitPrice, o.market)}
+                        {it.discountPct ? ` (−${it.discountPct}%)` : ''}
                       </div>
                     </div>
                   </div>

@@ -12,7 +12,7 @@ import { cart, useCart } from '../lib/store';
 import { haptic, openLink } from '../lib/telegram';
 import { money } from '../lib/format';
 
-export default function ProductSheet({ product, config, market, onClose, onGoCart }) {
+export default function ProductSheet({ product, config, market, mode, onClose, onGoCart }) {
   const open = !!product;
   // Yopilish animatsiyasi paytida ham kontent turadi
   const [p, setP] = useState(product);
@@ -22,12 +22,12 @@ export default function ProductSheet({ product, config, market, onClose, onGoCar
 
   return (
     <Sheet open={open} onClose={onClose} full className="product-sheet">
-      {p && <ProductBody key={p.id} p={p} config={config} market={market} onClose={onClose} onGoCart={onGoCart} />}
+      {p && <ProductBody key={p.id} p={p} config={config} market={market} mode={mode} onClose={onClose} onGoCart={onGoCart} />}
     </Sheet>
   );
 }
 
-function ProductBody({ p, config, market, onClose, onGoCart }) {
+function ProductBody({ p, config, market, mode, onClose, onGoCart }) {
   const { t, pick, label } = useI18n();
   const items = useCart();
   const [variant, setVariant] = useState(p.variants?.[0] || null);
@@ -104,6 +104,19 @@ function ProductBody({ p, config, market, onClose, onGoCart }) {
           <h2 className="ps-title">{pick(p, 'name')}</h2>
           {p.volume && <div className="ps-volume">{p.volume}</div>}
           <PriceTag price={p.price} oldPrice={p.oldPrice} size="lg" />
+          {mode === 'wholesale' && p.price > 0 && config?.wholesaleTiers?.length > 0 && (
+            <div className="ps-tiers">
+              <div className="ps-label">{t.tiersTitle}</div>
+              {[...config.wholesaleTiers]
+                .sort((a, b) => a.min - b.min)
+                .map((x) => (
+                  <div key={x.min} className={`ps-tier ${inCart + qty >= x.min ? 'on' : ''}`}>
+                    <span>{t.tierRow(x.min, x.pct)}</span>
+                    <b>{money(Math.round(p.price * (1 - x.pct / 100)))}</b>
+                  </div>
+                ))}
+            </div>
+          )}
 
           {out ? (
             <div className="stock-note out">{t.outOfStock}</div>

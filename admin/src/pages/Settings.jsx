@@ -65,7 +65,7 @@ export default function Settings() {
 
       <section className="panel">
         <h3>🇺🇿 O‘zbekiston — karta</h3>
-        <p className="muted small">O‘zbekistonni tanlagan mijozlar shu kartaga o‘tkazadi. Bo‘sh bo‘lsa — faqat naqd.</p>
+        <p className="muted small">O‘zbekistonni tanlagan mijozlar shu kartaga o‘tkazadi. Bo‘sh bo‘lsa — karta raqamini mijozga o‘zingiz yuborasiz.</p>
         <div className="form-grid">
           <label className="span2">
             Karta raqami
@@ -92,7 +92,7 @@ export default function Settings() {
 
       <section className="panel">
         <h3>🇰🇷 Koreya — karta</h3>
-        <p className="muted small">Koreyani tanlagan mijozlar shu karta/hisobga o‘tkazadi. Bo‘sh bo‘lsa — faqat naqd.</p>
+        <p className="muted small">Koreyani tanlagan mijozlar shu karta/hisobga o‘tkazadi. Bo‘sh bo‘lsa — karta raqamini mijozga o‘zingiz yuborasiz.</p>
         <div className="form-grid">
           <label className="span2">
             Karta yoki hisob raqami
@@ -120,6 +120,28 @@ export default function Settings() {
             Shu summadan bepul (₩)
             <input className="input" inputMode="numeric" value={f.freeDeliveryFrom} onChange={set('freeDeliveryFrom')} placeholder="0 = chegara yo‘q" />
           </label>
+        </div>
+      </section>
+
+      <section className="panel">
+        <h3>📦 Optom chegirmalari</h3>
+        <p className="muted small">
+          Optom bo‘limida bitta mahsulotdan (barcha turlari birga) shuncha dona olinsa, optom narxidan avtomatik chegirma qilinadi. 0 —
+          chegirma yo‘q.
+        </p>
+        <div className="form-grid">
+          {[3, 5, 10].map((n) => (
+            <label key={n}>
+              {n} ta va undan ko‘p (%)
+              <input
+                className="input"
+                inputMode="decimal"
+                value={f['wholesaleDiscount' + n]}
+                onChange={set('wholesaleDiscount' + n)}
+                placeholder="0"
+              />
+            </label>
+          ))}
         </div>
       </section>
 

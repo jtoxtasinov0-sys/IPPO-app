@@ -93,7 +93,9 @@ export default function PaymentScreen({ order, card, onClose, onUpdated }) {
                   </button>
                   {card.holder && <div className="bank-holder">{card.holder}</div>}
                 </div>
-              ) : null}
+              ) : (
+                <p className="muted small">{t.payNoCard}</p>
+              )}
 
               <button className="amount-row" onClick={() => copy(String(order.total))}>
                 <span className="muted">{t.amount}</span>

@@ -20,14 +20,14 @@ export default function Checkout({ open, calc, market, mode, marketCfg, user, on
     region: '',
     address: '',
     comment: '',
-    paymentMethod: 'cash',
+    paymentMethod: 'card',
   });
   const [touched, setTouched] = useState({});
   const [busy, setBusy] = useState(false);
   const refs = useRef({});
   const filled = useRef(false);
 
-  const methods = marketCfg?.payment?.methods || ['cash'];
+  const methods = marketCfg?.payment?.methods || ['card'];
   const regions = marketCfg?.regions || [];
 
   // Davlat almashtirilsa — boshqa davlat hududi qolib ketmasin
@@ -226,6 +226,12 @@ export default function Checkout({ open, calc, market, mode, marketCfg, user, on
               <span>{t.subtotal}</span>
               <span>{money(calc.subtotal)}</span>
             </div>
+            {calc.savings > 0 && (
+              <div className="sum-row">
+                <span>{t.savings}</span>
+                <span className="green">−{money(calc.savings)}</span>
+              </div>
+            )}
             <div className="sum-row">
               <span>{t.delivery}</span>
               <span className={calc.deliveryFee ? '' : 'green'}>{calc.deliveryFee ? money(calc.deliveryFee) : t.free}</span>

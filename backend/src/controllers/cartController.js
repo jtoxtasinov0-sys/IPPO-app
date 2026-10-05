@@ -19,16 +19,19 @@ const pickMode = (v) => (cfg.isMode(v) ? v : 'retail');
 async function getConfig(_req, res) {
   const s = await Setting.all();
   // Har davlatga: hududlar, valyuta, o'z kartasi va yetkazish narxi
-  const markets = await Promise.all(
+  const [markets, wholesaleTiers] = await Promise.all([
+    Promise.all(
     cfg.markets.map(async (m) => {
       const [pay, delivery] = await Promise.all([Setting.payment(m.key), Setting.delivery(m.key)]);
       return {
         ...m,
-        payment: { methods: pay.cardEnabled ? ['cash', 'card'] : ['cash'], card: pay.cardEnabled ? pay.card : null },
+        payment: { methods: cfg.payment.methods, card: pay.cardEnabled ? pay.card : null },
         delivery,
       };
     })
-  );
+    ),
+    Setting.wholesaleTiers(),
+  ]);
   res.json({
     company: cfg.company,
     categories: cfg.categories.map((c) => {
@@ -38,6 +41,7 @@ async function getConfig(_req, res) {
     tags: cfg.tags,
     markets,
     modes: cfg.modes,
+    wholesaleTiers,
     shopNote: s.shopNote || '',
   });
 }
@@ -150,11 +154,27 @@ async function priceCart(rawItems, market = 'kr', mode = 'retail') {
     });
   }
 
+  // Optom: bitta mahsulotdan (barcha turlari birga) 3 / 5 / 10+ dona — narx avtomatik tushadi
+  if (mode === 'wholesale') {
+    const tiers = await Setting.wholesaleTiers();
+    const qtyPerProduct = new Map();
+    for (const l of lines) qtyPerProduct.set(l.productId, (qtyPerProduct.get(l.productId) || 0) + l.qty);
+    for (const l of lines) {
+      const tier = tiers.find((x) => qtyPerProduct.get(l.productId) >= x.min);
+      if (!tier) continue;
+      l.basePrice = l.unitPrice;
+      l.discountPct = tier.pct;
+      l.unitPrice = Math.round(l.basePrice * (1 - tier.pct / 100));
+      l.lineTotal = l.unitPrice * l.qty;
+    }
+  }
+
   const subtotal = lines.reduce((s, l) => s + l.lineTotal, 0);
+  const savings = lines.reduce((s, l) => s + (l.basePrice ? (l.basePrice - l.unitPrice) * l.qty : 0), 0);
   const totalQty = lines.reduce((s, l) => s + l.qty, 0);
   const d = await Setting.delivery(market);
   const deliveryFee = subtotal > 0 && d.fee > 0 && !(d.freeFrom > 0 && subtotal >= d.freeFrom) ? d.fee : 0;
-  return { lines, problems, subtotal, totalQty, deliveryFee, total: subtotal + deliveryFee, freeFrom: d.freeFrom };
+  return { lines, problems, subtotal, savings, totalQty, deliveryFee, total: subtotal + deliveryFee, freeFrom: d.freeFrom };
 }
 
 async function calculate(req, res) {
@@ -172,7 +192,7 @@ async function createOrder(req, res) {
   const region = String(b.region || '');
   const address = String(b.address || '').trim().slice(0, 300);
   const comment = String(b.comment || '').trim().slice(0, 500) || null;
-  const method = String(b.paymentMethod || '');
+  const method = String(b.paymentMethod || 'card');
   const market = pickMarket(b.market);
   const mode = pickMode(b.mode);
 
@@ -181,7 +201,7 @@ async function createOrder(req, res) {
   if (!cfg.market(market).regions.some((r) => r.key === region)) return badRequest(res, 'region', 'Hududni tanlang');
   if (address.length < 3) return badRequest(res, 'address', 'Manzilni kiriting');
   const pay = await Setting.payment(market);
-  if (!(method === 'cash' || (method === 'card' && pay.cardEnabled))) return badRequest(res, 'paymentMethod', 'To‘lov usuli');
+  if (!cfg.payment.methods.includes(method)) return badRequest(res, 'paymentMethod', 'To‘lov usuli');
 
   const priced = await priceCart(b.items, market, mode);
   if (!priced.lines.length) return res.status(400).json({ error: 'Savatcha bo‘sh', problems: priced.problems });
@@ -233,7 +253,7 @@ async function createOrder(req, res) {
   // Mijozga botdan tasdiq
   const L = t(req.user.lang);
   bot.safeSend(req.user.telegramId, L.orderCreated(order)).then(() => {
-    if (method === 'card') bot.safeSend(req.user.telegramId, L.payCard(order, pay.card));
+    if (method === 'card') bot.safeSend(req.user.telegramId, pay.cardEnabled ? L.payCard(order, pay.card) : L.payCardSoon(order));
   });
 
   res.status(201).json(Order.toPublic(order));

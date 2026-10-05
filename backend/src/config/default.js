@@ -115,9 +115,9 @@ module.exports = {
     { key: 'wholesale', uz: 'Optom', ru: 'Оптом' },
   ],
 
-  // To'lov: naqd va kartaga o'tkazma (har davlatning kartasi admin paneldan kiritiladi)
+  // To'lov: faqat kartaga o'tkazma (har davlatning kartasi admin paneldan kiritiladi)
   payment: {
-    methods: ['cash', 'card'],
+    methods: ['card'],
     card: {
       number: env.PAYMENT_CARD || '',
       holder: env.PAYMENT_CARD_HOLDER || '',

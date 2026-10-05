@@ -14,6 +14,10 @@ const DEFAULTS = {
   bankNameUz: '',
   deliveryFeeUz: '0', // so'm
   freeDeliveryFromUz: '0',
+  // Optom: bitta mahsulotdan shuncha dona olinsa — optom narxdan chegirma (%), 0 = chegirma yo'q
+  wholesaleDiscount3: '0',
+  wholesaleDiscount5: '0',
+  wholesaleDiscount10: '0',
   shopNote: '', // Mini App'da ko'rinadigan qisqa e'lon (ixtiyoriy)
   categoryCovers: '{}', // JSON: { [kategoriya kaliti]: { image, frame: {z,x,y} } }
 };
@@ -94,4 +98,13 @@ async function delivery(market) {
   };
 }
 
-module.exports = { all, setMany, payment, delivery, covers, DEFAULTS };
+// Optom chegirma bosqichlari, kattasidan kichigiga: [{ min: 10, pct }, { min: 5, pct }, { min: 3, pct }]
+const TIER_MINS = [10, 5, 3];
+async function wholesaleTiers() {
+  const s = await all();
+  return TIER_MINS.map((min) => ({ min, pct: Math.max(0, Math.min(90, parseFloat(s['wholesaleDiscount' + min]) || 0)) })).filter(
+    (x) => x.pct > 0
+  );
+}
+
+module.exports = { all, setMany, payment, delivery, wholesaleTiers, covers, DEFAULTS };
