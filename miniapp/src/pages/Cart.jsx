@@ -151,7 +151,7 @@ export default function Cart({ products, config, user, market, mode, onCatalog, 
         <div className="summary card">
           <div className="sum-row">
             <span>{t.subtotal}</span>
-            <span>{money(calc.subtotal)}</span>
+            <span>{money(calc.subtotal + (calc.savings || 0))}</span>
           </div>
           {calc.savings > 0 && (
             <div className="sum-row">

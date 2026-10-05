@@ -254,7 +254,7 @@ export default function Checkout({ open, calc, market, mode, marketCfg, user, on
           <div className="summary card">
             <div className="sum-row">
               <span>{t.subtotal}</span>
-              <span>{money(calc.subtotal)}</span>
+              <span>{money(calc.subtotal + (calc.savings || 0))}</span>
             </div>
             {calc.savings > 0 && (
               <div className="sum-row">
@@ -262,10 +262,6 @@ export default function Checkout({ open, calc, market, mode, marketCfg, user, on
                 <span className="green">−{money(calc.savings)}</span>
               </div>
             )}
-            <div className="sum-row">
-              <span>{t.delivery}</span>
-              <span className={calc.deliveryFee ? '' : 'green'}>{calc.deliveryFee ? money(calc.deliveryFee) : t.free}</span>
-            </div>
             {firstDisc > 0 && (
               <div className="sum-row">
                 <span>{t.firstOrder}</span>
@@ -278,6 +274,10 @@ export default function Checkout({ open, calc, market, mode, marketCfg, user, on
                 <span className="green">−{money(cashbackUse)}</span>
               </div>
             )}
+            <div className="sum-row">
+              <span>{t.delivery}</span>
+              <span className={calc.deliveryFee ? '' : 'green'}>{calc.deliveryFee ? money(calc.deliveryFee) : t.free}</span>
+            </div>
             <div className="sum-row total">
               <span>{t.total}</span>
               <span>{money(payTotal)}</span>
@@ -288,7 +288,7 @@ export default function Checkout({ open, calc, market, mode, marketCfg, user, on
       </div>
       <div className="ps-footer">
         <button className="btn primary grow lg" onClick={submit} disabled={busy}>
-          {busy ? t.sending : `${t.confirmOrder}${calc ? ' · ' + money(calc.total) : ''}`}
+          {busy ? t.sending : `${t.confirmOrder}${calc ? ' · ' + money(payTotal) : ''}`}
         </button>
       </div>
     </Sheet>

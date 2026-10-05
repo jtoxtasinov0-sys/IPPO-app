@@ -72,6 +72,11 @@ function ProductBody({ p, config, market, mode, onClose, onGoCart }) {
     onClose();
   }
 
+  // Optom: savatdagi bilan birga shu mahsulot soniga mos chegirma
+  const tiers = mode === 'wholesale' ? config?.wholesaleTiers || [] : [];
+  const tierPct = tiers.filter((x) => inCart + qty >= x.min).reduce((m, x) => Math.max(m, x.pct), 0);
+  const unitNow = tierPct ? Math.round(p.price * (1 - tierPct / 100)) : p.price;
+
   const adminLink = `https://t.me/${config?.company?.telegram || 'fotimazuhrashop'}`;
   const description = pick(p, 'description');
 
@@ -180,7 +185,7 @@ function ProductBody({ p, config, market, mode, onClose, onGoCart }) {
             )}
             <button className="btn primary grow" onClick={add} disabled={out || maxQty <= 0}>
               {!out && <Icon name="bag" size={18} stroke={2.2} />}
-              {out ? t.outOfStock : `${t.addToCart} · ${money(p.price * qty)}`}
+              {out ? t.outOfStock : `${t.addToCart} · ${money(unitNow * qty)}`}
             </button>
           </>
         ) : (

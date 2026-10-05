@@ -14,15 +14,15 @@ const DEFAULTS = {
   bankNameUz: '',
   deliveryFeeUz: '0', // so'm
   freeDeliveryFromUz: '0',
-  // Optom: bitta mahsulotdan shuncha dona olinsa — optom narxdan chegirma (%), 0 = chegirma yo'q
-  wholesaleDiscount3: '0',
-  wholesaleDiscount5: '0',
-  wholesaleDiscount10: '0',
-  // Cashback: to'langan summadan foiz (0 = o'chiq), shu summadan boshlab beriladi
-  cashbackPercent: '0',
-  cashbackMinOrder: '0',
-  cashbackPercentUz: '0',
-  cashbackMinOrderUz: '0',
+  // Optom: bitta mahsulotdan shuncha dona olinsa — optom narxdan chegirma (%), 0 = chegirma yo'q (namuna qiymatlar)
+  wholesaleDiscount3: '5',
+  wholesaleDiscount5: '7',
+  wholesaleDiscount10: '10',
+  // Cashback: to'langan summadan foiz (0 = o'chiq), shu summadan boshlab beriladi (namuna qiymatlar)
+  cashbackPercent: '3',
+  cashbackMinOrder: '30000', // ₩
+  cashbackPercentUz: '3',
+  cashbackMinOrderUz: '100000', // so'm
   // Birinchi xarid chegirmasi (faqat dona bo'limi, telefon raqami bo'yicha bir marta), 0% = o'chiq
   firstOrderPercent: '10',
   firstOrderMinOrder: '50000', // ₩
