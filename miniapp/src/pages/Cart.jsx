@@ -161,7 +161,9 @@ export default function Cart({ products, config, market, mode, onCatalog, onChec
             <span>{t.delivery}</span>
             <span className={calc.deliveryFee ? '' : 'green'}>{calc.deliveryFee ? money(calc.deliveryFee) : t.free}</span>
           </div>
-          {calc.deliveryFee > 0 && calc.freeFrom > 0 && <div className="sum-hint">{t.freeFrom(money(calc.freeFrom))}</div>}
+          {calc.deliveryFee > 0 && calc.freeFrom > 0 && (
+            <div className="sum-hint">{t.freeLeft(money(calc.freeFrom - calc.subtotal), money(calc.freeFrom))}</div>
+          )}
           <div className="sum-row total">
             <span>{t.total}</span>
             <span>{money(calc.total)}</span>

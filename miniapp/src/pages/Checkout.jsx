@@ -22,6 +22,7 @@ export default function Checkout({ open, calc, market, mode, marketCfg, user, on
     comment: '',
     paymentMethod: 'card',
   });
+  const [useCashback, setUseCashback] = useState(true);
   const [touched, setTouched] = useState({});
   const [busy, setBusy] = useState(false);
   const refs = useRef({});
@@ -29,6 +30,14 @@ export default function Checkout({ open, calc, market, mode, marketCfg, user, on
 
   const methods = marketCfg?.payment?.methods || ['card'];
   const regions = marketCfg?.regions || [];
+
+  // Cashback: balansdan mahsulotlar summasigacha ayiriladi (server qayta hisoblaydi)
+  const balance = user?.cashback?.[market] || 0;
+  const cashbackUse = useCashback && calc ? Math.min(balance, calc.subtotal) : 0;
+  const payTotal = calc ? calc.total - cashbackUse : 0;
+  const cb = marketCfg?.cashback;
+  const paidForGoods = calc ? calc.subtotal - cashbackUse : 0;
+  const willEarn = cb?.percent > 0 && paidForGoods > 0 && paidForGoods >= (cb.minOrder || 0) ? Math.floor((paidForGoods * cb.percent) / 100) : 0;
 
   // Davlat almashtirilsa — boshqa davlat hududi qolib ketmasin
   useEffect(() => {
@@ -99,6 +108,7 @@ export default function Checkout({ open, calc, market, mode, marketCfg, user, on
         ...form,
         market,
         mode,
+        useCashback: cashbackUse > 0,
         items: cart.get(),
       });
       haptic('success');
@@ -220,6 +230,25 @@ export default function Checkout({ open, calc, market, mode, marketCfg, user, on
           ))}
         </div>
 
+        {balance > 0 && calc && (
+          <button
+            className={`pay-method cashback-toggle ${useCashback ? 'on' : ''}`}
+            onClick={() => {
+              haptic('select');
+              setUseCashback((v) => !v);
+            }}
+          >
+            <span className="pm-ic">
+              <Icon name="gift" size={22} />
+            </span>
+            <span className="pm-text">
+              <b>{t.useCashback}</b>
+              <small>{t.cashbackAvailable(money(balance))}</small>
+            </span>
+            <span className="pm-check">{useCashback && <Icon name="check" size={16} stroke={2.4} />}</span>
+          </button>
+        )}
+
         {calc && (
           <div className="summary card">
             <div className="sum-row">
@@ -236,10 +265,17 @@ export default function Checkout({ open, calc, market, mode, marketCfg, user, on
               <span>{t.delivery}</span>
               <span className={calc.deliveryFee ? '' : 'green'}>{calc.deliveryFee ? money(calc.deliveryFee) : t.free}</span>
             </div>
+            {cashbackUse > 0 && (
+              <div className="sum-row">
+                <span>{t.cashback}</span>
+                <span className="green">−{money(cashbackUse)}</span>
+              </div>
+            )}
             <div className="sum-row total">
               <span>{t.total}</span>
-              <span>{money(calc.total)}</span>
+              <span>{money(payTotal)}</span>
             </div>
+            {willEarn > 0 && <div className="sum-hint">{t.cashbackWillEarn(money(willEarn))}</div>}
           </div>
         )}
       </div>

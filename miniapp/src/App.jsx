@@ -188,12 +188,18 @@ export default function App() {
   const productById = useMemo(() => new Map((shown || []).map((p) => [p.id, p])), [shown]);
   const openProduct = openProductId ? productById.get(openProductId) : null;
 
+  // Cashback balansi o'zgarganda (buyurtma, to'lov tasdiqlanishi) — profil yangilanadi
+  function refreshUser() {
+    api.me().then(setUser).catch(() => {});
+  }
+
   function onOrderDone(order) {
     setCheckoutOpen(false);
+    refreshUser();
     setRefreshKey((k) => k + 1);
     // mahsulot qoldiqlari o'zgargan bo'lishi mumkin
     api.products().then(setProducts).catch(() => {});
-    setTimeout(() => (order.paymentMethod === 'card' ? setPayOrder(order) : setSuccessOrder(order)), 280);
+    setTimeout(() => (order.paymentMethod === 'card' && order.total > 0 ? setPayOrder(order) : setSuccessOrder(order)), 280);
   }
 
   let page;
@@ -261,6 +267,7 @@ export default function App() {
         refreshKey={refreshKey}
         onPay={setPayOrder}
         onGoCart={() => goTab('cart')}
+        onRefreshUser={refreshUser}
       />
     );
   }

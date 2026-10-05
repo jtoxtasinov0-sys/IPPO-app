@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { api, formatDate } from '../lib/api';
+import { api, formatDate, money } from '../lib/api';
 
 export default function Users() {
   const [list, setList] = useState(null);
@@ -17,6 +17,14 @@ export default function Users() {
     if (r) setList((l) => l.map((x) => (x.id === u.id ? { ...x, isAdmin: r.isAdmin } : x)));
   }
 
+  // Cashback balansini qo'lda o'zgartirish (masalan, sovg'a yoki tuzatish)
+  async function editCashback(u, key, market) {
+    const v = prompt(`${u.firstName || u.telegramId} — yangi cashback balansi (${market === 'uz' ? 'so‘m' : '₩'}):`, String(u[key] || 0));
+    if (v === null) return;
+    const r = await api.setCashback(u.id, { [key]: v.replace(/\D/g, '') || 0 }).catch((e) => alert(e.message));
+    if (r) setList((l) => l.map((x) => (x.id === u.id ? { ...x, [key]: r[key] } : x)));
+  }
+
   return (
     <div className="page">
       <div className="page-head">
@@ -32,6 +40,7 @@ export default function Users() {
               <th>Telefon</th>
               <th>Til</th>
               <th>Buyurtma</th>
+              <th>Cashback</th>
               <th>Qo‘shilgan</th>
               <th>Admin</th>
             </tr>
@@ -55,6 +64,15 @@ export default function Users() {
                   <td>{u.phone ? <a href={`tel:${u.phone}`}>{u.phone}</a> : '—'}</td>
                   <td>{u.lang.toUpperCase()}</td>
                   <td>{u._count?.orders || 0}</td>
+                  <td className="small nowrap">
+                    <button className="link" title="O‘zgartirish" onClick={() => editCashback(u, 'cashbackUz', 'uz')}>
+                      🇺🇿 {money(u.cashbackUz || 0, 'uz')}
+                    </button>
+                    <br />
+                    <button className="link" title="O‘zgartirish" onClick={() => editCashback(u, 'cashbackKr', 'kr')}>
+                      🇰🇷 {money(u.cashbackKr || 0, 'kr')}
+                    </button>
+                  </td>
                   <td className="small">{formatDate(u.createdAt)}</td>
                   <td>
                     {isTg && (

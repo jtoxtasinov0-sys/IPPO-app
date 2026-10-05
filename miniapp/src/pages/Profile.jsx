@@ -10,13 +10,14 @@ import { money, formatDate, formatPhone } from '../lib/format';
 import { tgUser, openLink, haptic } from '../lib/telegram';
 import Flag from '../components/Flag';
 
-export default function Profile({ config, user, market, mode, onMarket, refreshKey, onPay, onGoCart }) {
+export default function Profile({ config, user, market, mode, onMarket, refreshKey, onPay, onGoCart, onRefreshUser }) {
   const { t, lang, setLang, label } = useI18n();
   const [orders, setOrders] = useState(null);
   const [error, setError] = useState(false);
 
   function load() {
     setError(false);
+    onRefreshUser?.();
     api
       .myOrders()
       .then(setOrders)
@@ -36,6 +37,9 @@ export default function Profile({ config, user, market, mode, onMarket, refreshK
     toast(t.added);
     onGoCart();
   }
+
+  const cb = config?.markets?.find((m) => m.key === market)?.cashback;
+  const balance = user?.cashback?.[market] || 0;
 
   const region = (key) => label(config?.markets?.flatMap((m) => m.regions).find((r) => r.key === key)) || key;
 
@@ -58,6 +62,19 @@ export default function Profile({ config, user, market, mode, onMarket, refreshK
           ))}
         </div>
       </div>
+
+      {(balance > 0 || cb?.percent > 0) && (
+        <div className="cashback-card card">
+          <div className="cashback-ic">
+            <Icon name="gift" size={22} />
+          </div>
+          <div className="cashback-text">
+            <div className="muted small">{t.cashbackBalance}</div>
+            <b>{money(balance, market)}</b>
+            {cb?.percent > 0 && <div className="muted small">{t.cashbackRule(cb.percent, cb.minOrder ? money(cb.minOrder, market) : null)}</div>}
+          </div>
+        </div>
+      )}
 
       <section className="section">
         <div className="section-head">
@@ -110,6 +127,12 @@ export default function Profile({ config, user, market, mode, onMarket, refreshK
                   </span>
                   {o.paymentMethod === 'card' && <span className={`pay-status ps-${o.paymentStatus}`}>{t.payStatus[o.paymentStatus]}</span>}
                 </div>
+                {(o.cashbackUsed > 0 || o.cashbackEarned > 0) && (
+                  <div className="order-cashback small">
+                    {o.cashbackUsed > 0 && <span>{t.cashbackUsedLine(money(o.cashbackUsed, o.market))}</span>}
+                    {o.cashbackEarned > 0 && <span className="green">{t.cashbackEarnedLine(money(o.cashbackEarned, o.market))}</span>}
+                  </div>
+                )}
                 <div className="order-bottom">
                   <div className="order-total">{money(o.total, o.market)}</div>
                   <div className="order-actions">

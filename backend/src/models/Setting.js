@@ -18,6 +18,11 @@ const DEFAULTS = {
   wholesaleDiscount3: '0',
   wholesaleDiscount5: '0',
   wholesaleDiscount10: '0',
+  // Cashback: to'langan summadan foiz (0 = o'chiq), shu summadan boshlab beriladi
+  cashbackPercent: '0',
+  cashbackMinOrder: '0',
+  cashbackPercentUz: '0',
+  cashbackMinOrderUz: '0',
   shopNote: '', // Mini App'da ko'rinadigan qisqa e'lon (ixtiyoriy)
   categoryCovers: '{}', // JSON: { [kategoriya kaliti]: { image, frame: {z,x,y} } }
 };
@@ -98,6 +103,15 @@ async function delivery(market) {
   };
 }
 
+async function cashback(market) {
+  const s = await all();
+  const x = suffix(market);
+  return {
+    percent: Math.max(0, Math.min(50, parseFloat(s['cashbackPercent' + x]) || 0)),
+    minOrder: Math.max(0, parseInt(s['cashbackMinOrder' + x], 10) || 0),
+  };
+}
+
 // Optom chegirma bosqichlari, kattasidan kichigiga: [{ min: 10, pct }, { min: 5, pct }, { min: 3, pct }]
 const TIER_MINS = [10, 5, 3];
 async function wholesaleTiers() {
@@ -107,4 +121,4 @@ async function wholesaleTiers() {
   );
 }
 
-module.exports = { all, setMany, payment, delivery, wholesaleTiers, covers, DEFAULTS };
+module.exports = { all, setMany, payment, delivery, cashback, wholesaleTiers, covers, DEFAULTS };

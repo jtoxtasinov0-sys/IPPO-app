@@ -9,6 +9,7 @@ const Setting = require('../models/Setting');
 const bot = require('../core/bot');
 const broadcast = require('../core/broadcast');
 const payment = require('../services/payment');
+const cashback = require('../services/cashback');
 const { returnStock, retakeStock } = require('../services/stock');
 const { saveImage } = require('../utils/upload');
 const { t } = require('../utils/i18n');
@@ -118,6 +119,17 @@ async function updateOrder(req, res) {
         await retakeStock(tx, order.items);
         data.stockReturned = false;
       }
+      // Cashback: bekor qilinsa — ishlatilgani qaytadi, berilgani olinadi; qayta tiklansa — teskarisi
+      if (status === 'cancelled') {
+        await cashback.change(tx, order.userId, order.market, order.cashbackUsed);
+        const o = await tx.order.update({ where: { id }, data, include: { user: true } });
+        return cashback.revoke(tx, o);
+      }
+      if (order.status === 'cancelled') {
+        await cashback.change(tx, order.userId, order.market, -order.cashbackUsed);
+        const o = await tx.order.update({ where: { id }, data, include: { user: true } });
+        return o.paymentStatus === 'paid' ? cashback.credit(tx, o) : o;
+      }
       return tx.order.update({ where: { id }, data, include: { user: true } });
     });
     if (updated.user && t(updated.user.lang).status[status]) {
@@ -138,6 +150,10 @@ async function deleteOrder(req, res) {
   if (!order) return res.status(404).json({ error: 'Topilmadi' });
   await prisma.$transaction(async (tx) => {
     if (order.status !== 'cancelled' && !order.stockReturned) await returnStock(tx, order.items);
+    if (order.status !== 'cancelled') {
+      await cashback.change(tx, order.userId, order.market, order.cashbackUsed);
+      await cashback.revoke(tx, order);
+    }
     await tx.order.delete({ where: { id } });
   });
   res.json({ ok: true });
@@ -147,6 +163,8 @@ async function deleteOrder(req, res) {
 async function clearOrders(req, res) {
   if ((req.body?.confirm || '') !== 'TOZALASH') return res.status(400).json({ error: '"TOZALASH" deb yozing' });
   await prisma.$executeRawUnsafe('TRUNCATE TABLE "Order" RESTART IDENTITY');
+  // Buyurtmalar bilan birga ulardan to'plangan cashback ham nolga tushadi
+  await prisma.user.updateMany({ data: { cashbackKr: 0, cashbackUz: 0 } });
   res.json({ ok: true });
 }
 
@@ -254,9 +272,16 @@ async function listUsers(req, res) {
   res.json(rows);
 }
 
+// Admin qilish va/yoki cashback balansini qo'lda o'zgartirish
 async function setUserAdmin(req, res) {
-  const u = await prisma.user.update({ where: { id: Number(req.params.id) }, data: { isAdmin: !!req.body.isAdmin } });
-  if (u.isAdmin) bot.setAdminMenu(u.telegramId);
+  const b = req.body || {};
+  const data = {};
+  if (typeof b.isAdmin === 'boolean') data.isAdmin = b.isAdmin;
+  for (const k of ['cashbackKr', 'cashbackUz']) {
+    if (b[k] !== undefined) data[k] = Math.max(0, Math.min(1e9, parseInt(b[k], 10) || 0));
+  }
+  const u = await prisma.user.update({ where: { id: Number(req.params.id) }, data });
+  if (data.isAdmin) bot.setAdminMenu(u.telegramId);
   res.json(u);
 }
 

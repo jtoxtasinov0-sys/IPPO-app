@@ -7,6 +7,7 @@ const Order = require('../models/Order');
 const Setting = require('../models/Setting');
 const bot = require('../core/bot');
 const payment = require('../services/payment');
+const cashback = require('../services/cashback');
 const { takeStock } = require('../services/stock');
 const { saveImage } = require('../utils/upload');
 const { t, adminOrderText } = require('../utils/i18n');
@@ -22,11 +23,12 @@ async function getConfig(_req, res) {
   const [markets, wholesaleTiers] = await Promise.all([
     Promise.all(
     cfg.markets.map(async (m) => {
-      const [pay, delivery] = await Promise.all([Setting.payment(m.key), Setting.delivery(m.key)]);
+      const [pay, delivery, cb] = await Promise.all([Setting.payment(m.key), Setting.delivery(m.key), Setting.cashback(m.key)]);
       return {
         ...m,
         payment: { methods: cfg.payment.methods, card: pay.cardEnabled ? pay.card : null },
         delivery,
+        cashback: cb,
       };
     })
     ),
@@ -78,6 +80,7 @@ function me(req, res) {
     market: u.market,
     mode: u.mode,
     seenIntro: u.seenIntro,
+    cashback: { kr: u.cashbackKr || 0, uz: u.cashbackUz || 0 },
     isWeb: !!req.isWeb,
   });
 }
@@ -213,6 +216,18 @@ async function createOrder(req, res) {
   try {
     order = await prisma.$transaction(async (tx) => {
       await takeStock(tx, priced.lines);
+      // Cashback: balansdan mahsulotlar summasigacha ayiriladi (yetkazish narxiga ishlatilmaydi)
+      let cashbackUsed = 0;
+      if (b.useCashback) {
+        const f = cashback.field(market);
+        const u = await tx.user.findUnique({ where: { id: req.user.id }, select: { [f]: true } });
+        cashbackUsed = Math.min(u?.[f] || 0, priced.subtotal);
+        if (cashbackUsed > 0) {
+          const r = await tx.user.updateMany({ where: { id: req.user.id, [f]: { gte: cashbackUsed } }, data: { [f]: { decrement: cashbackUsed } } });
+          if (!r.count) cashbackUsed = 0;
+        }
+      }
+      const total = priced.total - cashbackUsed;
       return tx.order.create({
         data: {
           userId: req.user.id,
@@ -222,7 +237,10 @@ async function createOrder(req, res) {
           totalQty: priced.totalQty,
           subtotal: priced.subtotal,
           deliveryFee: priced.deliveryFee,
-          total: priced.total,
+          cashbackUsed,
+          total,
+          // To'liq cashback bilan to'langan (summa 0) — to'lov kutilmaydi
+          ...(total === 0 ? { paymentStatus: 'paid' } : {}),
           customerName: name,
           phone,
           region,
@@ -253,7 +271,7 @@ async function createOrder(req, res) {
   // Mijozga botdan tasdiq
   const L = t(req.user.lang);
   bot.safeSend(req.user.telegramId, L.orderCreated(order)).then(() => {
-    if (method === 'card') bot.safeSend(req.user.telegramId, pay.cardEnabled ? L.payCard(order, pay.card) : L.payCardSoon(order));
+    if (method === 'card' && order.total > 0) bot.safeSend(req.user.telegramId, pay.cardEnabled ? L.payCard(order, pay.card) : L.payCardSoon(order));
   });
 
   res.status(201).json(Order.toPublic(order));

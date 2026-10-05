@@ -1434,3 +1434,17 @@ code {
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
+
+/* Jadvaldagi bosiladigan matn (masalan, cashback balansi) */
+.link {
+  background: none;
+  border: 0;
+  padding: 2px 0;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+  text-decoration: underline dotted;
+}
+.nowrap {
+  white-space: nowrap;
+}

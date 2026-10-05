@@ -44,6 +44,7 @@ const T = {
     orderCreated: (o) =>
       `✅ <b>Buyurtmangiz qabul qilindi — #${o.id}</b>\n\n` +
       `Summa: <b>${money(o.total, o.market)}</b>\n` +
+      (o.cashbackUsed ? `Cashback ishlatildi: −${money(o.cashbackUsed, o.market)}\n` : '') +
       `To‘lov: ${o.paymentMethod === 'card' ? 'kartaga o‘tkazma' : 'naqd pul'}\n\n` +
       `Tez orada siz bilan bog‘lanamiz. Rahmat! 🤍`,
     payCard: (o, card) =>
@@ -55,6 +56,9 @@ const T = {
       `📸 O‘tkazmadan so‘ng chek rasmini shu yerga yuboring.`,
     payCardSoon: (o) =>
       `💳 Summa: <b>${money(o.total, o.market)}</b>\n\nKarta raqamini tez orada yuboramiz. O‘tkazmadan so‘ng chek rasmini shu yerga yuboring 📸`,
+    cashbackEarned: (o, balance) =>
+      `🎁 Buyurtma #${o.id} uchun <b>${money(o.cashbackEarned, o.market)}</b> cashback qo‘shildi!\n` +
+      `Balansingiz: <b>${money(balance, o.market)}</b> — keyingi xaridda chegirma sifatida ishlatishingiz mumkin.`,
     receiptOk: (id) => `🧾 Chek qabul qilindi (buyurtma #${id}). Tekshirib, sizga xabar beramiz.`,
     noOrderForReceipt: 'Chek biriktiriladigan to‘lanmagan buyurtma topilmadi. Buyurtmani do‘kon orqali bering 👇',
     payApproved: (id) => `✅ Buyurtma #${id} bo‘yicha to‘lovingiz tasdiqlandi. Rahmat!`,
@@ -91,6 +95,7 @@ const T = {
     orderCreated: (o) =>
       `✅ <b>Заказ принят — #${o.id}</b>\n\n` +
       `Сумма: <b>${money(o.total, o.market)}</b>\n` +
+      (o.cashbackUsed ? `Списано кэшбэка: −${money(o.cashbackUsed, o.market)}\n` : '') +
       `Оплата: ${o.paymentMethod === 'card' ? 'перевод на карту' : 'наличными'}\n\n` +
       `Скоро свяжемся с вами. Спасибо! 🤍`,
     payCard: (o, card) =>
@@ -102,6 +107,9 @@ const T = {
       `📸 После перевода отправьте сюда фото чека.`,
     payCardSoon: (o) =>
       `💳 Сумма: <b>${money(o.total, o.market)}</b>\n\nРеквизиты карты скоро отправим. После перевода пришлите сюда фото чека 📸`,
+    cashbackEarned: (o, balance) =>
+      `🎁 За заказ #${o.id} начислено <b>${money(o.cashbackEarned, o.market)}</b> кэшбэка!\n` +
+      `Ваш баланс: <b>${money(balance, o.market)}</b> — можно использовать как скидку при следующей покупке.`,
     receiptOk: (id) => `🧾 Чек получен (заказ #${id}). Проверим и сообщим вам.`,
     noOrderForReceipt: 'Не найден неоплаченный заказ для этого чека. Оформите заказ через магазин 👇',
     payApproved: (id) => `✅ Оплата по заказу #${id} подтверждена. Спасибо!`,
@@ -157,7 +165,9 @@ function adminOrderText(o, { title } = {}) {
       return `${i + 1}. <b>${esc(it.name)}</b> [${esc(it.article)}]${variant}\n    ${it.qty} × ${money(it.unitPrice, o.market)}${off} = <b>${money(it.lineTotal, o.market)}</b>`;
     })
     .join('\n');
-  const delivery = o.deliveryFee ? `\n🚚 Yetkazish: ${money(o.deliveryFee, o.market)}` : '';
+  const delivery =
+    (o.deliveryFee ? `\n🚚 Yetkazish: ${money(o.deliveryFee, o.market)}` : '') +
+    (o.cashbackUsed ? `\n🎁 Cashback ishlatildi: −${money(o.cashbackUsed, o.market)}` : '');
   return (
     `${title || '🆕 <b>Yangi buyurtma #' + o.id + '</b>'}\n\n` +
     `${items}\n\n` +

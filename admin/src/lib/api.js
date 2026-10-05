@@ -90,6 +90,7 @@ export const api = {
   deleteStory: (id) => request(`/api/admin/stories/${id}`, { method: 'DELETE' }),
   users: (q) => request('/api/admin/users' + (q ? `?q=${encodeURIComponent(q)}` : '')),
   setAdmin: (id, isAdmin) => request(`/api/admin/users/${id}`, { method: 'PATCH', body: { isAdmin } }),
+  setCashback: (id, body) => request(`/api/admin/users/${id}`, { method: 'PATCH', body }),
   broadcast: (body) => request('/api/admin/broadcast', { method: 'POST', body }),
   broadcastStatus: () => request('/api/admin/broadcast'),
   settings: () => request('/api/admin/settings'),

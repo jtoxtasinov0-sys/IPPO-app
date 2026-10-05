@@ -23,6 +23,8 @@ model User {
   seenIntro  Boolean  @default(false)
   isAdmin    Boolean  @default(false) // botda "/admin PAROL" yozgan
   isBlocked  Boolean  @default(false) // botni bloklagan
+  cashbackKr Int      @default(0) // cashback balansi, Koreya (₩)
+  cashbackUz Int      @default(0) // cashback balansi, O'zbekiston (so'm)
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
   orders     Order[]
@@ -66,13 +68,15 @@ model Order {
   totalQty      Int
   subtotal      Int
   deliveryFee   Int       @default(0)
+  cashbackUsed  Int       @default(0) // mijoz balansidan ishlatilgan cashback (summadan ayirilgan)
+  cashbackEarned Int      @default(0) // to'lov tasdiqlanganda berilgan cashback
   total         Int
   customerName  String
   phone         String
   region        String
   address       String
   comment       String?
-  paymentMethod String // cash | card
+  paymentMethod String // card (eski buyurtmalarda cash ham bor)
   paymentStatus String    @default("unpaid") // unpaid | pending | paid | rejected
   receiptUrl    String?
   receiptAt     DateTime?

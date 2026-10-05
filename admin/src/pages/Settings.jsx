@@ -124,6 +124,32 @@ export default function Settings() {
       </section>
 
       <section className="panel">
+        <h3>🎁 Cashback</h3>
+        <p className="muted small">
+          To‘lov tasdiqlanganda mijoz balansiga mahsulotlar summasidan (yetkazishsiz) foiz qo‘shiladi. Balans Mini App profilida ko‘rinadi va keyingi
+          xaridda summadan ayiriladi. Buyurtma bekor qilinsa yoki to‘lov rad etilsa — qaytariladi. 0% — o‘chiq.
+        </p>
+        <div className="form-grid">
+          <label>
+            🇺🇿 Cashback (%)
+            <input className="input" inputMode="decimal" value={f.cashbackPercentUz} onChange={set('cashbackPercentUz')} placeholder="0 = o‘chiq" />
+          </label>
+          <label>
+            🇺🇿 Shu summadan boshlab (so‘m)
+            <input className="input" inputMode="numeric" value={f.cashbackMinOrderUz} onChange={set('cashbackMinOrderUz')} placeholder="0 = har xariddan" />
+          </label>
+          <label>
+            🇰🇷 Cashback (%)
+            <input className="input" inputMode="decimal" value={f.cashbackPercent} onChange={set('cashbackPercent')} placeholder="0 = o‘chiq" />
+          </label>
+          <label>
+            🇰🇷 Shu summadan boshlab (₩)
+            <input className="input" inputMode="numeric" value={f.cashbackMinOrder} onChange={set('cashbackMinOrder')} placeholder="0 = har xariddan" />
+          </label>
+        </div>
+      </section>
+
+      <section className="panel">
         <h3>📦 Optom chegirmalari</h3>
         <p className="muted small">
           Optom bo‘limida bitta mahsulotdan (barcha turlari birga) shuncha dona olinsa, optom narxidan avtomatik chegirma qilinadi. 0 —
