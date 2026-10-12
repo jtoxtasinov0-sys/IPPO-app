@@ -36,13 +36,18 @@ module.exports = {
 
 
   // Kategoriyalar (kalit bazada saqlanadi — o'zgartirmang, nomini o'zgartirsa bo'ladi)
+  // only: shu bo'lim faqat Koreya + dona uchun. Boshqa davlat/optomda bu bo'limdagi mahsulot
+  // faqat admin o'sha narxni kiritgan bo'lsa ko'rinadi.
   categories: [
     { key: 'jenshen', uz: 'Jenshen', ru: 'Женьшень', emoji: '🌿' },
     { key: 'kollagen', uz: 'Kollagen', ru: 'Коллаген', emoji: '🍎' },
     { key: 'vitaminlar', uz: 'Vitaminlar', ru: 'Витамины', emoji: '💊' },
     { key: 'soch', uz: 'Soch parvarishi', ru: 'Уход за волосами', emoji: '💆‍♀️' },
     { key: 'yuz', uz: 'Yuz parvarishi', ru: 'Уход за лицом', emoji: '✨' },
-    { key: 'parfyum', uz: 'Parfyumeriya', ru: 'Парфюмерия', emoji: '🌸' },
+    { key: 'parfyum', uz: 'Atir', ru: 'Парфюм', emoji: '🌸', only: { market: 'kr', mode: 'retail' } },
+    { key: 'kitob', uz: 'Kitob', ru: 'Книги', emoji: '📚', only: { market: 'kr', mode: 'retail' } },
+    { key: 'islomiy', uz: 'Islomiy', ru: 'Исламское', emoji: '🕌', only: { market: 'kr', mode: 'retail' } },
+    { key: 'tilla', uz: 'Tilla taqinchoqlar', ru: 'Золотые украшения', emoji: '💍', only: { market: 'kr', mode: 'retail' } },
   ],
 
   // Teglar (katalogdagi filtr)

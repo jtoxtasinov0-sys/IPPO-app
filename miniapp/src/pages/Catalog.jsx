@@ -1,8 +1,12 @@
-import { useEffect, useMemo, useRef } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import ProductCard from '../components/ProductCard';
 import Icon from '../components/Icon';
 import { useI18n } from '../lib/i18n';
 import { haptic } from '../lib/telegram';
+
+// Mahsulot ko'p bo'lsa ham ilova yengil ishlashi uchun kartalar bo'lib-bo'lib chiziladi:
+// avval PAGE ta, pastga yaqinlashganda yana PAGE ta
+const PAGE = 20;
 
 const norm = (s) =>
   String(s || '')
@@ -30,6 +34,17 @@ export default function Catalog({ config, products, filter, setFilter, onOpen })
       return [p.name, p.nameRu, p.brand, p.article, p.description, p.descriptionRu].some((x) => norm(x).includes(q));
     });
   }, [products, filter.category, filter.tag, filter.q]);
+
+  const [limit, setLimit] = useState(PAGE);
+  const more = useRef(null);
+  useEffect(() => setLimit(PAGE), [filter.category, filter.tag, filter.q]);
+  useEffect(() => {
+    const el = more.current;
+    if (!el || limit >= list.length) return;
+    const io = new IntersectionObserver((e) => e[0].isIntersecting && setLimit((n) => n + PAGE), { rootMargin: '900px 0px' });
+    io.observe(el);
+    return () => io.disconnect();
+  }, [limit, list.length]);
 
   const set = (patch) => {
     haptic('select');
@@ -84,11 +99,14 @@ export default function Catalog({ config, products, filter, setFilter, onOpen })
       </div>
 
       {list.length ? (
-        <div className="grid">
-          {list.map((p) => (
-            <ProductCard key={p.id} p={p} tags={config?.tags} onOpen={onOpen} />
-          ))}
-        </div>
+        <>
+          <div className="grid">
+            {list.slice(0, limit).map((p) => (
+              <ProductCard key={p.id} p={p} tags={config?.tags} onOpen={onOpen} />
+            ))}
+          </div>
+          {limit < list.length && <div ref={more} style={{ height: 1 }} />}
+        </>
       ) : (
         <div className="empty">
           <div className="empty-ic">

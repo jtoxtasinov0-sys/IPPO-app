@@ -66,6 +66,35 @@ async function readUpload(p) {
   }
 }
 
+// Kichik nusxa (WebP): diskda bo'lsa o'qiladi, bo'lmasa yasaladi va saqlanadi.
+// Bir rasmga bir vaqtda ko'p so'rov kelsa — faqat bir marta yasaladi.
+const thumbJobs = new Map();
+function getThumb(rel, w) {
+  const thumbAbs = path.join(THUMB_DIR, String(w), rel + '.webp');
+  if (thumbJobs.has(thumbAbs)) return thumbJobs.get(thumbAbs);
+  const job = (async () => {
+    try {
+      return await fs.promises.readFile(thumbAbs);
+    } catch {}
+    const src = await readUpload(rel);
+    if (!src) return null;
+    const thumb = await sharp(src, { failOn: 'none' }).rotate().resize({ width: w, withoutEnlargement: true }).webp({ quality: 78 }).toBuffer();
+    await fs.promises.mkdir(path.dirname(thumbAbs), { recursive: true });
+    await fs.promises.writeFile(thumbAbs, thumb).catch(() => {});
+    return thumb;
+  })().finally(() => thumbJobs.delete(thumbAbs));
+  thumbJobs.set(thumbAbs, job);
+  return job;
+}
+
+// Katalog rasmlarining kichik nusxalarini oldindan tayyorlaydi (deploy paytida seed chaqiradi) —
+// mijoz birinchi ochganda server rasm siqib o'tirmaydi, rasmlar darhol chiqadi
+async function warmThumbs(widths = THUMB_WIDTHS) {
+  const files = (await fs.promises.readdir(path.join(UPLOAD_DIR, 'products'))).filter((f) => MIME[path.extname(f).toLowerCase()]);
+  for (const f of files) for (const w of widths) await getThumb(`products/${f}`, w).catch(() => null);
+  return files.length;
+}
+
 // GET /uploads/... — ?w=480 bo'lsa WebP kichik nusxa
 async function serveUploads(req, res) {
   const rel = toRel(decodeURIComponent(req.path));
@@ -76,16 +105,8 @@ async function serveUploads(req, res) {
 
   try {
     if (THUMB_WIDTHS.includes(w)) {
-      const thumbAbs = path.join(THUMB_DIR, String(w), rel + '.webp');
-      try {
-        const cached = await fs.promises.readFile(thumbAbs);
-        return res.type('image/webp').send(cached);
-      } catch {}
-      const src = await readUpload(rel);
-      if (!src) return res.sendStatus(404);
-      const thumb = await sharp(src, { failOn: 'none' }).rotate().resize({ width: w, withoutEnlargement: true }).webp({ quality: 78 }).toBuffer();
-      await fs.promises.mkdir(path.dirname(thumbAbs), { recursive: true });
-      fs.promises.writeFile(thumbAbs, thumb).catch(() => {});
+      const thumb = await getThumb(rel, w);
+      if (!thumb) return res.sendStatus(404);
       return res.type('image/webp').send(thumb);
     }
     const buf = await readUpload(rel);
@@ -97,4 +118,4 @@ async function serveUploads(req, res) {
   }
 }
 
-module.exports = { upload, saveImage, readUpload, serveUploads, toRel, UPLOAD_DIR };
+module.exports = { upload, saveImage, readUpload, serveUploads, warmThumbs, toRel, UPLOAD_DIR };

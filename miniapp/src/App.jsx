@@ -174,16 +174,22 @@ export default function App() {
     });
   }
 
-  // Narx tanlangan davlat va savdo turiga qarab almashtiriladi — komponentlar p.price ni ishlatadi
-  const shown = useMemo(
-    () =>
-      products?.map((p) => ({
+  // Narx tanlangan davlat va savdo turiga qarab almashtiriladi — komponentlar p.price ni ishlatadi.
+  // Faqat bitta davlat/turga mo'ljallangan bo'lim (masalan Atir — Koreya, dona) boshqasida narxsiz ko'rinmaydi.
+  const shown = useMemo(() => {
+    if (!products) return null;
+    const only = new Map((config?.categories || []).filter((c) => c.only).map((c) => [c.key, c.only]));
+    return products
+      .map((p) => ({
         ...p,
         price: priceFor(p, market, mode),
         oldPrice: market === 'kr' && mode === 'retail' ? p.oldPrice : null,
-      })) || null,
-    [products, market, mode]
-  );
+      }))
+      .filter((p) => {
+        const o = only.get(p.category);
+        return !o || p.price > 0 || (o.market === market && o.mode === mode);
+      });
+  }, [products, config, market, mode]);
   const marketCfg = config?.markets?.find((m) => m.key === market) || null;
   const productById = useMemo(() => new Map((shown || []).map((p) => [p.id, p])), [shown]);
   const openProduct = openProductId ? productById.get(openProductId) : null;
