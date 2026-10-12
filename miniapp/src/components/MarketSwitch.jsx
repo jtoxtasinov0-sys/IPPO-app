@@ -4,11 +4,32 @@ import Flag from './Flag';
 import { useI18n } from '../lib/i18n';
 import { haptic } from '../lib/telegram';
 
+// Ilova har ochilganda bir marta: tugma ostida "bu yerda nima sozlanadi" degan yozuv chiqadi,
+// biroz turib, asta-sekin (opacity) yo'qoladi. Bosilsa — darhol almashtirish oynasi ochiladi.
+let hintShown = false;
+const HINT_DELAY = 700;
+const HINT_STAY = 5000;
+const HINT_FADE = 600;
+
 // Bayroqcha tugmasi: bosilganda davlat va xarid turini shu yerning o'zida almashtirish oynasi
 export default function MarketSwitch({ market, mode, onChange }) {
   const { t } = useI18n();
   const [open, setOpen] = useState(false);
   const ref = useRef(null);
+  const [hint, setHint] = useState(null); // null | 'in' | 'out'
+
+  useEffect(() => {
+    if (hintShown) return;
+    const timers = [
+      setTimeout(() => {
+        hintShown = true;
+        setHint('in');
+      }, HINT_DELAY),
+      setTimeout(() => setHint('out'), HINT_DELAY + HINT_STAY),
+      setTimeout(() => setHint(null), HINT_DELAY + HINT_STAY + HINT_FADE),
+    ];
+    return () => timers.forEach(clearTimeout);
+  }, []);
 
   useEffect(() => {
     if (!open) return;
@@ -29,6 +50,7 @@ export default function MarketSwitch({ market, mode, onChange }) {
         className={'market-pill' + (open ? ' open' : '')}
         onClick={() => {
           haptic('light');
+          setHint(null);
           setOpen((o) => !o);
         }}
       >
@@ -40,6 +62,21 @@ export default function MarketSwitch({ market, mode, onChange }) {
         </span>
         <Icon name="chevron" size={14} stroke={2.4} />
       </button>
+
+      {hint && !open && (
+        <div
+          className={`mswitch-hint ${hint === 'out' ? 'out' : ''}`}
+          role="status"
+          onClick={() => {
+            haptic('light');
+            setHint(null);
+            setOpen(true);
+          }}
+        >
+          <Icon name="sparkle" size={16} />
+          <span>{t.switchHint}</span>
+        </div>
+      )}
 
       {open && (
         <div className="mswitch-pop">
