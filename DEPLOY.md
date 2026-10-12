@@ -72,15 +72,15 @@ git push -u origin main
 
 `PORT` va `PUBLIC_URL` **qo'ymang** — Render o'zi beradi.
 
-4. **Create Web Service**. 3–5 daqiqada manzil chiqadi, masalan: `https://ippo-app.onrender.com`.
-   Tekshirish: `https://ippo-app.onrender.com/api/health` → `{"ok":true}`.
+4. **Create Web Service**. 3–5 daqiqada manzil chiqadi, masalan: `https://ippo-app-ucce.onrender.com`.
+   Tekshirish: `https://ippo-app-ucce.onrender.com/api/health` → `{"ok":true}`.
 
 ---
 
 ## 3. Vercel — Mini App va Admin panel (ikkita loyiha)
 
 Avval **manzilni yozing**: `miniapp/.env.production` va `admin/.env.production` faylida
-`VITE_API_URL=` ga Render manzilini qo'ying (agar `ippo-app.onrender.com` dan boshqa bo'lsa),
+`VITE_API_URL=` ga Render manzilini qo'ying (agar `ippo-app-ucce.onrender.com` dan boshqa bo'lsa),
 `miniapp/src/lib/api.js` va `admin/src/lib/api.js` dagi `PROD_API_URL` ni ham. Keyin GitHub'ga push qiling.
 
 ### Mini App
