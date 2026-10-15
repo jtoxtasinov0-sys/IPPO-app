@@ -27,6 +27,31 @@ const T = {
       `🛍 Do‘konni ochib, mahsulot tanlang — buyurtmangiz Koreya va O‘zbekiston bo‘ylab yetkaziladi.\n` +
       `💳 To‘lov: kartaga o‘tkazma.`,
     openShop: '🛍 Do‘konni ochish',
+    installApp: '📲 Ilovani o‘rnatish',
+    installIntro: (url) =>
+      `📲 <b>IPPO’ni telefoningizga ilova qilib o‘rnating</b>\n\n` +
+      `⚠️ <b>ENG MUHIMI:</b> pastdagi havolani oddiy bosmang — <b>barmog‘ingiz bilan bosib turing</b> (1–2 soniya):\n\n` +
+      `👉 ${url}\n\n` +
+      `Menyu chiqadi → <b>«Открыть в Safari»</b> (iPhone) yoki <b>«Открыть в Chrome»</b> (Samsung) ni tanlang. ` +
+      `Sayt brauzerda ochiladi — ilova faqat brauzerdan o‘rnatiladi, Telegram ichidan emas.\n` +
+      `<i>Bunday tugma chiqmasa: «Копировать» ni bosing va havolani Safari/Chrome manzil qatoriga joylang.</i>\n\n` +
+      `🎬 Telefoningizni tanlang — qadamma-qadam video yuboraman 👇`,
+    installIos: '🍏 iPhone',
+    installAndroid: '🤖 Samsung / Android',
+    installVideo: (os, url) =>
+      (os === 'ios'
+        ? `🍏 <b>iPhone’da o‘rnatish</b>\n\n` +
+          `1️⃣ Havolani <b>BOSIB TURING</b> → «Открыть в Safari»\n👉 ${url}\n` +
+          `2️⃣ Pastdagi <b>Ulashish</b> tugmasi (kvadrat ichida strelka)\n` +
+          `3️⃣ «Добавить на экран «Домой»» — ya’ni «Bosh ekranga qo‘shish»\n` +
+          `4️⃣ Yuqorida «Добавить» ni bosing\n`
+        : `🤖 <b>Samsung / Android’da o‘rnatish</b>\n\n` +
+          `1️⃣ Havolani <b>BOSIB TURING</b> → «Открыть в Chrome»\n👉 ${url}\n` +
+          `2️⃣ Yuqori o‘ngdagi <b>⋮</b> (uchta nuqta) — menyu\n` +
+          `3️⃣ «Добавить на главный экран» — ya’ni «Bosh ekranga qo‘shish»\n` +
+          `4️⃣ «Установить» ni bosing\n`) +
+      `✅ Tayyor! IPPO ekraningizda — endi bir bosishda ochiladi.\n\n` +
+      `⚠️ Esda tuting: havolani oddiy bosmang — <b>bosib turing</b>!`,
     adminPanel: '🛠 Admin panel',
     menuShop: 'Do‘kon',
     menuAdmin: 'Admin',
@@ -79,6 +104,31 @@ const T = {
       `🛍 Откройте магазин и выберите товар — доставим по Корее и Узбекистану.\n` +
       `💳 Оплата: переводом на карту.`,
     openShop: '🛍 Открыть магазин',
+    installApp: '📲 Установить приложение',
+    installIntro: (url) =>
+      `📲 <b>Установите IPPO на телефон как приложение</b>\n\n` +
+      `⚠️ <b>САМОЕ ВАЖНОЕ:</b> не нажимайте ссылку ниже просто так — <b>нажмите и удерживайте</b> её пальцем (1–2 секунды):\n\n` +
+      `👉 ${url}\n\n` +
+      `Появится меню → выберите <b>«Открыть в Safari»</b> (iPhone) или <b>«Открыть в Chrome»</b> (Samsung). ` +
+      `Сайт откроется в браузере — приложение устанавливается только из браузера, не из Telegram.\n` +
+      `<i>Если такого пункта нет: нажмите «Копировать» и вставьте ссылку в адресную строку Safari/Chrome.</i>\n\n` +
+      `🎬 Выберите телефон — пришлю пошаговое видео 👇`,
+    installIos: '🍏 iPhone',
+    installAndroid: '🤖 Samsung / Android',
+    installVideo: (os, url) =>
+      (os === 'ios'
+        ? `🍏 <b>Установка на iPhone</b>\n\n` +
+          `1️⃣ <b>НАЖМИТЕ И УДЕРЖИВАЙТЕ</b> ссылку → «Открыть в Safari»\n👉 ${url}\n` +
+          `2️⃣ Внизу кнопка <b>«Поделиться»</b> (квадрат со стрелкой)\n` +
+          `3️⃣ «Добавить на экран «Домой»»\n` +
+          `4️⃣ Вверху нажмите «Добавить»\n`
+        : `🤖 <b>Установка на Samsung / Android</b>\n\n` +
+          `1️⃣ <b>НАЖМИТЕ И УДЕРЖИВАЙТЕ</b> ссылку → «Открыть в Chrome»\n👉 ${url}\n` +
+          `2️⃣ Справа вверху <b>⋮</b> (три точки) — меню\n` +
+          `3️⃣ «Добавить на главный экран»\n` +
+          `4️⃣ Нажмите «Установить»\n`) +
+      `✅ Готово! IPPO на вашем экране — открывается в одно касание.\n\n` +
+      `⚠️ Помните: ссылку не нажимайте просто так — <b>нажмите и удерживайте</b>!`,
     adminPanel: '🛠 Админ-панель',
     menuShop: 'Магазин',
     menuAdmin: 'Админ',

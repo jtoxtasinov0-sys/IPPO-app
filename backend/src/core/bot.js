@@ -97,6 +97,17 @@ async function sendPhoto(chatId, src, caption, extra = {}) {
 
 const lastFileId = (msg) => msg?.photo?.[msg.photo.length - 1]?.file_id;
 
+// Video: Buffer (birinchi marta) yoki file_id (keyingi safar)
+async function sendVideo(chatId, src, caption, extra = {}) {
+  const fields = { chat_id: chatId, caption, parse_mode: 'HTML', supports_streaming: true, ...extra };
+  if (Buffer.isBuffer(src)) {
+    const file = { buffer: src, filename: 'video.mp4', mime: 'video/mp4' };
+    return safe(chatId, () => callForm('sendVideo', { ...fields, width: 720, height: 1280 }, { video: file }));
+  }
+  if (typeof src === 'string' && src) return safe(chatId, () => call('sendVideo', { ...fields, video: src }));
+  return null;
+}
+
 /**
  * Rasm(lar) + matn bitta xabarda. Matn 1024 dan uzun bo'lsa — rasmlar, keyin matn.
  * cache — rasm bir marta yuklanadi, keyingi chatlarga file_id bilan boradi.
@@ -183,6 +194,7 @@ async function setCommands() {
   await call('setMyCommands', {
     commands: [
       { command: 'start', description: 'Do‘konni ochish' },
+      { command: 'ilova', description: 'Ilovani telefonga o‘rnatish' },
       { command: 'help', description: 'Yordam' },
       { command: 'id', description: 'Chat ID' },
     ],
@@ -191,6 +203,7 @@ async function setCommands() {
     language_code: 'ru',
     commands: [
       { command: 'start', description: 'Открыть магазин' },
+      { command: 'ilova', description: 'Установить приложение на телефон' },
       { command: 'help', description: 'Помощь' },
       { command: 'id', description: 'Chat ID' },
     ],
@@ -257,6 +270,7 @@ module.exports = {
   callForm,
   safeSend,
   sendPhoto,
+  sendVideo,
   sendPhotosWithText,
   notifyAdmins,
   downloadFile,

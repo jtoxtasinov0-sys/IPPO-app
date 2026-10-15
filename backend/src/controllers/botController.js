@@ -11,12 +11,22 @@ const { t, esc } = require('../utils/i18n');
 const WELCOME_IMAGE = path.join(__dirname, '../../assets/welcome.jpg');
 let welcomeFileId = null;
 
+// "Ilovani o'rnatish" yo'riqnoma videolari — bir marta yuklanadi, keyin file_id bilan
+const INSTALL_VIDEOS = {
+  ios: path.join(__dirname, '../../assets/install-iphone.mp4'),
+  android: path.join(__dirname, '../../assets/install-samsung.mp4'),
+};
+const installVideoIds = {};
+
 // /admin parol urinishlari: 1 soatda 5 ta xato
 const attempts = new Map();
 
 function shopKeyboard(L, isAdmin) {
   const rows = [];
-  if (bot.isHttps(cfg.miniappUrl)) rows.push([{ text: L.openShop, web_app: { url: cfg.miniappUrl } }]);
+  if (bot.isHttps(cfg.miniappUrl)) {
+    rows.push([{ text: L.openShop, web_app: { url: cfg.miniappUrl } }]);
+    rows.push([{ text: L.installApp, callback_data: 'install' }]);
+  }
   if (isAdmin && bot.isHttps(cfg.adminUrl)) rows.push([{ text: L.adminPanel, web_app: { url: cfg.adminUrl } }]);
   rows.push([
     { text: '🇺🇿 O‘zbekcha', callback_data: 'lang:uz' },
@@ -51,6 +61,34 @@ async function sendWelcome(user) {
     });
   }
   if (isAdmin) bot.setAdminMenu(user.telegramId);
+}
+
+// 1-qadam: havola (oddiy matn — bosib turilsa "Открыть в Safari/Chrome" chiqadi) + telefon tanlash
+async function sendInstallIntro(user) {
+  const L = t(user.lang);
+  if (!bot.isHttps(cfg.miniappUrl)) return bot.safeSend(user.telegramId, L.notHttps);
+  await bot.safeSend(user.telegramId, L.installIntro(cfg.miniappUrl), {
+    reply_markup: {
+      inline_keyboard: [[
+        { text: L.installIos, callback_data: 'install:ios' },
+        { text: L.installAndroid, callback_data: 'install:android' },
+      ]],
+    },
+  });
+}
+
+async function sendInstallVideo(user, os) {
+  const L = t(user.lang);
+  if (!bot.isHttps(cfg.miniappUrl)) return bot.safeSend(user.telegramId, L.notHttps);
+  const caption = L.installVideo(os, cfg.miniappUrl);
+  const fs = require('fs');
+  let msg = null;
+  if (installVideoIds[os]) msg = await bot.sendVideo(user.telegramId, installVideoIds[os], caption);
+  else if (fs.existsSync(INSTALL_VIDEOS[os])) {
+    msg = await bot.sendVideo(user.telegramId, fs.readFileSync(INSTALL_VIDEOS[os]), caption);
+    if (msg?.video?.file_id) installVideoIds[os] = msg.video.file_id;
+  }
+  if (!msg) await bot.safeSend(user.telegramId, caption);
 }
 
 async function onAdminCommand(msg, user) {
@@ -119,6 +157,7 @@ async function onMessage(msg) {
 
   if (cmd === '/start' || cmd === '/help') return sendWelcome(user);
   if (cmd === '/id') return bot.safeSend(chat.id, L.idMsg(chat.id));
+  if (cmd === '/ilova' || cmd === '/install') return sendInstallIntro(user);
   if (cmd === '/admin') return onAdminCommand(msg, user);
 
   if (msg.contact) {
@@ -147,6 +186,14 @@ async function onCallback(q) {
     await prisma.user.update({ where: { id: user.id }, data: { lang } });
     await answer(t(lang).langChosen);
     return sendWelcome({ ...user, lang });
+  }
+
+  if (data === 'install' || data.startsWith('install:')) {
+    const user = await User.upsertFromTelegram(q.from);
+    await answer();
+    const os = data.slice(8);
+    if (os === 'ios' || os === 'android') return sendInstallVideo(user, os);
+    return sendInstallIntro(user);
   }
 
   if (data.startsWith('pay:')) {
