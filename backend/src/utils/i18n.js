@@ -35,9 +35,7 @@ const T = {
       `Menyu chiqadi → <b>«Открыть в Safari»</b> (iPhone) yoki <b>«Открыть в Chrome»</b> (Samsung) ni tanlang. ` +
       `Sayt brauzerda ochiladi — ilova faqat brauzerdan o‘rnatiladi, Telegram ichidan emas.\n` +
       `<i>Bunday tugma chiqmasa: «Копировать» ni bosing va havolani Safari/Chrome manzil qatoriga joylang.</i>\n\n` +
-      `🎬 Telefoningizni tanlang — qadamma-qadam video yuboraman 👇`,
-    installIos: '🍏 iPhone',
-    installAndroid: '🤖 Samsung / Android',
+      `🎬 Pastda iPhone va Samsung uchun qadamma-qadam video 👇`,
     installVideo: (os, url) =>
       (os === 'ios'
         ? `🍏 <b>iPhone’da o‘rnatish</b>\n\n` +
@@ -112,9 +110,7 @@ const T = {
       `Появится меню → выберите <b>«Открыть в Safari»</b> (iPhone) или <b>«Открыть в Chrome»</b> (Samsung). ` +
       `Сайт откроется в браузере — приложение устанавливается только из браузера, не из Telegram.\n` +
       `<i>Если такого пункта нет: нажмите «Копировать» и вставьте ссылку в адресную строку Safari/Chrome.</i>\n\n` +
-      `🎬 Выберите телефон — пришлю пошаговое видео 👇`,
-    installIos: '🍏 iPhone',
-    installAndroid: '🤖 Samsung / Android',
+      `🎬 Ниже — пошаговое видео для iPhone и Samsung 👇`,
     installVideo: (os, url) =>
       (os === 'ios'
         ? `🍏 <b>Установка на iPhone</b>\n\n` +

@@ -63,18 +63,13 @@ async function sendWelcome(user) {
   if (isAdmin) bot.setAdminMenu(user.telegramId);
 }
 
-// 1-qadam: havola (oddiy matn — bosib turilsa "Открыть в Safari/Chrome" chiqadi) + telefon tanlash
+// Havola (oddiy matn — bosib turilsa "Открыть в Safari/Chrome" chiqadi), keyin ikkala video ham
 async function sendInstallIntro(user) {
   const L = t(user.lang);
   if (!bot.isHttps(cfg.miniappUrl)) return bot.safeSend(user.telegramId, L.notHttps);
-  await bot.safeSend(user.telegramId, L.installIntro(cfg.miniappUrl), {
-    reply_markup: {
-      inline_keyboard: [[
-        { text: L.installIos, callback_data: 'install:ios' },
-        { text: L.installAndroid, callback_data: 'install:android' },
-      ]],
-    },
-  });
+  await bot.safeSend(user.telegramId, L.installIntro(cfg.miniappUrl));
+  await sendInstallVideo(user, 'ios');
+  await sendInstallVideo(user, 'android');
 }
 
 async function sendInstallVideo(user, os) {
