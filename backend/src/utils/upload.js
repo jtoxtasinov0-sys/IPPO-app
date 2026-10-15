@@ -33,12 +33,13 @@ function toRel(p) {
 }
 
 // Rasmni siqib diskka va bazaga yozadi, "/uploads/<folder>/<nom>" qaytaradi
-async function saveImage(buffer, folder, { maxSize = 1600, quality = 84 } = {}) {
+// mozjpeg: biroz kichikroq fayl, lekin sekin — mijoz kutib turgan joyda (chek) o'chiriladi
+async function saveImage(buffer, folder, { maxSize = 1600, quality = 84, mozjpeg = true } = {}) {
   if (!FOLDERS.includes(folder)) throw new Error('bad folder');
   const out = await sharp(buffer, { failOn: 'none' })
     .rotate()
     .resize({ width: maxSize, height: maxSize, fit: 'inside', withoutEnlargement: true })
-    .jpeg({ quality, mozjpeg: true })
+    .jpeg({ quality, mozjpeg })
     .toBuffer();
   const name = `custom-${Date.now()}-${crypto.randomBytes(4).toString('hex')}.jpg`;
   const rel = `${folder}/${name}`;

@@ -311,7 +311,7 @@ async function uploadReceipt(req, res) {
   if (!order) return res.status(404).json({ error: 'Buyurtma topilmadi' });
   if (order.paymentStatus === 'paid') return res.status(400).json({ error: 'Allaqachon to‘langan' });
   if (!req.file) return res.status(400).json({ error: 'Rasm yuklang' });
-  const url = await saveImage(req.file.buffer, 'receipts', { maxSize: 2000 });
+  const url = await saveImage(req.file.buffer, 'receipts', { maxSize: 1600, mozjpeg: false });
   const updated = await payment.attachReceipt(order.id, url);
   res.json(Order.toPublic(updated));
 }

@@ -1,5 +1,6 @@
 // Server bilan aloqa: qayta urinish, "server uyg'onmoqda", Telegram yoki veb-token
 import { isTelegram, initData } from './telegram';
+import { compressImage } from './compress';
 
 // Vercel build'da localhost qolib ketmasligi uchun zaxira manzil
 const PROD_API_URL = 'https://ippo-app-ucce.onrender.com';
@@ -126,9 +127,10 @@ export const api = {
   calculate: (items, market, mode) => request('/api/cart/calculate', { method: 'POST', body: { items, market, mode } }),
   createOrder: (body) => request('/api/orders', { method: 'POST', body, auth: true }),
   myOrders: () => request('/api/orders/my', { auth: true }),
-  uploadReceipt: (id, file) => {
+  uploadReceipt: async (id, file) => {
+    const small = await compressImage(file);
     const form = new FormData();
-    form.append('receipt', file);
+    form.append('receipt', small, small === file ? file.name || 'receipt.jpg' : 'receipt.jpg');
     return request(`/api/orders/${id}/receipt`, { method: 'POST', form, auth: true });
   },
 };

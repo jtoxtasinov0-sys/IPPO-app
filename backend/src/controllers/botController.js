@@ -11,12 +11,39 @@ const { t, esc } = require('../utils/i18n');
 const WELCOME_IMAGE = path.join(__dirname, '../../assets/welcome.jpg');
 let welcomeFileId = null;
 
-// "Ilovani o'rnatish" yo'riqnoma videolari — bir marta yuklanadi, keyin file_id bilan
+// "Ilovani o'rnatish" yo'riqnoma videolari — Telegram'ga bir marta yuklanadi, file_id bazada saqlanadi
+// (Render qayta yonganda ham qayta yuklanmaydi). Kalitda fayl xeshi — video yangilansa, yangisi yuklanadi.
 const INSTALL_VIDEOS = {
   ios: path.join(__dirname, '../../assets/install-iphone.mp4'),
   android: path.join(__dirname, '../../assets/install-samsung.mp4'),
 };
 const installVideoIds = {};
+const installVideoFiles = {};
+
+function installVideoFile(os) {
+  if (!installVideoFiles[os]) {
+    const fs = require('fs');
+    if (!fs.existsSync(INSTALL_VIDEOS[os])) return null;
+    const buffer = fs.readFileSync(INSTALL_VIDEOS[os]);
+    const hash = require('crypto').createHash('sha1').update(buffer).digest('hex').slice(0, 12);
+    installVideoFiles[os] = { buffer, key: `tgVideo:${path.basename(INSTALL_VIDEOS[os])}:${hash}` };
+  }
+  return installVideoFiles[os];
+}
+
+async function installVideoId(os, file) {
+  if (installVideoIds[os]) return installVideoIds[os];
+  const row = await prisma.setting.findUnique({ where: { key: file.key } }).catch(() => null);
+  if (row?.value) installVideoIds[os] = row.value;
+  return installVideoIds[os] || null;
+}
+
+async function saveInstallVideoId(os, file, fileId) {
+  installVideoIds[os] = fileId;
+  await prisma.setting
+    .upsert({ where: { key: file.key }, update: { value: fileId }, create: { key: file.key, value: fileId } })
+    .catch((e) => console.warn('[bot] video file_id saqlanmadi:', e.message));
+}
 
 // /admin parol urinishlari: 1 soatda 5 ta xato
 const attempts = new Map();
@@ -76,12 +103,18 @@ async function sendInstallVideo(user, os) {
   const L = t(user.lang);
   if (!bot.isHttps(cfg.miniappUrl)) return bot.safeSend(user.telegramId, L.notHttps);
   const caption = L.installVideo(os, cfg.miniappUrl);
-  const fs = require('fs');
+  const file = installVideoFile(os);
+  if (!file) return bot.safeSend(user.telegramId, caption);
+  // "video yuborilmoqda…" belgisi — mijoz kutayotganini ko'radi
+  bot.call('sendChatAction', { chat_id: user.telegramId, action: 'upload_video' }).catch(() => {});
+
   let msg = null;
-  if (installVideoIds[os]) msg = await bot.sendVideo(user.telegramId, installVideoIds[os], caption);
-  else if (fs.existsSync(INSTALL_VIDEOS[os])) {
-    msg = await bot.sendVideo(user.telegramId, fs.readFileSync(INSTALL_VIDEOS[os]), caption);
-    if (msg?.video?.file_id) installVideoIds[os] = msg.video.file_id;
+  const id = await installVideoId(os, file);
+  if (id) msg = await bot.sendVideo(user.telegramId, id, caption);
+  if (!msg) {
+    // file_id yo'q yoki eskirgan — faylni yuklaymiz va yangi file_id ni saqlaymiz
+    msg = await bot.sendVideo(user.telegramId, file.buffer, caption);
+    if (msg?.video?.file_id) await saveInstallVideoId(os, file, msg.video.file_id);
   }
   if (!msg) await bot.safeSend(user.telegramId, caption);
 }
@@ -130,7 +163,7 @@ async function onReceiptPhoto(msg, user) {
   }
   const fileId = msg.photo ? msg.photo[msg.photo.length - 1].file_id : msg.document.file_id;
   const buffer = await bot.downloadFile(fileId);
-  const url = await saveImage(buffer, 'receipts', { maxSize: 2000 });
+  const url = await saveImage(buffer, 'receipts', { maxSize: 1600, mozjpeg: false });
   await payment.attachReceipt(order.id, url);
   await bot.safeSend(msg.chat.id, L.receiptOk(order.id));
 }
