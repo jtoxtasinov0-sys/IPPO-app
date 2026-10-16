@@ -68,6 +68,7 @@ git push -u origin main
 | `MINIAPP_URL` | hozircha bo'sh — 4-qadamda yoziladi |
 | `ADMIN_URL` | hozircha bo'sh — 4-qadamda yoziladi |
 | `COMPANY_PHONE` | ixtiyoriy, masalan `+82 10 1234 5678` |
+| `COMPANY_PHONE_UZ` | ixtiyoriy, O'zbekiston raqami (bo'sh bo'lsa `+998902810585`) |
 | `NODE_VERSION` | `20` |
 
 `PORT` va `PUBLIC_URL` **qo'ymang** — Render o'zi beradi.

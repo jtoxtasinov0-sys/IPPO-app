@@ -30,6 +30,13 @@ export default function Profile({ config, user, market, mode, onMarket, refreshK
   const phone = user?.phone;
   const photo = tgUser?.photo_url;
   const c = config?.company || {};
+  // Koreya va O'zbekiston raqamlari — tanlangan davlatniki birinchi
+  const phones = [
+    { market: 'kr', phone: c.phone },
+    { market: 'uz', phone: c.phoneUz },
+  ]
+    .filter((p) => p.phone)
+    .sort((a, b) => (b.market === market) - (a.market === market));
 
   function reorder(o) {
     for (const it of o.items || []) cart.add(it.productId, it.variant, it.qty);
@@ -194,18 +201,20 @@ export default function Profile({ config, user, market, mode, onMarket, refreshK
               <Icon name="chevron" size={16} />
             </button>
           )}
-          {c.phone && (
-            <a href={`tel:${c.phone.replace(/\s/g, '')}`}>
+          {phones.map((p) => (
+            <a key={p.market} href={`tel:${p.phone.replace(/\s/g, '')}`}>
               <span className="ci">
                 <Icon name="phone" size={20} />
               </span>
               <span className="ct">
                 <b>{t.call}</b>
-                <small>{c.phone}</small>
+                <small>
+                  <Flag market={p.market} size={14} /> {t.marketName[p.market]} · {p.phone}
+                </small>
               </span>
               <Icon name="chevron" size={16} />
             </a>
-          )}
+          ))}
           <button onClick={onMarket}>
             <span className="ci">
               <Icon name="globe" size={20} />

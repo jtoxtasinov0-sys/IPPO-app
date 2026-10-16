@@ -27,7 +27,8 @@ module.exports = {
     name: 'IPPO by Fotima Zuhra',
     short: 'IPPO',
     slogan: { uz: 'Koreyadan original go‘zallik', ru: 'Оригинальная красота из Кореи' },
-    phone: env.COMPANY_PHONE || '',
+    phone: env.COMPANY_PHONE || '', // Koreya raqami
+    phoneUz: env.COMPANY_PHONE_UZ || '+998902810585', // O'zbekiston raqami
     address: env.COMPANY_ADDRESS || '',
     telegram: 'fotimazuhrashop', // admin bilan yozishish
     channel: 'korea_fotima_zuhra_shop',
