@@ -120,6 +120,16 @@ Bepul rejada server 15 daqiqa so'rovsiz qolsa uxlaydi (birinchi ochilish ~30–5
 Himoya allaqachon bor: webhook (Telegram xabari uyg'otadi) + server o'zini ping qiladi + GitHub Actions.
 GitHub → repo → **Settings → Secrets and variables → Actions → Variables** → `BACKEND_URL` = Render manzili.
 
+## 7. Link preview (rasm + tavsif)
+
+Linkni **`@` siz** yozing: `https://t.me/IPPO_by_fotimazuhrabot` (`t.me/@...` — noto'g'ri, preview chiqmaydi).
+
+- **Bot linki**: tavsifni server o'zi qo'yadi (`backend/src/config/default.js` → `botProfile`).
+  Rasm — BotFather → `/setuserpic` → `@IPPO_by_fotimazuhrabot` → `miniapp/public/icon-512.png` ni yuboring.
+- **Sayt linki** (`https://ippo-miniapp.vercel.app`): `miniapp/index.html` dagi `og:` teglar + `miniapp/public/og-image.jpg`.
+  Sayt manzili boshqa bo'lsa, `og:url` va `og:image` dagi manzilni almashtiring.
+- Telegram eski previewni eslab qoladi: [@WebpageBot](https://t.me/WebpageBot) ga linkni yuboring — yangilanadi.
+
 ---
 
 ## Xatolar jadvali

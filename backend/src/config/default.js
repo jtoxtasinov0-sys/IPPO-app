@@ -34,6 +34,27 @@ module.exports = {
     instagram: 'ippo_by_fotimazuhra',
   },
 
+  // Bot profili. short — t.me/IPPO_by_fotimazuhrabot link preview'da rasm yonida chiqadi (120 belgigacha),
+  // description — bo'sh chatda "Start" ustida (512 belgigacha). Rasm: BotFather → /setuserpic
+  botProfile: {
+    uz: {
+      short: 'Koreyadan original kosmetika, jenshen, kollagen va vitaminlar — O‘zbekiston va Koreya bo‘ylab yetkazib berish',
+      description:
+        'IPPO by Fotima Zuhra — Koreyadan original kosmetika 🇰🇷\n\n' +
+        '🌿 Jenshen  🍎 Kollagen  💊 Vitaminlar\n✨ Yuz va soch parvarishi  🌸 Atirlar\n\n' +
+        '🚚 O‘zbekiston va Koreya bo‘ylab yetkazib berish\n💳 Kartaga to‘lov  🎁 Cashback\n\n' +
+        'Do‘konni ochish uchun «Start» ni bosing 👇',
+    },
+    ru: {
+      short: 'Оригинальная корейская косметика, женьшень, коллаген и витамины — доставка по Узбекистану и Корее',
+      description:
+        'IPPO by Fotima Zuhra — оригинальная косметика из Кореи 🇰🇷\n\n' +
+        '🌿 Женьшень  🍎 Коллаген  💊 Витамины\n✨ Уход за лицом и волосами  🌸 Парфюм\n\n' +
+        '🚚 Доставка по Узбекистану и Корее\n💳 Оплата на карту  🎁 Кэшбэк\n\n' +
+        'Нажмите «Старт», чтобы открыть магазин 👇',
+    },
+  },
+
 
   // Kategoriyalar (kalit bazada saqlanadi — o'zgartirmang, nomini o'zgartirsa bo'ladi)
   // only: shu bo'lim faqat Koreya + dona uchun. Boshqa davlat/optomda bu bo'limdagi mahsulot

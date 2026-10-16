@@ -210,6 +210,27 @@ async function setCommands() {
   }).catch(() => {});
 }
 
+// Bot tavsifi (link preview va bo'sh chat). Telegram bu metodlarni tez-tez chaqirishni
+// cheklaydi, Render esa tez-tez qayta ishga tushadi — shuning uchun faqat farq bo'lsa yozamiz.
+// uz — standart (til kodisiz), qolganlari o'z tili uchun.
+async function syncProfile() {
+  for (const [lang, p] of Object.entries(cfg.botProfile)) {
+    const language_code = lang === 'uz' ? '' : lang;
+    try {
+      const cur = await call('getMyShortDescription', { language_code });
+      if (cur.short_description !== p.short) {
+        await call('setMyShortDescription', { short_description: p.short, language_code });
+      }
+      const curDesc = await call('getMyDescription', { language_code });
+      if (curDesc.description !== p.description) {
+        await call('setMyDescription', { description: p.description, language_code });
+      }
+    } catch (e) {
+      console.warn(`[bot] tavsif (${lang}):`, e.message);
+    }
+  }
+}
+
 // ——— Ishga tushirish: https bo'lsa webhook, aks holda polling ———
 let polling = false;
 
@@ -227,6 +248,7 @@ async function start(handleUpdate) {
   }
   setCommands();
   setDefaultMenu();
+  syncProfile();
 
   if (isHttps(cfg.publicUrl)) {
     const url = cfg.publicUrl + webhookPath;
