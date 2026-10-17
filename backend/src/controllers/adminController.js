@@ -207,13 +207,17 @@ async function updateProduct(req, res) {
   }
 }
 
-// Tez o'zgartirish: faol/nofaol, ombor, narx, aksiya (2+1, 3+1)
+// Tez o'zgartirish: faol/nofaol, ombor, narx, aksiya (1+1, 2+1 yoki qo'lda N+M)
 async function patchProduct(req, res) {
   const b = req.body || {};
   const data = {};
   if (typeof b.isActive === 'boolean') data.isActive = b.isActive;
   if (typeof b.isFeatured === 'boolean') data.isFeatured = b.isFeatured;
-  if ('promo' in b) data.promo = cfg.promo(b.promo) ? b.promo : null;
+  if ('promo' in b) {
+    const promo = Product.parsePromo(b.promo);
+    if (b.promo && !promo) return res.status(400).json({ error: 'Aksiya noto‘g‘ri — masalan: 1+1, 2+1, 4+2 (1 dan 20 gacha)' });
+    data.promo = promo?.key || null;
+  }
   if ('stock' in b) data.stock = b.stock === null || b.stock === '' ? null : Math.max(0, parseInt(b.stock, 10) || 0);
   for (const k of Object.values(Product.PRICE_FIELD).flatMap(Object.values)) {
     if (k in b) data[k] = Math.max(0, parseInt(b[k], 10) || 0);

@@ -14,8 +14,21 @@ export function priceFor(p, market, mode) {
   return (mode === 'wholesale' ? p.priceOptom : p.price) || 0;
 }
 
-// Aksiya 2+1 / 3+1 (server ham shunday hisoblaydi): shuncha donadan nechtasi bepul
-export const promoFree = (promo, qty) => (promo ? Math.floor(qty / (promo.buy + promo.free)) * promo.free : 0);
+// Aksiya "N+M" (1+1, 2+1, 4+2 ...): {key, buy, free} yoki null — server ham xuddi shunday tekshiradi
+export function parsePromo(s) {
+  const m = String(s || '').match(/^\s*(\d{1,2})\s*\+\s*(\d{1,2})\s*$/);
+  if (!m) return null;
+  const buy = +m[1];
+  const free = +m[2];
+  return buy >= 1 && free >= 1 && buy <= 20 && free <= 20 ? { key: `${buy}+${free}`, buy, free } : null;
+}
+
+// Shuncha donadan nechtasi bepul: har to'liq N+M to'plamda M ta, chala to'plamda N dan oshgani
+export function promoFree(promo, qty) {
+  if (!promo) return 0;
+  const group = promo.buy + promo.free;
+  return Math.floor(qty / group) * promo.free + Math.max(0, (qty % group) - promo.buy);
+}
 
 // Birinchi xarid chegirmasi (server ham qayta tekshiradi): faqat dona, yangi mijoz, summa chegaradan oshsa
 export function firstOrderInfo(user, marketCfg, mode) {

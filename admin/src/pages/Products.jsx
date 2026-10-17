@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import ProductForm from '../components/ProductForm';
+import PromoPicker from '../components/PromoPicker';
 import { api, imageUrl, frameStyle, money, PRICE_FIELDS } from '../lib/api';
 
 export default function Products({ meta }) {
@@ -37,9 +38,8 @@ export default function Products({ meta }) {
     await api.patchProduct(p.id, { [field]: !p[field] }).catch((e) => (alert(e.message), load()));
   }
 
-  // Aksiya 2+1 / 3+1 — bir bosishda yoqiladi, shu tugmani qayta bossa o'chadi
-  async function setPromo(p, key) {
-    const promo = p.promo === key ? null : key;
+  // Aksiya 1+1 / 2+1 / qo'lda N+M — bir bosishda yoqiladi, shu tugmani qayta bossa o'chadi
+  async function setPromo(p, promo) {
     setList((l) => l.map((x) => (x.id === p.id ? { ...x, promo } : x)));
     await api.patchProduct(p.id, { promo }).catch((e) => (alert(e.message), load()));
   }
@@ -119,13 +119,9 @@ export default function Products({ meta }) {
                 </label>
               </div>
               {meta?.promos?.length > 0 && (
-                <div className="pc-promo" title="Bitta mahsulotdan N ta olsa, yana 1 tasi bepul (faqat dona narxida)">
+                <div className="pc-promo" title="Bitta mahsulotdan N ta olsa, yana M tasi bepul (faqat dona narxida)">
                   <span className="muted small">Aksiya:</span>
-                  {meta.promos.map((x) => (
-                    <button key={x.key} className={p.promo === x.key ? 'on' : ''} onClick={() => setPromo(p, x.key)}>
-                      {x.key}
-                    </button>
-                  ))}
+                  <PromoPicker value={p.promo} presets={meta.promos} onChange={(promo) => setPromo(p, promo)} />
                 </div>
               )}
               <div className="pc-actions">

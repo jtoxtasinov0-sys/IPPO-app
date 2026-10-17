@@ -49,7 +49,6 @@ async function getConfig(_req, res) {
     tags: cfg.tags,
     markets,
     modes: cfg.modes,
-    promos: cfg.promos,
     wholesaleTiers,
     shopNote: s.shopNote || '',
   });
@@ -174,22 +173,21 @@ async function priceCart(rawItems, market = 'kr', mode = 'retail') {
     });
   }
 
-  // Aksiya 2+1 / 3+1 (faqat dona): bitta mahsulotdan (barcha turlari birga) har N+1 donaning 1 tasi bepul
+  // Aksiya N+M (faqat dona): bitta mahsulotdan (barcha turlari birga) N ta olsa, keyingi M tasi bepul
   if (mode === 'retail') {
     const qtyPerProduct = new Map();
     for (const l of lines) qtyPerProduct.set(l.productId, (qtyPerProduct.get(l.productId) || 0) + l.qty);
     const freeLeft = new Map();
     for (const p of products) {
-      const promo = cfg.promo(p.promo);
-      const q = qtyPerProduct.get(p.id) || 0;
-      if (promo) freeLeft.set(p.id, Math.floor(q / (promo.buy + promo.free)) * promo.free);
+      const promo = Product.parsePromo(p.promo);
+      if (promo) freeLeft.set(p.id, { key: promo.key, n: Product.promoFree(promo, qtyPerProduct.get(p.id) || 0) });
     }
     for (const l of lines) {
       const left = freeLeft.get(l.productId);
-      if (left === undefined) continue;
-      l.promo = byId.get(l.productId).promo;
-      l.freeQty = Math.min(left, l.qty);
-      freeLeft.set(l.productId, left - l.freeQty);
+      if (!left) continue;
+      l.promo = left.key;
+      l.freeQty = Math.min(left.n, l.qty);
+      left.n -= l.freeQty;
       l.lineTotal = l.unitPrice * (l.qty - l.freeQty);
     }
   }

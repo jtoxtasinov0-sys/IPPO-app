@@ -1,4 +1,3 @@
-const cfg = require('../config/default');
 const prisma = require('../database/connection');
 
 // Mahsulot turiga (variant) mos rasm; topilmasa — birinchi rasm
@@ -20,6 +19,23 @@ const PRICE_FIELD = {
 function priceFor(p, market, mode) {
   const field = (PRICE_FIELD[market] || PRICE_FIELD.kr)[mode] || 'price';
   return p[field] || 0;
+}
+
+// Aksiya "N+M" (1+1, 2+1, 4+2 ...): {key, buy, free} yoki null
+function parsePromo(s) {
+  const m = String(s ?? '').match(/^\s*(\d{1,2})\s*\+\s*(\d{1,2})\s*$/);
+  if (!m) return null;
+  const buy = +m[1];
+  const free = +m[2];
+  if (buy < 1 || free < 1 || buy > 20 || free > 20) return null;
+  return { key: `${buy}+${free}`, buy, free };
+}
+
+// Shuncha donadan nechtasi bepul: har to'liq N+M to'plamda M ta, chala to'plamda N dan oshgani
+function promoFree(promo, qty) {
+  if (!promo) return 0;
+  const group = promo.buy + promo.free;
+  return Math.floor(qty / group) * promo.free + Math.max(0, (qty % group) - promo.buy);
 }
 
 // Mijozga ko'rinadigan maydonlar
@@ -99,7 +115,7 @@ function sanitizeInput(b = {}) {
     priceUz: int(b.priceUz) ?? 0,
     priceUzOptom: int(b.priceUzOptom) ?? 0,
     oldPrice: int(b.oldPrice),
-    promo: cfg.promo(b.promo) ? b.promo : null,
+    promo: parsePromo(b.promo)?.key || null,
     stock: b.stock === '' || b.stock == null ? null : int(b.stock),
     isActive: b.isActive !== false,
     isFeatured: !!b.isFeatured,
@@ -107,4 +123,4 @@ function sanitizeInput(b = {}) {
   };
 }
 
-module.exports = { PRICE_FIELD, priceFor, imageForVariant, toPublic, listActive, sanitizeInput };
+module.exports = { PRICE_FIELD, priceFor, parsePromo, promoFree, imageForVariant, toPublic, listActive, sanitizeInput };

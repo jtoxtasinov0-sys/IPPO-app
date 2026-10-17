@@ -16,7 +16,7 @@ import { api, onWaking } from './lib/api';
 import { I18nContext, getDict } from './lib/i18n';
 import { tgUser } from './lib/telegram';
 import { reloadBrokenImages } from './lib/image';
-import { priceFor, setMoneyMarket } from './lib/format';
+import { priceFor, parsePromo, setMoneyMarket } from './lib/format';
 
 const ls = {
   get(k) {
@@ -186,8 +186,8 @@ export default function App() {
           ...p,
           price,
           oldPrice: market === 'kr' && mode === 'retail' ? p.oldPrice : null,
-          // Aksiya 2+1 / 3+1 faqat dona narxida: {key, buy, free} yoki null
-          promo: mode === 'retail' && price > 0 ? config?.promos?.find((x) => x.key === p.promo) || null : null,
+          // Aksiya N+M (1+1, 2+1 ...) faqat dona narxida: {key, buy, free} yoki null
+          promo: mode === 'retail' && price > 0 ? parsePromo(p.promo) : null,
         };
       })
       .filter((p) => {

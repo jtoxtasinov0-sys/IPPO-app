@@ -77,7 +77,7 @@ function ProductBody({ p, config, market, mode, onClose, onGoCart }) {
   const tierPct = tiers.filter((x) => inCart + qty >= x.min).reduce((m, x) => Math.max(m, x.pct), 0);
   const unitNow = tierPct ? Math.round(p.price * (1 - tierPct / 100)) : p.price;
 
-  // Aksiya 2+1 / 3+1: savatdagi bilan birga — shu qo'shilayotganlardan nechtasi bepul
+  // Aksiya N+M: savatdagi bilan birga — shu qo'shilayotganlardan nechtasi bepul
   const promo = p.promo;
   const group = promo ? promo.buy + promo.free : 0;
   const freeNow = promoFree(promo, inCart + qty) - promoFree(promo, inCart);

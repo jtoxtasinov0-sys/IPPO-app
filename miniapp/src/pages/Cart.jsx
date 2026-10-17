@@ -69,7 +69,7 @@ export default function Cart({ products, config, user, market, mode, onCatalog, 
     return next ? t.tierMore(next.min - q, next.pct) : null;
   }
 
-  // Aksiya 2+1 / 3+1: yana nechta qo'shsa — bepul (omborda yetarli bo'lsa)
+  // Aksiya N+M: yana nechta qo'shsa — bepul (omborda yetarli bo'lsa)
   function giftHint(productId) {
     const p = byId.get(productId);
     if (!p?.promo) return null;

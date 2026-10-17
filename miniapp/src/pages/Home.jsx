@@ -15,9 +15,9 @@ export default function Home({ config, market, mode, onMarketChange, products, s
   const cb = marketCfg?.cashback;
   const tiers = [...(config?.wholesaleTiers || [])].sort((a, b) => a.min - b.min);
 
-  // Aksiyalar: birinchi xarid (yangi mijozga), 2+1 / 3+1, cashback, optom chegirmalari — hammaga ko'rinadi
+  // Aksiyalar: birinchi xarid (yangi mijozga), 1+1 / 2+1 ..., cashback, optom chegirmalari — hammaga ko'rinadi
   const promos = [];
-  const giftKeys = [...new Set(products.filter((p) => p.promo).map((p) => p.promo.key))];
+  const giftKeys = [...new Set(products.filter((p) => p.promo).map((p) => p.promo.key))].slice(0, 3);
   if (first)
     promos.push({
       key: 'first',

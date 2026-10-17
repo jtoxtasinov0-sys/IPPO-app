@@ -2,6 +2,7 @@
 import { useState } from 'react';
 import Modal from './Modal';
 import ImagePicker from './ImagePicker';
+import PromoPicker from './PromoPicker';
 import { api, PRICE_FIELDS } from '../lib/api';
 
 const EMPTY = {
@@ -160,14 +161,8 @@ export default function ProductForm({ product, meta, nextArticle, onClose, onSav
           </label>
         ))}
         <div className="span2">
-          <div className="form-label">Aksiya — bitta mahsulotdan N ta olsa, yana 1 tasi bepul (faqat dona narxida)</div>
-          <div className="seg">
-            {[{ key: '', label: 'Yo‘q' }, ...(meta?.promos || []).map((x) => ({ key: x.key, label: `🎁 ${x.key}` }))].map((x) => (
-              <button type="button" key={x.key} className={f.promo === x.key ? 'on' : ''} onClick={() => setF({ ...f, promo: x.key })}>
-                {x.label}
-              </button>
-            ))}
-          </div>
+          <div className="form-label">Aksiya — N ta olsa, yana M tasi bepul (faqat dona narxida). Boshqasini qo‘lda yozing: 4+1, 2+2 …</div>
+          <PromoPicker withNone value={f.promo || null} presets={meta?.promos} onChange={(promo) => setF((prev) => ({ ...prev, promo: promo || '' }))} />
         </div>
         <label>
           Eski narx 🇰🇷 dona (chizilgan)
