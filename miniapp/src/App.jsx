@@ -180,11 +180,16 @@ export default function App() {
     if (!products) return null;
     const only = new Map((config?.categories || []).filter((c) => c.only).map((c) => [c.key, c.only]));
     return products
-      .map((p) => ({
-        ...p,
-        price: priceFor(p, market, mode),
-        oldPrice: market === 'kr' && mode === 'retail' ? p.oldPrice : null,
-      }))
+      .map((p) => {
+        const price = priceFor(p, market, mode);
+        return {
+          ...p,
+          price,
+          oldPrice: market === 'kr' && mode === 'retail' ? p.oldPrice : null,
+          // Aksiya 2+1 / 3+1 faqat dona narxida: {key, buy, free} yoki null
+          promo: mode === 'retail' && price > 0 ? config?.promos?.find((x) => x.key === p.promo) || null : null,
+        };
+      })
       .filter((p) => {
         const o = only.get(p.category);
         return !o || p.price > 0 || (o.market === market && o.mode === mode);

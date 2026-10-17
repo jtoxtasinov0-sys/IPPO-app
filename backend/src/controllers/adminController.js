@@ -207,12 +207,13 @@ async function updateProduct(req, res) {
   }
 }
 
-// Tez o'zgartirish: faol/nofaol, ombor, narx
+// Tez o'zgartirish: faol/nofaol, ombor, narx, aksiya (2+1, 3+1)
 async function patchProduct(req, res) {
   const b = req.body || {};
   const data = {};
   if (typeof b.isActive === 'boolean') data.isActive = b.isActive;
   if (typeof b.isFeatured === 'boolean') data.isFeatured = b.isFeatured;
+  if ('promo' in b) data.promo = cfg.promo(b.promo) ? b.promo : null;
   if ('stock' in b) data.stock = b.stock === null || b.stock === '' ? null : Math.max(0, parseInt(b.stock, 10) || 0);
   for (const k of Object.values(Product.PRICE_FIELD).flatMap(Object.values)) {
     if (k in b) data[k] = Math.max(0, parseInt(b[k], 10) || 0);
@@ -314,6 +315,7 @@ function meta(_req, res) {
     tags: cfg.tags,
     markets: cfg.markets,
     modes: cfg.modes,
+    promos: cfg.promos,
     orderStatuses: cfg.orderStatuses,
     paymentStatuses: cfg.paymentStatuses,
     company: cfg.company,

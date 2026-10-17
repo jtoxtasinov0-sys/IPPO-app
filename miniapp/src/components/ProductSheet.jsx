@@ -10,7 +10,7 @@ import { flyToCart } from '../lib/flyToCart';
 import { useI18n } from '../lib/i18n';
 import { cart, useCart } from '../lib/store';
 import { haptic, openLink } from '../lib/telegram';
-import { money } from '../lib/format';
+import { money, promoFree } from '../lib/format';
 
 export default function ProductSheet({ product, config, market, mode, onClose, onGoCart }) {
   const open = !!product;
@@ -77,6 +77,13 @@ function ProductBody({ p, config, market, mode, onClose, onGoCart }) {
   const tierPct = tiers.filter((x) => inCart + qty >= x.min).reduce((m, x) => Math.max(m, x.pct), 0);
   const unitNow = tierPct ? Math.round(p.price * (1 - tierPct / 100)) : p.price;
 
+  // Aksiya 2+1 / 3+1: savatdagi bilan birga — shu qo'shilayotganlardan nechtasi bepul
+  const promo = p.promo;
+  const group = promo ? promo.buy + promo.free : 0;
+  const freeNow = promoFree(promo, inCart + qty) - promoFree(promo, inCart);
+  const rem = promo ? (inCart + qty) % group : 0;
+  const fillQty = rem ? qty + group - rem : qty; // to'liq to'plamgacha
+
   const adminLink = `https://t.me/${config?.company?.telegram || 'fotimazuhrashop'}`;
   const description = pick(p, 'description');
 
@@ -120,6 +127,36 @@ function ProductBody({ p, config, market, mode, onClose, onGoCart }) {
                     <b>{money(Math.round(p.price * (1 - x.pct / 100)))}</b>
                   </div>
                 ))}
+            </div>
+          )}
+
+          {promo && !out && (
+            <div className="ps-gift">
+              <div className="ps-gift-head">
+                <span className="ps-gift-ic">
+                  <Icon name="gift" size={20} />
+                </span>
+                <span>
+                  <b>{t.giftTitle(promo.key)}</b>
+                  <small>{t.giftRule(promo.buy, promo.free)}</small>
+                </span>
+              </div>
+              {(freeNow > 0 || (rem > 0 && fillQty <= maxQty)) && (
+                <div className="ps-gift-row">
+                  {freeNow > 0 && <span className="ps-gift-free">🎁 {t.giftFree(freeNow)}</span>}
+                  {rem > 0 && fillQty <= maxQty && (
+                    <button
+                      className="ps-gift-btn"
+                      onClick={() => {
+                        haptic('select');
+                        setQty(fillQty);
+                      }}
+                    >
+                      {rem >= promo.buy ? t.giftAddFree(group - rem) : t.giftTake(fillQty)}
+                    </button>
+                  )}
+                </div>
+              )}
             </div>
           )}
 
@@ -185,7 +222,7 @@ function ProductBody({ p, config, market, mode, onClose, onGoCart }) {
             )}
             <button className="btn primary grow" onClick={add} disabled={out || maxQty <= 0}>
               {!out && <Icon name="bag" size={18} stroke={2.2} />}
-              {out ? t.outOfStock : `${t.addToCart} · ${money(unitNow * qty)}`}
+              {out ? t.outOfStock : `${t.addToCart} · ${money(unitNow * (qty - freeNow))}`}
             </button>
           </>
         ) : (

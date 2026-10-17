@@ -14,6 +14,9 @@ export function priceFor(p, market, mode) {
   return (mode === 'wholesale' ? p.priceOptom : p.price) || 0;
 }
 
+// Aksiya 2+1 / 3+1 (server ham shunday hisoblaydi): shuncha donadan nechtasi bepul
+export const promoFree = (promo, qty) => (promo ? Math.floor(qty / (promo.buy + promo.free)) * promo.free : 0);
+
 // Birinchi xarid chegirmasi (server ham qayta tekshiradi): faqat dona, yangi mijoz, summa chegaradan oshsa
 export function firstOrderInfo(user, marketCfg, mode) {
   const f = marketCfg?.firstOrder;

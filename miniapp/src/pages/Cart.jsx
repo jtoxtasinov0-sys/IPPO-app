@@ -69,6 +69,17 @@ export default function Cart({ products, config, user, market, mode, onCatalog, 
     return next ? t.tierMore(next.min - q, next.pct) : null;
   }
 
+  // Aksiya 2+1 / 3+1: yana nechta qo'shsa — bepul (omborda yetarli bo'lsa)
+  function giftHint(productId) {
+    const p = byId.get(productId);
+    if (!p?.promo) return null;
+    const group = p.promo.buy + p.promo.free;
+    const q = qtyOf(productId);
+    const rem = q % group;
+    if (rem < p.promo.buy || (p.stock != null && p.stock < q + group - rem)) return null;
+    return t.giftAddFree(group - rem);
+  }
+
   function problemText(pr) {
     if (!pr) return null;
     if (pr.reason === 'noPrice') return t.noPrice;
@@ -110,6 +121,12 @@ export default function Cart({ products, config, user, market, mode, onCatalog, 
                 {pr && <div className="cart-problem">{problemText(pr)}</div>}
                 {!pr && line?.discountPct > 0 && <div className="cart-discount">−{line.discountPct}% · {money(line.unitPrice)}</div>}
                 {!pr && tiers.length > 0 && nextTier(it.productId) && <div className="cart-tier-hint">{nextTier(it.productId)}</div>}
+                {!pr && line?.freeQty > 0 && (
+                  <div className="cart-discount">
+                    🎁 {line.promo} · {t.giftFree(line.freeQty)}
+                  </div>
+                )}
+                {!pr && giftHint(it.productId) && <div className="cart-tier-hint">{giftHint(it.productId)}</div>}
                 <div className="cart-row">
                   <div className="cart-price">{line ? money(line.lineTotal) : p?.price ? money(p.price * it.qty) : '—'}</div>
                   <div className="stepper sm">
@@ -151,12 +168,18 @@ export default function Cart({ products, config, user, market, mode, onCatalog, 
         <div className="summary card">
           <div className="sum-row">
             <span>{t.subtotal}</span>
-            <span>{money(calc.subtotal + (calc.savings || 0))}</span>
+            <span>{money(calc.subtotal + (calc.savings || 0) + (calc.promoSavings || 0))}</span>
           </div>
           {calc.savings > 0 && (
             <div className="sum-row">
               <span>{t.savings}</span>
               <span className="green">−{money(calc.savings)}</span>
+            </div>
+          )}
+          {calc.promoSavings > 0 && (
+            <div className="sum-row">
+              <span>{t.giftSavings}</span>
+              <span className="green">−{money(calc.promoSavings)}</span>
             </div>
           )}
           {firstDisc > 0 && (

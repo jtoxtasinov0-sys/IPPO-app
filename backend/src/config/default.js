@@ -80,6 +80,12 @@ module.exports = {
     { key: 'set', uz: 'To‘plam', ru: 'Набор' },
   ],
 
+  // Aksiya "N+1": bitta mahsulotdan N ta olsa, yana 1 tasi bepul (faqat dona). Admin har mahsulotga yoqadi
+  promos: [
+    { key: '2+1', buy: 2, free: 1 },
+    { key: '3+1', buy: 3, free: 1 },
+  ],
+
   // Davlatlar: har birining valyutasi, hududlari va telefon kodi.
   // Mijoz birinchi kirganda davlatni, keyin optom yoki donani tanlaydi.
   markets: [
@@ -161,4 +167,5 @@ const M = module.exports;
 M.market = (key) => M.markets.find((m) => m.key === key) || M.markets.find((m) => m.key === 'kr');
 M.isMarket = (key) => M.markets.some((m) => m.key === key);
 M.isMode = (key) => M.modes.some((m) => m.key === key);
+M.promo = (key) => M.promos.find((x) => x.key === key) || null;
 M.allRegions = () => M.markets.flatMap((m) => m.regions);

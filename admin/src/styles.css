@@ -762,6 +762,11 @@ select.ps-rejected {
   background: var(--red);
   color: #fff;
 }
+.pc-flag.promo {
+  top: auto;
+  bottom: 8px;
+  background: var(--green);
+}
 .pc-body {
   padding: 10px 12px 12px;
   display: flex;
@@ -783,6 +788,27 @@ select.ps-rejected {
   gap: 12px;
   margin-top: 6px;
   flex-wrap: wrap;
+}
+.pc-promo {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 6px;
+  flex-wrap: wrap;
+}
+.pc-promo button {
+  height: 26px;
+  padding: 0 10px;
+  border-radius: 99px;
+  background: var(--card);
+  border: 1px solid var(--line);
+  font-weight: 700;
+  font-size: 12.5px;
+}
+.pc-promo button.on {
+  background: var(--green);
+  border-color: transparent;
+  color: #fff;
 }
 .pc-actions {
   display: flex;

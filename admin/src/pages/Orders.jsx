@@ -155,6 +155,7 @@ export default function Orders({ meta }) {
                         {it.article}
                         {it.variant ? ` · ${it.variant}` : ''} · {it.qty} × {money(it.unitPrice, o.market)}
                         {it.discountPct ? ` (−${it.discountPct}%)` : ''}
+                        {it.freeQty ? ` · 🎁 ${it.promo}: ${it.freeQty} tasi bepul` : ''}
                       </div>
                     </div>
                   </div>

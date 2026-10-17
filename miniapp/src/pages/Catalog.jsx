@@ -29,7 +29,7 @@ export default function Catalog({ config, products, filter, setFilter, onOpen })
     const q = norm(filter.q);
     return products.filter((p) => {
       if (filter.category && p.category !== filter.category) return false;
-      if (filter.tag && p.tag !== filter.tag) return false;
+      if (filter.tag && p.tag !== filter.tag && !(filter.tag === 'sale' && p.promo)) return false;
       if (!q) return true;
       return [p.name, p.nameRu, p.brand, p.article, p.description, p.descriptionRu].some((x) => norm(x).includes(q));
     });

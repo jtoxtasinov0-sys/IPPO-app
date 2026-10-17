@@ -1,3 +1,4 @@
+const cfg = require('../config/default');
 const prisma = require('../database/connection');
 
 // Mahsulot turiga (variant) mos rasm; topilmasa — birinchi rasm
@@ -43,6 +44,7 @@ function toPublic(p) {
     priceUz: p.priceUz,
     priceUzOptom: p.priceUzOptom,
     oldPrice: p.oldPrice,
+    promo: p.promo,
     stock: p.stock,
     isFeatured: p.isFeatured,
   };
@@ -97,6 +99,7 @@ function sanitizeInput(b = {}) {
     priceUz: int(b.priceUz) ?? 0,
     priceUzOptom: int(b.priceUzOptom) ?? 0,
     oldPrice: int(b.oldPrice),
+    promo: cfg.promo(b.promo) ? b.promo : null,
     stock: b.stock === '' || b.stock == null ? null : int(b.stock),
     isActive: b.isActive !== false,
     isFeatured: !!b.isFeatured,

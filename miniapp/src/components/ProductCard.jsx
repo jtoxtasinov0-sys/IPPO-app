@@ -27,6 +27,7 @@ export default function ProductCard({ p, tags, onOpen }) {
       <div className="pcard-media">
         <Img src={p.images?.[0]} width={480} frame={p.imageFrames?.[0]} alt={pick(p, 'name')} />
         {tag && <span className={`badge tag-${tag.key}`}>{label(tag)}</span>}
+        {p.promo && !out && <span className="badge badge-gift">{p.promo.key}</span>}
         {out && <span className="out-label">{t.outOfStock}</span>}
         {!out && p.stock != null && p.stock > 0 && p.stock <= 5 && <span className="left-label">{t.left(p.stock)}</span>}
         {p.price > 0 && !out && (

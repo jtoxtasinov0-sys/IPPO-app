@@ -37,6 +37,13 @@ export default function Products({ meta }) {
     await api.patchProduct(p.id, { [field]: !p[field] }).catch((e) => (alert(e.message), load()));
   }
 
+  // Aksiya 2+1 / 3+1 — bir bosishda yoqiladi, shu tugmani qayta bossa o'chadi
+  async function setPromo(p, key) {
+    const promo = p.promo === key ? null : key;
+    setList((l) => l.map((x) => (x.id === p.id ? { ...x, promo } : x)));
+    await api.patchProduct(p.id, { promo }).catch((e) => (alert(e.message), load()));
+  }
+
   async function remove(p) {
     if (!confirm(`«${p.name}» o‘chirilsinmi? Buni qaytarib bo‘lmaydi.\n(Yashirish uchun «Faol» belgisini oling)`)) return;
     await api.deleteProduct(p.id).catch((e) => alert(e.message));
@@ -83,6 +90,7 @@ export default function Products({ meta }) {
               <img src={imageUrl(p.images[0], 320)} alt="" style={frameStyle(p.imageFrames?.[0])} />
               {!p.isActive && <span className="pc-flag">Yashirin</span>}
               {p.stock === 0 && <span className="pc-flag red">Tugagan</span>}
+              {p.promo && <span className="pc-flag promo">🎁 {p.promo}</span>}
             </div>
             <div className="pc-body">
               <div className="muted small">
@@ -110,6 +118,16 @@ export default function Products({ meta }) {
                   <span /> Mashhur
                 </label>
               </div>
+              {meta?.promos?.length > 0 && (
+                <div className="pc-promo" title="Bitta mahsulotdan N ta olsa, yana 1 tasi bepul (faqat dona narxida)">
+                  <span className="muted small">Aksiya:</span>
+                  {meta.promos.map((x) => (
+                    <button key={x.key} className={p.promo === x.key ? 'on' : ''} onClick={() => setPromo(p, x.key)}>
+                      {x.key}
+                    </button>
+                  ))}
+                </div>
+              )}
               <div className="pc-actions">
                 <button className="btn ghost sm" onClick={() => setEditing(p)}>
                   ✎ Tahrirlash

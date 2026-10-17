@@ -254,12 +254,18 @@ export default function Checkout({ open, calc, market, mode, marketCfg, user, on
           <div className="summary card">
             <div className="sum-row">
               <span>{t.subtotal}</span>
-              <span>{money(calc.subtotal + (calc.savings || 0))}</span>
+              <span>{money(calc.subtotal + (calc.savings || 0) + (calc.promoSavings || 0))}</span>
             </div>
             {calc.savings > 0 && (
               <div className="sum-row">
                 <span>{t.savings}</span>
                 <span className="green">−{money(calc.savings)}</span>
+              </div>
+            )}
+            {calc.promoSavings > 0 && (
+              <div className="sum-row">
+                <span>{t.giftSavings}</span>
+                <span className="green">−{money(calc.promoSavings)}</span>
               </div>
             )}
             {firstDisc > 0 && (

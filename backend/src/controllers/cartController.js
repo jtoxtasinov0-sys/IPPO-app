@@ -49,6 +49,7 @@ async function getConfig(_req, res) {
     tags: cfg.tags,
     markets,
     modes: cfg.modes,
+    promos: cfg.promos,
     wholesaleTiers,
     shopNote: s.shopNote || '',
   });
@@ -173,6 +174,26 @@ async function priceCart(rawItems, market = 'kr', mode = 'retail') {
     });
   }
 
+  // Aksiya 2+1 / 3+1 (faqat dona): bitta mahsulotdan (barcha turlari birga) har N+1 donaning 1 tasi bepul
+  if (mode === 'retail') {
+    const qtyPerProduct = new Map();
+    for (const l of lines) qtyPerProduct.set(l.productId, (qtyPerProduct.get(l.productId) || 0) + l.qty);
+    const freeLeft = new Map();
+    for (const p of products) {
+      const promo = cfg.promo(p.promo);
+      const q = qtyPerProduct.get(p.id) || 0;
+      if (promo) freeLeft.set(p.id, Math.floor(q / (promo.buy + promo.free)) * promo.free);
+    }
+    for (const l of lines) {
+      const left = freeLeft.get(l.productId);
+      if (left === undefined) continue;
+      l.promo = byId.get(l.productId).promo;
+      l.freeQty = Math.min(left, l.qty);
+      freeLeft.set(l.productId, left - l.freeQty);
+      l.lineTotal = l.unitPrice * (l.qty - l.freeQty);
+    }
+  }
+
   // Optom: bitta mahsulotdan (barcha turlari birga) 3 / 5 / 10+ dona — narx avtomatik tushadi
   if (mode === 'wholesale') {
     const tiers = await Setting.wholesaleTiers();
@@ -190,10 +211,11 @@ async function priceCart(rawItems, market = 'kr', mode = 'retail') {
 
   const subtotal = lines.reduce((s, l) => s + l.lineTotal, 0);
   const savings = lines.reduce((s, l) => s + (l.basePrice ? (l.basePrice - l.unitPrice) * l.qty : 0), 0);
+  const promoSavings = lines.reduce((s, l) => s + (l.freeQty || 0) * l.unitPrice, 0);
   const totalQty = lines.reduce((s, l) => s + l.qty, 0);
   const d = await Setting.delivery(market);
   const deliveryFee = subtotal > 0 && d.fee > 0 && !(d.freeFrom > 0 && subtotal >= d.freeFrom) ? d.fee : 0;
-  return { lines, problems, subtotal, savings, totalQty, deliveryFee, total: subtotal + deliveryFee, freeFrom: d.freeFrom };
+  return { lines, problems, subtotal, savings, promoSavings, totalQty, deliveryFee, total: subtotal + deliveryFee, freeFrom: d.freeFrom };
 }
 
 async function calculate(req, res) {

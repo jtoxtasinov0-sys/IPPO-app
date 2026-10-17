@@ -15,8 +15,9 @@ export default function Home({ config, market, mode, onMarketChange, products, s
   const cb = marketCfg?.cashback;
   const tiers = [...(config?.wholesaleTiers || [])].sort((a, b) => a.min - b.min);
 
-  // Aksiyalar: birinchi xarid (yangi mijozga), cashback, optom chegirmalari — hammaga ko'rinadi
+  // Aksiyalar: birinchi xarid (yangi mijozga), 2+1 / 3+1, cashback, optom chegirmalari — hammaga ko'rinadi
   const promos = [];
+  const giftKeys = [...new Set(products.filter((p) => p.promo).map((p) => p.promo.key))];
   if (first)
     promos.push({
       key: 'first',
@@ -25,6 +26,15 @@ export default function Home({ config, market, mode, onMarketChange, products, s
       title: t.promoFirst(first.percent),
       sub: first.minOrder ? t.promoFrom(money(first.minOrder)) : t.promoFirstSub,
       onClick: () => onCatalog({}),
+    });
+  if (giftKeys.length)
+    promos.push({
+      key: 'gift',
+      green: true,
+      icon: 'gift',
+      title: t.giftTitle(giftKeys.join(' · ')),
+      sub: t.giftBannerSub,
+      onClick: () => onCatalog({ tag: 'sale' }),
     });
   if (cb?.percent > 0)
     promos.push({
@@ -45,7 +55,7 @@ export default function Home({ config, market, mode, onMarketChange, products, s
   const name = tgUser?.first_name || user?.firstName || '';
   const featured = products.filter((p) => p.isFeatured).slice(0, 6);
   const popular = featured.length ? featured : products.slice(0, 6);
-  const onSale = products.filter((p) => p.tag === 'sale' || (p.oldPrice && p.oldPrice > p.price)).slice(0, 8);
+  const onSale = products.filter((p) => p.tag === 'sale' || p.promo || (p.oldPrice && p.oldPrice > p.price)).slice(0, 8);
 
   const catCover = (key) => products.find((p) => p.category === key)?.images?.[0];
   const catCount = (key) => products.filter((p) => p.category === key).length;
