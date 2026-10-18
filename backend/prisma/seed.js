@@ -524,10 +524,22 @@ async function addNewProducts() {
   console.log(`✅ Seed: ${added} ta yangi mahsulot qo‘shildi`);
 }
 
+// Bir marta: avval bitta aksiya 🇰🇷 va 🇺🇿 donaga birga ishlardi — endi har davlat/tur alohida,
+// shuning uchun eski aksiya 🇺🇿 donaga ham ko'chiriladi (🇰🇷 dona o'zida qoladi)
+async function splitPromos() {
+  const done = await prisma.setting.findUnique({ where: { key: 'promoSplit' } });
+  if (done) return;
+  const list = await prisma.product.findMany({ where: { promo: { not: null }, promoUz: null }, select: { id: true, promo: true } });
+  for (const p of list) await prisma.product.update({ where: { id: p.id }, data: { promoUz: p.promo } });
+  await setVersion('promoSplit', '1');
+  console.log(`✅ Seed: ${list.length} ta mahsulot aksiyasi 🇺🇿 donaga ham ko‘chirildi`);
+}
+
 async function main() {
   await fillTestCards();
   await replaceCatalog();
   await addNewProducts();
+  await splitPromos();
   const n = await warmThumbs();
   console.log(`✅ Seed: ${n} ta rasmning kichik nusxalari tayyor`);
 }

@@ -10,7 +10,8 @@ export function normPromo(s) {
   return buy >= 1 && free >= 1 && buy <= 20 && free <= 20 ? `${buy}+${free}` : null;
 }
 
-export default function PromoPicker({ value, presets = [], onChange, withNone }) {
+// compact — kartochkadagi kichik ko'rinish (4 ta bo'lim ustma-ust turadi)
+export default function PromoPicker({ value, presets = [], onChange, withNone, compact }) {
   const custom = value && !presets.some((x) => x.key === value) ? value : '';
   const [draft, setDraft] = useState(custom);
   const [bad, setBad] = useState(false);
@@ -29,7 +30,7 @@ export default function PromoPicker({ value, presets = [], onChange, withNone })
   }
 
   return (
-    <div className="promo-picker">
+    <div className={`promo-picker ${compact ? 'compact' : ''}`}>
       {withNone && (
         <button type="button" className={!value ? 'on' : ''} onClick={() => onChange(null)}>
           Yo‘q
@@ -44,7 +45,7 @@ export default function PromoPicker({ value, presets = [], onChange, withNone })
         className={`${custom ? 'on' : ''} ${bad ? 'bad' : ''}`}
         value={draft}
         inputMode="tel"
-        placeholder="✎ boshqa"
+        placeholder={compact ? '✎' : '✎ boshqa'}
         title="Boshqa aksiya: masalan 4+1 yoki 2+2 (Enter — saqlash, bo‘sh qoldirsa — o‘chadi)"
         onChange={(e) => {
           setDraft(e.target.value);

@@ -19,6 +19,9 @@ const EMPTY = {
   priceUzOptom: '',
   oldPrice: '',
   promo: '',
+  promoOptom: '',
+  promoUz: '',
+  promoUzOptom: '',
   stock: '',
   variants: [],
   description: '',
@@ -42,7 +45,7 @@ export default function ProductForm({ product, meta, nextArticle, onClose, onSav
           priceUz: product.priceUz || '',
           priceUzOptom: product.priceUzOptom || '',
           oldPrice: product.oldPrice ?? '',
-          promo: product.promo || '',
+          ...Object.fromEntries(PRICE_FIELDS.map((x) => [x.promo, product[x.promo] || ''])),
           stock: product.stock ?? '',
           tag: product.tag || '',
           imageFrames: product.imageFrames || [],
@@ -74,7 +77,7 @@ export default function ProductForm({ product, meta, nextArticle, onClose, onSav
     setBusy(true);
     setError('');
     try {
-      const body = { ...f, tag: f.tag || null, promo: f.promo || null };
+      const body = { ...f, tag: f.tag || null, ...Object.fromEntries(PRICE_FIELDS.map((x) => [x.promo, f[x.promo] || null])) };
       const saved = product ? await api.updateProduct(product.id, body) : await api.createProduct(body);
       onSaved(saved);
     } catch (e) {
@@ -160,10 +163,18 @@ export default function ProductForm({ product, meta, nextArticle, onClose, onSav
             <input className="input" inputMode="numeric" value={f[x.key]} onChange={set(x.key)} placeholder="0" />
           </label>
         ))}
-        <div className="span2">
-          <div className="form-label">Aksiya — N ta olsa, yana M tasi bepul (faqat dona narxida). Boshqasini qo‘lda yozing: 4+1, 2+2 …</div>
-          <PromoPicker withNone value={f.promo || null} presets={meta?.promos} onChange={(promo) => setF((prev) => ({ ...prev, promo: promo || '' }))} />
-        </div>
+        <div className="span2 muted small">Aksiya — N ta olsa, yana M tasi bepul. Har davlatning optom va donasiga alohida yoqiladi; boshqasini qo‘lda yozing: 4+1, 2+2 …</div>
+        {PRICE_FIELDS.map((x) => (
+          <div key={x.promo}>
+            <div className="form-label">Aksiya {x.label.replace(/ (₩|so‘m)$/, '')}</div>
+            <PromoPicker
+              withNone
+              value={f[x.promo] || null}
+              presets={meta?.promos}
+              onChange={(promo) => setF((prev) => ({ ...prev, [x.promo]: promo || '' }))}
+            />
+          </div>
+        ))}
         <label>
           Eski narx 🇰🇷 dona (chizilgan)
           <input className="input" inputMode="numeric" value={f.oldPrice} onChange={set('oldPrice')} placeholder="ixtiyoriy" />

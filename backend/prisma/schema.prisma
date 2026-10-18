@@ -50,7 +50,10 @@ model Product {
   priceUz       Int      @default(0) // O'zbekiston, dona (so'm)
   priceUzOptom  Int      @default(0) // O'zbekiston, optom (so'm)
   oldPrice      Int? // chizilgan eski narx
-  promo         String? // aksiya "N+M" (1+1, 2+1 ...) — N ta olsa, M tasi bepul (faqat dona)
+  promo         String? // aksiya "N+M" (1+1, 2+1 ...) — N ta olsa, M tasi bepul. Koreya, dona
+  promoOptom    String? // aksiya, Koreya, optom
+  promoUz       String? // aksiya, O'zbekiston, dona
+  promoUzOptom  String? // aksiya, O'zbekiston, optom
   stock         Int? // null = cheklanmagan
   isActive      Boolean  @default(true)
   isFeatured    Boolean  @default(false)

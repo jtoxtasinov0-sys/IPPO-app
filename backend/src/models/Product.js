@@ -21,6 +21,13 @@ function priceFor(p, market, mode) {
   return p[field] || 0;
 }
 
+// Aksiya ham har davlat va savdo turi uchun alohida yoqiladi
+const PROMO_FIELD = {
+  kr: { retail: 'promo', wholesale: 'promoOptom' },
+  uz: { retail: 'promoUz', wholesale: 'promoUzOptom' },
+};
+const PROMO_FIELDS = Object.values(PROMO_FIELD).flatMap(Object.values);
+
 // Aksiya "N+M" (1+1, 2+1, 4+2 ...): {key, buy, free} yoki null
 function parsePromo(s) {
   const m = String(s ?? '').match(/^\s*(\d{1,2})\s*\+\s*(\d{1,2})\s*$/);
@@ -36,6 +43,11 @@ function promoFree(promo, qty) {
   if (!promo) return 0;
   const group = promo.buy + promo.free;
   return Math.floor(qty / group) * promo.free + Math.max(0, (qty % group) - promo.buy);
+}
+
+// Davlat va savdo turiga mos aksiya: {key, buy, free} yoki null
+function promoFor(p, market, mode) {
+  return parsePromo(p[(PROMO_FIELD[market] || PROMO_FIELD.kr)[mode] || 'promo']);
 }
 
 // Mijozga ko'rinadigan maydonlar
@@ -61,6 +73,9 @@ function toPublic(p) {
     priceUzOptom: p.priceUzOptom,
     oldPrice: p.oldPrice,
     promo: p.promo,
+    promoOptom: p.promoOptom,
+    promoUz: p.promoUz,
+    promoUzOptom: p.promoUzOptom,
     stock: p.stock,
     isFeatured: p.isFeatured,
   };
@@ -115,7 +130,7 @@ function sanitizeInput(b = {}) {
     priceUz: int(b.priceUz) ?? 0,
     priceUzOptom: int(b.priceUzOptom) ?? 0,
     oldPrice: int(b.oldPrice),
-    promo: parsePromo(b.promo)?.key || null,
+    ...Object.fromEntries(PROMO_FIELDS.map((k) => [k, parsePromo(b[k])?.key || null])),
     stock: b.stock === '' || b.stock == null ? null : int(b.stock),
     isActive: b.isActive !== false,
     isFeatured: !!b.isFeatured,
@@ -123,4 +138,4 @@ function sanitizeInput(b = {}) {
   };
 }
 
-module.exports = { PRICE_FIELD, priceFor, parsePromo, promoFree, imageForVariant, toPublic, listActive, sanitizeInput };
+module.exports = { PRICE_FIELD, PROMO_FIELDS, priceFor, parsePromo, promoFree, promoFor, imageForVariant, toPublic, listActive, sanitizeInput };

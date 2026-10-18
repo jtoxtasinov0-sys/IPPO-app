@@ -121,11 +121,12 @@ export const money = (n, market = 'kr') => {
 };
 
 // Mahsulotning 4 ta narxi: davlat × savdo turi
+// promo — shu davlat va savdo turining aksiyasi (har biriga alohida yoqiladi)
 export const PRICE_FIELDS = [
-  { key: 'priceOptom', market: 'kr', label: '🇰🇷 Optom ₩' },
-  { key: 'price', market: 'kr', label: '🇰🇷 Dona ₩' },
-  { key: 'priceUzOptom', market: 'uz', label: '🇺🇿 Optom so‘m' },
-  { key: 'priceUz', market: 'uz', label: '🇺🇿 Dona so‘m' },
+  { key: 'priceOptom', promo: 'promoOptom', market: 'kr', label: '🇰🇷 Optom ₩' },
+  { key: 'price', promo: 'promo', market: 'kr', label: '🇰🇷 Dona ₩' },
+  { key: 'priceUzOptom', promo: 'promoUzOptom', market: 'uz', label: '🇺🇿 Optom so‘m' },
+  { key: 'priceUz', promo: 'promoUz', market: 'uz', label: '🇺🇿 Dona so‘m' },
 ];
 
 export const FLAG = { kr: '🇰🇷', uz: '🇺🇿' };

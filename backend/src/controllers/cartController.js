@@ -173,30 +173,12 @@ async function priceCart(rawItems, market = 'kr', mode = 'retail') {
     });
   }
 
-  // Aksiya N+M (faqat dona): bitta mahsulotdan (barcha turlari birga) N ta olsa, keyingi M tasi bepul
-  if (mode === 'retail') {
-    const qtyPerProduct = new Map();
-    for (const l of lines) qtyPerProduct.set(l.productId, (qtyPerProduct.get(l.productId) || 0) + l.qty);
-    const freeLeft = new Map();
-    for (const p of products) {
-      const promo = Product.parsePromo(p.promo);
-      if (promo) freeLeft.set(p.id, { key: promo.key, n: Product.promoFree(promo, qtyPerProduct.get(p.id) || 0) });
-    }
-    for (const l of lines) {
-      const left = freeLeft.get(l.productId);
-      if (!left) continue;
-      l.promo = left.key;
-      l.freeQty = Math.min(left.n, l.qty);
-      left.n -= l.freeQty;
-      l.lineTotal = l.unitPrice * (l.qty - l.freeQty);
-    }
-  }
+  const qtyPerProduct = new Map();
+  for (const l of lines) qtyPerProduct.set(l.productId, (qtyPerProduct.get(l.productId) || 0) + l.qty);
 
   // Optom: bitta mahsulotdan (barcha turlari birga) 3 / 5 / 10+ dona — narx avtomatik tushadi
   if (mode === 'wholesale') {
     const tiers = await Setting.wholesaleTiers();
-    const qtyPerProduct = new Map();
-    for (const l of lines) qtyPerProduct.set(l.productId, (qtyPerProduct.get(l.productId) || 0) + l.qty);
     for (const l of lines) {
       const tier = tiers.find((x) => qtyPerProduct.get(l.productId) >= x.min);
       if (!tier) continue;
@@ -205,6 +187,22 @@ async function priceCart(rawItems, market = 'kr', mode = 'retail') {
       l.unitPrice = Math.round(l.basePrice * (1 - tier.pct / 100));
       l.lineTotal = l.unitPrice * l.qty;
     }
+  }
+
+  // Aksiya N+M (shu davlat va savdo turiga yoqilgani): bitta mahsulotdan (barcha turlari birga) N ta olsa, keyingi M tasi bepul.
+  // Optomda bepullari chegirmali narxda ayiriladi
+  const freeLeft = new Map();
+  for (const p of products) {
+    const promo = Product.promoFor(p, market, mode);
+    if (promo) freeLeft.set(p.id, { key: promo.key, n: Product.promoFree(promo, qtyPerProduct.get(p.id) || 0) });
+  }
+  for (const l of lines) {
+    const left = freeLeft.get(l.productId);
+    if (!left) continue;
+    l.promo = left.key;
+    l.freeQty = Math.min(left.n, l.qty);
+    left.n -= l.freeQty;
+    l.lineTotal = l.unitPrice * (l.qty - l.freeQty);
   }
 
   const subtotal = lines.reduce((s, l) => s + l.lineTotal, 0);

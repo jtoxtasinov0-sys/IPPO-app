@@ -38,10 +38,10 @@ export default function Products({ meta }) {
     await api.patchProduct(p.id, { [field]: !p[field] }).catch((e) => (alert(e.message), load()));
   }
 
-  // Aksiya 1+1 / 2+1 / qo'lda N+M — bir bosishda yoqiladi, shu tugmani qayta bossa o'chadi
-  async function setPromo(p, promo) {
-    setList((l) => l.map((x) => (x.id === p.id ? { ...x, promo } : x)));
-    await api.patchProduct(p.id, { promo }).catch((e) => (alert(e.message), load()));
+  // Aksiya 1+1 / 2+1 / qo'lda N+M — har davlat/tur uchun alohida: bir bosishda yoqiladi, shu tugmani qayta bossa o'chadi
+  async function setPromo(p, field, promo) {
+    setList((l) => l.map((x) => (x.id === p.id ? { ...x, [field]: promo } : x)));
+    await api.patchProduct(p.id, { [field]: promo }).catch((e) => (alert(e.message), load()));
   }
 
   async function remove(p) {
@@ -51,6 +51,7 @@ export default function Products({ meta }) {
   }
 
   const catName = (k) => meta?.categories?.find((c) => c.key === k)?.uz || k;
+  const promosOf = (p) => [...new Set(PRICE_FIELDS.map((x) => p[x.promo]).filter(Boolean))];
   const noPrice = (list || []).filter((p) => p.isActive && PRICE_FIELDS.some((x) => !p[x.key])).length;
 
   return (
@@ -90,7 +91,7 @@ export default function Products({ meta }) {
               <img src={imageUrl(p.images[0], 320)} alt="" style={frameStyle(p.imageFrames?.[0])} />
               {!p.isActive && <span className="pc-flag">Yashirin</span>}
               {p.stock === 0 && <span className="pc-flag red">Tugagan</span>}
-              {p.promo && <span className="pc-flag promo">🎁 {p.promo}</span>}
+              {promosOf(p).length > 0 && <span className="pc-flag promo">🎁 {promosOf(p).join(' · ')}</span>}
             </div>
             <div className="pc-body">
               <div className="muted small">
@@ -119,9 +120,14 @@ export default function Products({ meta }) {
                 </label>
               </div>
               {meta?.promos?.length > 0 && (
-                <div className="pc-promo" title="Bitta mahsulotdan N ta olsa, yana M tasi bepul (faqat dona narxida)">
+                <div className="pc-promos" title="Bitta mahsulotdan N ta olsa, yana M tasi bepul — har davlatning optom va donasiga alohida">
                   <span className="muted small">Aksiya:</span>
-                  <PromoPicker value={p.promo} presets={meta.promos} onChange={(promo) => setPromo(p, promo)} />
+                  {PRICE_FIELDS.map((x) => (
+                    <div className="pc-promo" key={x.promo}>
+                      <span className="muted small">{x.label.replace(/ (₩|so‘m)$/, '')}</span>
+                      <PromoPicker compact value={p[x.promo]} presets={meta.promos} onChange={(promo) => setPromo(p, x.promo, promo)} />
+                    </div>
+                  ))}
                 </div>
               )}
               <div className="pc-actions">

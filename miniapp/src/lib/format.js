@@ -30,6 +30,12 @@ export function promoFree(promo, qty) {
   return Math.floor(qty / group) * promo.free + Math.max(0, (qty % group) - promo.buy);
 }
 
+// Davlat va savdo turiga mos aksiya (har biriga alohida yoqiladi): {key, buy, free} yoki null
+export function promoFor(p, market, mode) {
+  if (market === 'uz') return parsePromo(mode === 'wholesale' ? p.promoUzOptom : p.promoUz);
+  return parsePromo(mode === 'wholesale' ? p.promoOptom : p.promo);
+}
+
 // Birinchi xarid chegirmasi (server ham qayta tekshiradi): faqat dona, yangi mijoz, summa chegaradan oshsa
 export function firstOrderInfo(user, marketCfg, mode) {
   const f = marketCfg?.firstOrder;

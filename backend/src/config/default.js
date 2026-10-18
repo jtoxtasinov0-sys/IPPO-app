@@ -80,7 +80,7 @@ module.exports = {
     { key: 'set', uz: 'To‘plam', ru: 'Набор' },
   ],
 
-  // Aksiya "N+M": bitta mahsulotdan N ta olsa, yana M tasi bepul (faqat dona).
+  // Aksiya "N+M": bitta mahsulotdan N ta olsa, yana M tasi bepul. Har davlatning optom va donasiga alohida yoqiladi.
   // Admin panelda tayyor tugmalar; boshqasini qo'lda yozsa bo'ladi (masalan 4+1)
   promos: [
     { key: '1+1', buy: 1, free: 1 },

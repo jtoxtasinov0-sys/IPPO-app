@@ -789,12 +789,25 @@ select.ps-rejected {
   margin-top: 6px;
   flex-wrap: wrap;
 }
+.pc-promos {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  margin-top: 6px;
+}
+/* Keng kartochkada nom va tugmalar bir qatorda, torida — tugmalar pastki qatorga tushadi */
 .pc-promo {
   display: flex;
-  align-items: center;
-  gap: 6px;
-  margin-top: 6px;
   flex-wrap: wrap;
+  align-items: center;
+  gap: 3px 8px;
+}
+.pc-promo > span {
+  min-width: 70px;
+}
+.pc-promo .promo-picker {
+  flex: 0 0 auto;
+  max-width: 100%;
 }
 .promo-picker {
   display: flex;
@@ -837,6 +850,23 @@ select.ps-rejected {
   border-color: var(--red);
   background: var(--red-soft);
   color: var(--red);
+}
+.promo-picker.compact {
+  gap: 3px;
+}
+.promo-picker.compact button,
+.promo-picker.compact input {
+  height: 26px;
+  padding: 0 5px;
+  font-size: 12px;
+}
+.promo-picker.compact input {
+  width: 30px;
+  transition: width 0.15s;
+}
+.promo-picker.compact input:focus,
+.promo-picker.compact input.on {
+  width: 40px;
 }
 .pc-actions {
   display: flex;
