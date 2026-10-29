@@ -176,6 +176,26 @@ async function priceCart(rawItems, market = 'kr', mode = 'retail') {
   const qtyPerProduct = new Map();
   for (const l of lines) qtyPerProduct.set(l.productId, (qtyPerProduct.get(l.productId) || 0) + l.qty);
 
+  // Admin har mahsulotga optom minimum belgilaydi (5, 6, 10 ...), bitta mahsulotning barcha turlari birga sanaladi.
+  // Optomda bundan kam olib bo'lmaydi; donada shuncha va ko'p olsa — optom narxda hisoblanadi
+  for (const l of lines) {
+    const p = byId.get(l.productId);
+    const min = Product.minFor(p, market);
+    const have = qtyPerProduct.get(l.productId);
+    if (!min) continue;
+    if (mode === 'wholesale') {
+      if (have < min) problems.push({ productId: p.id, variant: l.variant, reason: 'minQty', min, have, available: p.stock });
+      continue;
+    }
+    const optom = Product.priceFor(p, market, 'wholesale');
+    if (have < min || optom >= l.unitPrice) continue;
+    l.basePrice = l.unitPrice;
+    l.unitPrice = optom;
+    l.optomFrom = min;
+    l.oldPrice = null;
+    l.lineTotal = l.unitPrice * l.qty;
+  }
+
   // Optom: bitta mahsulotdan (barcha turlari birga) 3 / 5 / 10+ dona — narx avtomatik tushadi
   if (mode === 'wholesale') {
     const tiers = await Setting.wholesaleTiers();

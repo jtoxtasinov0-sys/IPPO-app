@@ -80,17 +80,37 @@ export default function Cart({ products, config, user, market, mode, onCatalog, 
     return t.giftAddFree(group - rem);
   }
 
+  // Dona: yana nechta qo'shsa — optom narx (omborda yetarli bo'lsa)
+  function bulkHint(productId) {
+    const p = byId.get(productId);
+    if (!p?.bulk) return null;
+    const q = qtyOf(productId);
+    if (q >= p.bulk.min || (p.stock != null && p.stock < p.bulk.min)) return null;
+    return t.bulkMore(p.bulk.min - q, money(p.bulk.price));
+  }
+
   function problemText(pr) {
     if (!pr) return null;
     if (pr.reason === 'noPrice') return t.noPrice;
     if (pr.reason === 'stock') return t.onlyLeft(pr.available);
     if (pr.reason === 'outOfStock') return t.outOfStock;
+    if (pr.reason === 'minQty') return pr.available != null && pr.available < pr.min ? t.minNoStock(pr.min) : t.minQtyNeed(pr.min, pr.min - pr.have);
     return t.unavailable;
   }
 
-  // Muammoli qatorlarni tuzatish: yetarli bo'lmasa — qoldiqqa tushiriladi, mavjud bo'lmasa — o'chiriladi
+  // Muammoli qatorlarni tuzatish: yetarli bo'lmasa — qoldiqqa tushiriladi, mavjud bo'lmasa — o'chiriladi.
+  // Optom minimumdan kam bo'lsa — birinchi turiga qo'shib to'ldiriladi (omborda yetmasa — o'chiriladi)
   function fixProblems() {
+    const minDone = new Set();
     for (const pr of calc?.problems || []) {
+      if (pr.reason === 'minQty') {
+        if (minDone.has(pr.productId)) continue;
+        minDone.add(pr.productId);
+        const lines = items.filter((i) => i.productId === pr.productId);
+        if (pr.available != null && pr.available < pr.min) lines.forEach((i) => cart.remove(i.productId, i.variant));
+        else if (lines[0]) cart.setQty(lines[0].productId, lines[0].variant, lines[0].qty + pr.min - pr.have);
+        continue;
+      }
       const item = items.find((i) => i.productId === pr.productId && (i.variant || null) === (pr.variant || null));
       const it = item || items.find((i) => i.productId === pr.productId);
       if (!it) continue;
@@ -110,6 +130,8 @@ export default function Cart({ products, config, user, market, mode, onCatalog, 
           const image = line?.image || p?.images?.[0];
           const title = line ? pick(line, 'name') : p ? pick(p, 'name') : `#${it.productId}`;
           const max = p?.stock != null ? p.stock : 99;
+          // Optomda roppa-rosa minimumda turgan bo'lsa — kamaytirish o'rniga butunlay olib tashlanadi
+          const dropAll = p?.minQty > 1 && it.qty === p.minQty && qtyOf(it.productId) === it.qty;
           return (
             <div className={`cart-item ${pr ? 'has-problem' : ''}`} key={keyOf(it.productId, it.variant)}>
               <button className="cart-thumb" onClick={() => p && onOpen(p)}>
@@ -120,6 +142,12 @@ export default function Cart({ products, config, user, market, mode, onCatalog, 
                 {it.variant && <div className="cart-variant">{it.variant}</div>}
                 {pr && <div className="cart-problem">{problemText(pr)}</div>}
                 {!pr && line?.discountPct > 0 && <div className="cart-discount">−{line.discountPct}% · {money(line.unitPrice)}</div>}
+                {!pr && line?.optomFrom > 0 && (
+                  <div className="cart-discount">
+                    {t.bulkApplied} · {money(line.unitPrice)}
+                  </div>
+                )}
+                {!pr && bulkHint(it.productId) && <div className="cart-tier-hint">{bulkHint(it.productId)}</div>}
                 {!pr && tiers.length > 0 && nextTier(it.productId) && <div className="cart-tier-hint">{nextTier(it.productId)}</div>}
                 {!pr && line?.freeQty > 0 && (
                   <div className="cart-discount">
@@ -133,11 +161,12 @@ export default function Cart({ products, config, user, market, mode, onCatalog, 
                     <button
                       onClick={() => {
                         haptic('light');
-                        cart.setQty(it.productId, it.variant, it.qty - 1);
+                        if (dropAll) cart.remove(it.productId, it.variant);
+                        else cart.setQty(it.productId, it.variant, it.qty - 1);
                       }}
                       aria-label="-"
                     >
-                      <Icon name={it.qty <= 1 ? 'trash' : 'minus'} size={16} stroke={2.1} />
+                      <Icon name={it.qty <= 1 || dropAll ? 'trash' : 'minus'} size={16} stroke={2.1} />
                     </button>
                     <span>{it.qty}</span>
                     <button
@@ -208,7 +237,11 @@ export default function Cart({ products, config, user, market, mode, onCatalog, 
       <div className="sticky-cta">
         {hasBlocking ? (
           <>
-            <div className="cta-note">{t.cartHasProblems}</div>
+            <div className="cta-note">
+              {calc.problems.every((pr) => pr.reason === 'minQty' && !(pr.available != null && pr.available < pr.min))
+                ? t.cartMinNote
+                : t.cartHasProblems}
+            </div>
             <button className="btn dark block lg" onClick={fixProblems}>
               <Icon name="check" size={18} /> {t.fixCart}
             </button>

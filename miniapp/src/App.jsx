@@ -16,7 +16,7 @@ import { api, onWaking } from './lib/api';
 import { I18nContext, getDict } from './lib/i18n';
 import { tgUser } from './lib/telegram';
 import { reloadBrokenImages } from './lib/image';
-import { priceFor, promoFor, setMoneyMarket } from './lib/format';
+import { priceFor, promoFor, minFor, tierPctFor, setMoneyMarket } from './lib/format';
 
 const ls = {
   get(k) {
@@ -179,15 +179,24 @@ export default function App() {
   const shown = useMemo(() => {
     if (!products) return null;
     const only = new Map((config?.categories || []).filter((c) => c.only).map((c) => [c.key, c.only]));
+    const tiers = config?.wholesaleTiers || [];
     return products
       .map((p) => {
         const price = priceFor(p, market, mode);
+        const min = price > 0 ? minFor(p, market) : 0;
+        const optom = priceFor(p, market, 'wholesale');
+        const wholesaleMin = mode === 'wholesale' && min > 0;
         return {
           ...p,
           price,
           oldPrice: market === 'kr' && mode === 'retail' ? p.oldPrice : null,
           // Aksiya N+M (1+1, 2+1 ...) — shu davlat va savdo turiga yoqilgan bo'lsa: {key, buy, free} yoki null
           promo: price > 0 ? promoFor(p, market, mode) : null,
+          // Optom: bitta mahsulotdan kamida shuncha dona (1 = cheklov yo'q) va shuncha donaning narxi (chegirma bilan)
+          minQty: wholesaleMin ? min : 1,
+          packPrice: wholesaleMin ? min * Math.round(price * (1 - tierPctFor(tiers, min) / 100)) : 0,
+          // Dona: shuncha va ko'p olsa — optom narxda hisoblanadi: {min, price} yoki null
+          bulk: mode === 'retail' && min > 0 && optom < price ? { min, price: optom } : null,
         };
       })
       .filter((p) => {

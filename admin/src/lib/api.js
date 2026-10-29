@@ -129,6 +129,12 @@ export const PRICE_FIELDS = [
   { key: 'priceUz', promo: 'promoUz', market: 'uz', label: '🇺🇿 Dona so‘m' },
 ];
 
+// Optom minimum (bitta mahsulotdan kamida shuncha dona) — har davlatga alohida; price — shu davlatning optom narxi
+export const MIN_FIELDS = [
+  { key: 'minOptom', price: 'priceOptom', market: 'kr', label: '🇰🇷 Optom' },
+  { key: 'minUzOptom', price: 'priceUzOptom', market: 'uz', label: '🇺🇿 Optom' },
+];
+
 export const FLAG = { kr: '🇰🇷', uz: '🇺🇿' };
 
 export function formatDate(d) {

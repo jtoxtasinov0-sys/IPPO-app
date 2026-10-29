@@ -54,6 +54,8 @@ model Product {
   promoOptom    String? // aksiya, Koreya, optom
   promoUz       String? // aksiya, O'zbekiston, dona
   promoUzOptom  String? // aksiya, O'zbekiston, optom
+  minOptom      Int? // optomda eng kam miqdor (5, 6, 10 ...), Koreya; null = cheklov yo'q
+  minUzOptom    Int? // optomda eng kam miqdor, O'zbekiston
   stock         Int? // null = cheklanmagan
   isActive      Boolean  @default(true)
   isFeatured    Boolean  @default(false)

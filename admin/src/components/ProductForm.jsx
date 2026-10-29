@@ -3,7 +3,8 @@ import { useState } from 'react';
 import Modal from './Modal';
 import ImagePicker from './ImagePicker';
 import PromoPicker from './PromoPicker';
-import { api, PRICE_FIELDS } from '../lib/api';
+import MinPicker from './MinPicker';
+import { api, PRICE_FIELDS, MIN_FIELDS } from '../lib/api';
 
 const EMPTY = {
   article: '',
@@ -22,6 +23,8 @@ const EMPTY = {
   promoOptom: '',
   promoUz: '',
   promoUzOptom: '',
+  minOptom: null,
+  minUzOptom: null,
   stock: '',
   variants: [],
   description: '',
@@ -172,6 +175,23 @@ export default function ProductForm({ product, meta, nextArticle, onClose, onSav
               value={f[x.promo] || null}
               presets={meta?.promos}
               onChange={(promo) => setF((prev) => ({ ...prev, [x.promo]: promo || '' }))}
+            />
+          </div>
+        ))}
+        <div className="span2 muted small">
+          Optom minimum — optomda bitta mahsulotdan kamida shuncha dona olinadi (barcha turlari birga). Donada shuncha va ko‘p
+          olsa — optom narxda hisoblanadi. Boshqa sonni qo‘lda yozing: 8, 12 …
+        </div>
+        {MIN_FIELDS.map((x) => (
+          <div key={x.key}>
+            <div className="form-label">
+              Kamida {x.label} {!num(f[x.price]) && <em className="warn-text">— optom narx yo‘q</em>}
+            </div>
+            <MinPicker
+              withNone
+              value={f[x.key] || null}
+              presets={meta?.optomMins}
+              onChange={(n) => setF((prev) => ({ ...prev, [x.key]: n }))}
             />
           </div>
         ))}

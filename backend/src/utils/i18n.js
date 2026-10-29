@@ -209,7 +209,7 @@ function adminOrderText(o, { title } = {}) {
   const items = (o.items || [])
     .map((it, i) => {
       const variant = it.variant ? ` · 🎨 ${esc(it.variant)}` : '';
-      const off = it.discountPct ? ` (−${it.discountPct}%)` : '';
+      const off = it.discountPct ? ` (−${it.discountPct}%)` : it.optomFrom ? ` (optom narx, ${it.optomFrom}+ ta)` : '';
       const gift = it.freeQty ? ` · 🎁 ${esc(it.promo)}: ${it.freeQty} tasi bepul` : '';
       return `${i + 1}. <b>${esc(it.name)}</b> [${esc(it.article)}]${variant}\n    ${it.qty} × ${money(it.unitPrice, o.market)}${off}${gift} = <b>${money(it.lineTotal, o.market)}</b>`;
     })
