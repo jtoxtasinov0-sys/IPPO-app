@@ -207,7 +207,8 @@ async function updateProduct(req, res) {
   }
 }
 
-// Tez o'zgartirish: faol/nofaol, ombor, narx, aksiya (1+1, 2+1 yoki qo'lda N+M — har davlat/tur uchun alohida)
+// Tez o'zgartirish: faol/nofaol, ombor, narx, aksiya (1+1, 2+1 yoki qo'lda N+M — har davlat/tur uchun alohida),
+// optom minimum (5, 6, 10 yoki qo'lda — har davlatga alohida)
 async function patchProduct(req, res) {
   const b = req.body || {};
   const data = {};
@@ -218,6 +219,12 @@ async function patchProduct(req, res) {
     const promo = Product.parsePromo(b[k]);
     if (b[k] && !promo) return res.status(400).json({ error: 'Aksiya noto‘g‘ri — masalan: 1+1, 2+1, 4+2 (1 dan 20 gacha)' });
     data[k] = promo?.key || null;
+  }
+  for (const k of Product.MIN_FIELDS) {
+    if (!(k in b)) continue;
+    const min = Product.parseMin(b[k]);
+    if (b[k] && !min) return res.status(400).json({ error: 'Optom minimum 2 dan 99 gacha bo‘lishi kerak' });
+    data[k] = min;
   }
   if ('stock' in b) data.stock = b.stock === null || b.stock === '' ? null : Math.max(0, parseInt(b.stock, 10) || 0);
   for (const k of Object.values(Product.PRICE_FIELD).flatMap(Object.values)) {
@@ -321,6 +328,7 @@ function meta(_req, res) {
     markets: cfg.markets,
     modes: cfg.modes,
     promos: cfg.promos,
+    optomMins: cfg.optomMins,
     orderStatuses: cfg.orderStatuses,
     paymentStatuses: cfg.paymentStatuses,
     company: cfg.company,

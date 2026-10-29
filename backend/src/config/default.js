@@ -88,6 +88,10 @@ module.exports = {
     { key: '3+1', buy: 3, free: 1 },
   ],
 
+  // Optom minimum: bitta mahsulotdan kamida shuncha dona (har davlatga alohida). Admin panelda tayyor tugmalar;
+  // boshqasini qo'lda yozsa bo'ladi (2 dan 99 gacha). Donada shuncha va ko'p olsa — optom narxda hisoblanadi
+  optomMins: [5, 6, 10],
+
   // Davlatlar: har birining valyutasi, hududlari va telefon kodi.
   // Mijoz birinchi kirganda davlatni, keyin optom yoki donani tanlaydi.
   markets: [

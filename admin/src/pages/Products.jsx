@@ -1,7 +1,8 @@
 import { useEffect, useMemo, useState } from 'react';
 import ProductForm from '../components/ProductForm';
 import PromoPicker from '../components/PromoPicker';
-import { api, imageUrl, frameStyle, money, PRICE_FIELDS } from '../lib/api';
+import MinPicker from '../components/MinPicker';
+import { api, imageUrl, frameStyle, money, PRICE_FIELDS, MIN_FIELDS } from '../lib/api';
 
 export default function Products({ meta }) {
   const [list, setList] = useState(null);
@@ -38,7 +39,8 @@ export default function Products({ meta }) {
     await api.patchProduct(p.id, { [field]: !p[field] }).catch((e) => (alert(e.message), load()));
   }
 
-  // Aksiya 1+1 / 2+1 / qo'lda N+M — har davlat/tur uchun alohida: bir bosishda yoqiladi, shu tugmani qayta bossa o'chadi
+  // Aksiya 1+1 / 2+1 / qo'lda N+M — har davlat/tur uchun alohida: bir bosishda yoqiladi, shu tugmani qayta bossa o'chadi.
+  // Optom minimum (5 / 6 / 10 / qo'lda) ham shunday saqlanadi
   async function setPromo(p, field, promo) {
     setList((l) => l.map((x) => (x.id === p.id ? { ...x, [field]: promo } : x)));
     await api.patchProduct(p.id, { [field]: promo }).catch((e) => (alert(e.message), load()));
@@ -52,6 +54,7 @@ export default function Products({ meta }) {
 
   const catName = (k) => meta?.categories?.find((c) => c.key === k)?.uz || k;
   const promosOf = (p) => [...new Set(PRICE_FIELDS.map((x) => p[x.promo]).filter(Boolean))];
+  const minsOf = (p) => [...new Set(MIN_FIELDS.map((x) => p[x.key]).filter(Boolean))];
   const noPrice = (list || []).filter((p) => p.isActive && PRICE_FIELDS.some((x) => !p[x.key])).length;
 
   return (
@@ -92,6 +95,7 @@ export default function Products({ meta }) {
               {!p.isActive && <span className="pc-flag">Yashirin</span>}
               {p.stock === 0 && <span className="pc-flag red">Tugagan</span>}
               {promosOf(p).length > 0 && <span className="pc-flag promo">🎁 {promosOf(p).join(' · ')}</span>}
+              {minsOf(p).length > 0 && <span className="pc-flag min">📦 {minsOf(p).join(' · ')}+ ta</span>}
             </div>
             <div className="pc-body">
               <div className="muted small">
@@ -126,6 +130,24 @@ export default function Products({ meta }) {
                     <div className="pc-promo" key={x.promo}>
                       <span className="muted small">{x.label.replace(/ (₩|so‘m)$/, '')}</span>
                       <PromoPicker compact value={p[x.promo]} presets={meta.promos} onChange={(promo) => setPromo(p, x.promo, promo)} />
+                    </div>
+                  ))}
+                </div>
+              )}
+              {meta?.optomMins?.length > 0 && (
+                <div
+                  className="pc-promos pc-mins"
+                  title="Optomda bitta mahsulotdan kamida shuncha dona olinadi. Donada shuncha va ko‘p olsa — optom narxda hisoblanadi"
+                >
+                  <span className="muted small">Optom — kamida (dona):</span>
+                  {MIN_FIELDS.map((x) => (
+                    <div className="pc-promo" key={x.key}>
+                      <span className="muted small">{x.label}</span>
+                      {p[x.price] ? (
+                        <MinPicker compact value={p[x.key]} presets={meta.optomMins} onChange={(n) => setPromo(p, x.key, n)} />
+                      ) : (
+                        <span className="muted small">optom narx yo‘q</span>
+                      )}
                     </div>
                   ))}
                 </div>

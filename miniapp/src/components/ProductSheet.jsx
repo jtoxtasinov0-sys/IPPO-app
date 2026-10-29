@@ -10,7 +10,7 @@ import { flyToCart } from '../lib/flyToCart';
 import { useI18n } from '../lib/i18n';
 import { cart, useCart } from '../lib/store';
 import { haptic, openLink } from '../lib/telegram';
-import { money, promoFree } from '../lib/format';
+import { money, promoFree, tierPctFor } from '../lib/format';
 
 export default function ProductSheet({ product, config, market, mode, onClose, onGoCart }) {
   const open = !!product;
@@ -31,7 +31,8 @@ function ProductBody({ p, config, market, mode, onClose, onGoCart }) {
   const { t, pick, label } = useI18n();
   const items = useCart();
   const [variant, setVariant] = useState(p.variants?.[0] || null);
-  const [qty, setQty] = useState(1);
+  // Optomda savatdagi bilan birga kamida p.minQty bo'lishi kerak — shundan boshlanadi
+  const [qty, setQty] = useState(() => Math.max(1, (p.minQty || 1) - cart.qtyOf(p.id)));
   const [slide, setSlide] = useState(0);
   const [viewer, setViewer] = useState(null);
   const track = useRef(null);
@@ -41,6 +42,7 @@ function ProductBody({ p, config, market, mode, onClose, onGoCart }) {
   const out = p.stock === 0;
   const inCart = items.filter((i) => i.productId === p.id).reduce((s, i) => s + i.qty, 0);
   const maxQty = p.stock != null ? Math.max(0, p.stock - inCart) : 99;
+  const minQty = Math.max(1, (p.minQty || 1) - inCart);
   const tag = config?.tags?.find((x) => x.key === p.tag);
   const category = config?.categories?.find((c) => c.key === p.category);
 
@@ -62,7 +64,7 @@ function ProductBody({ p, config, market, mode, onClose, onGoCart }) {
   }
 
   function add() {
-    if (qty > maxQty) return;
+    if (qty > maxQty || qty < minQty) return;
     cart.add(p.id, variant, qty);
     haptic('success');
     toast(t.added);
@@ -74,8 +76,20 @@ function ProductBody({ p, config, market, mode, onClose, onGoCart }) {
 
   // Optom: savatdagi bilan birga shu mahsulot soniga mos chegirma
   const tiers = mode === 'wholesale' ? config?.wholesaleTiers || [] : [];
-  const tierPct = tiers.filter((x) => inCart + qty >= x.min).reduce((m, x) => Math.max(m, x.pct), 0);
-  const unitNow = tierPct ? Math.round(p.price * (1 - tierPct / 100)) : p.price;
+  const tierPct = tierPctFor(tiers, inCart + qty);
+  // Dona: savatdagi bilan birga optom minimumicha bo'lsa — optom narx
+  const bulkOn = !!p.bulk && inCart + qty >= p.bulk.min;
+  const unitNow = bulkOn ? p.bulk.price : tierPct ? Math.round(p.price * (1 - tierPct / 100)) : p.price;
+  const bulkFill = p.bulk ? p.bulk.min - inCart : 0; // optom narxgacha shuncha tanlash kerak
+
+  // Optom minimumdan kichik bosqichlar minimumga qo'shiladi (masalan minimum 5 bo'lsa, «3 ta» bosqich ko'rinmaydi)
+  const tierRows = Object.values(
+    tiers.reduce((acc, x) => {
+      const n = Math.max(x.min, p.minQty || 1);
+      if (!acc[n] || acc[n].pct < x.pct) acc[n] = { min: n, pct: x.pct };
+      return acc;
+    }, {})
+  ).sort((a, b) => a.min - b.min);
 
   // Aksiya N+M: savatdagi bilan birga — shu qo'shilayotganlardan nechtasi bepul
   const promo = p.promo;
@@ -116,17 +130,63 @@ function ProductBody({ p, config, market, mode, onClose, onGoCart }) {
           <h2 className="ps-title">{pick(p, 'name')}</h2>
           {p.volume && <div className="ps-volume">{p.volume}</div>}
           <PriceTag price={p.price} oldPrice={p.oldPrice} size="lg" />
-          {mode === 'wholesale' && p.price > 0 && config?.wholesaleTiers?.length > 0 && (
+
+          {p.packPrice > 0 && (
+            <div className="ps-pack">
+              <div className="ps-gift-head">
+                <span className="ps-pack-ic">
+                  <Icon name="box" size={20} />
+                </span>
+                <span>
+                  <b>{t.packTitle(p.minQty)}</b>
+                  <small>{t.packSub(money(p.price))}</small>
+                </span>
+              </div>
+              <div className="ps-pack-sum">{t.packPrice(p.minQty, money(p.packPrice))}</div>
+              {p.stock != null && p.stock < p.minQty && !out && <div className="ps-pack-warn">{t.minNoStock(p.minQty)}</div>}
+            </div>
+          )}
+
+          {p.bulk && !out && (
+            <div className={`ps-pack ${bulkOn ? 'on' : ''}`}>
+              <div className="ps-gift-head">
+                <span className="ps-pack-ic">
+                  <Icon name="box" size={20} />
+                </span>
+                <span>
+                  <b>{t.bulkTitle(p.bulk.min)}</b>
+                  <small>{t.bulkSub(money(p.bulk.price))}</small>
+                </span>
+              </div>
+              {(bulkOn || bulkFill <= maxQty) && (
+                <div className="ps-gift-row">
+                  {bulkOn ? (
+                    <span className="ps-gift-free">{t.bulkOn}</span>
+                  ) : (
+                    <button
+                      className="ps-gift-btn"
+                      onClick={() => {
+                        haptic('select');
+                        setQty(bulkFill);
+                      }}
+                    >
+                      {t.giftTake(bulkFill)}
+                    </button>
+                  )}
+                </div>
+              )}
+            </div>
+          )}
+
+          {mode === 'wholesale' && p.price > 0 && tierRows.length > 0 && (
             <div className="ps-tiers">
               <div className="ps-label">{t.tiersTitle}</div>
-              {[...config.wholesaleTiers]
-                .sort((a, b) => a.min - b.min)
-                .map((x) => (
-                  <div key={x.min} className={`ps-tier ${inCart + qty >= x.min ? 'on' : ''}`}>
-                    <span>{t.tierRow(x.min, x.pct)}</span>
-                    <b>{money(Math.round(p.price * (1 - x.pct / 100)))}</b>
-                  </div>
-                ))}
+              {tierRows.map((x) => (
+                <div key={x.min} className={`ps-tier ${inCart + qty >= x.min ? 'on' : ''}`}>
+                  <span>{t.tierRow(x.min, x.pct)}</span>
+                  <b>{money(Math.round(p.price * (1 - x.pct / 100)))}</b>
+                </div>
+              ))}
             </div>
           )}
 
@@ -183,7 +243,7 @@ function ProductBody({ p, config, market, mode, onClose, onGoCart }) {
             <div className="ps-block row-between">
               <div className="ps-label">{t.qty}</div>
               <div className="stepper">
-                <button onClick={() => setQty((q) => Math.max(1, q - 1))} disabled={qty <= 1} aria-label="-">
+                <button onClick={() => setQty((q) => Math.max(minQty, q - 1))} disabled={qty <= minQty} aria-label="-">
                   <Icon name="minus" size={18} stroke={2.2} />
                 </button>
                 <span>{qty}</span>
@@ -220,7 +280,7 @@ function ProductBody({ p, config, market, mode, onClose, onGoCart }) {
                 <Icon name="bag" size={18} /> {inCart}
               </button>
             )}
-            <button className="btn primary grow" onClick={add} disabled={out || maxQty <= 0}>
+            <button className="btn primary grow" onClick={add} disabled={out || maxQty <= 0 || minQty > maxQty}>
               {!out && <Icon name="bag" size={18} stroke={2.2} />}
               {out ? t.outOfStock : `${t.addToCart} · ${money(unitNow * (qty - freeNow))}`}
             </button>

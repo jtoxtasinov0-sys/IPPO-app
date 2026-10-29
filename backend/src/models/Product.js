@@ -50,6 +50,23 @@ function promoFor(p, market, mode) {
   return parsePromo(p[(PROMO_FIELD[market] || PROMO_FIELD.kr)[mode] || 'promo']);
 }
 
+// Optomda eng kam miqdor (bitta mahsulotdan, barcha turlari birga) — har davlatga alohida
+const MIN_FIELD = { kr: 'minOptom', uz: 'minUzOptom' };
+const MIN_FIELDS = Object.values(MIN_FIELD);
+
+// 2 dan 99 gacha dona yoki null (bo'sh yoki 1 — cheklov yo'q)
+function parseMin(v) {
+  const n = parseInt(String(v ?? '').replace(/\D/g, ''), 10);
+  return n >= 2 && n <= 99 ? n : null;
+}
+
+// Davlatga mos optom minimum: 0 = cheklov yo'q (optom narx kiritilmagan bo'lsa ham 0).
+// Optomda bundan kam olib bo'lmaydi, donada shuncha va ko'p olsa — optom narxda hisoblanadi
+function minFor(p, market) {
+  const m = PRICE_FIELD[market] ? market : 'kr';
+  return p[PRICE_FIELD[m].wholesale] > 0 ? parseMin(p[MIN_FIELD[m]]) || 0 : 0;
+}
+
 // Mijozga ko'rinadigan maydonlar
 function toPublic(p) {
   return {
@@ -76,6 +93,8 @@ function toPublic(p) {
     promoOptom: p.promoOptom,
     promoUz: p.promoUz,
     promoUzOptom: p.promoUzOptom,
+    minOptom: p.minOptom,
+    minUzOptom: p.minUzOptom,
     stock: p.stock,
     isFeatured: p.isFeatured,
   };
@@ -131,6 +150,7 @@ function sanitizeInput(b = {}) {
     priceUzOptom: int(b.priceUzOptom) ?? 0,
     oldPrice: int(b.oldPrice),
     ...Object.fromEntries(PROMO_FIELDS.map((k) => [k, parsePromo(b[k])?.key || null])),
+    ...Object.fromEntries(MIN_FIELDS.map((k) => [k, parseMin(b[k])])),
     stock: b.stock === '' || b.stock == null ? null : int(b.stock),
     isActive: b.isActive !== false,
     isFeatured: !!b.isFeatured,
@@ -138,4 +158,18 @@ function sanitizeInput(b = {}) {
   };
 }
 
-module.exports = { PRICE_FIELD, PROMO_FIELDS, priceFor, parsePromo, promoFree, promoFor, imageForVariant, toPublic, listActive, sanitizeInput };
+module.exports = {
+  PRICE_FIELD,
+  PROMO_FIELDS,
+  MIN_FIELDS,
+  priceFor,
+  parsePromo,
+  promoFree,
+  promoFor,
+  parseMin,
+  minFor,
+  imageForVariant,
+  toPublic,
+  listActive,
+  sanitizeInput,
+};

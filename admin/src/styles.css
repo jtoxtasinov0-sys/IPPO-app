@@ -767,6 +767,13 @@ select.ps-rejected {
   bottom: 8px;
   background: var(--green);
 }
+.pc-flag.min {
+  top: auto;
+  left: auto;
+  bottom: 8px;
+  right: 8px;
+  background: var(--blue);
+}
 .pc-body {
   padding: 10px 12px 12px;
   display: flex;
@@ -867,6 +874,18 @@ select.ps-rejected {
 .promo-picker.compact input:focus,
 .promo-picker.compact input.on {
   width: 40px;
+}
+/* Optom minimum — aksiyadan ajralib turishi uchun ko'k */
+.min-picker button.on,
+.min-picker input.on {
+  background: var(--blue);
+}
+.min-picker input.on:focus {
+  border-color: var(--blue);
+}
+.pc-mins {
+  padding-top: 6px;
+  border-top: 1px dashed var(--line);
 }
 .pc-actions {
   display: flex;

@@ -8,6 +8,7 @@ Koreya bo'ylab original kosmetika sotish uchun: **Telegram bot + Mini App (do'ko
 - Cashback: to'langan xariddan foiz balansga qo'shiladi, keyingi xaridda ishlatiladi (Admin → Sozlamalar, har davlatga alohida)
 - Yetkazish: belgilangan summadan oshsa bepul (Admin → Sozlamalar)
 - Optom: bitta mahsulotdan 3 / 5 / 10+ dona olinsa narx avtomatik tushadi (foizlar — Admin → Sozlamalar)
+- Optom minimum 5 / 6 / 10 yoki qo‘lda (2–99): Admin → Mahsulotlar, kartochkadagi «Optom — kamida» (🇰🇷 va 🇺🇿 alohida). Optomda bundan kam olib bo‘lmaydi, kartochkada «5 tasi — narxi» chiqadi; donada shuncha va ko‘p olsa — optom narxda hisoblanadi
 - Aksiya 1+1 / 2+1 / 3+1 yoki qo‘lda (masalan 4+1): Admin → Mahsulotlar, kartochkadagi «Aksiya» — N ta olsa, yana M tasi bepul (🇰🇷 optom, 🇰🇷 dona, 🇺🇿 optom, 🇺🇿 dona — har biriga alohida; turlari birga sanaladi, optomda bepullari chegirmali narxda)
 - Valyuta: **₩ (KRW)**, yetkazish hududlari — Koreya viloyatlari
 - Tillar: o'zbek + rus

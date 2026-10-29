@@ -36,6 +36,15 @@ export function promoFor(p, market, mode) {
   return parsePromo(mode === 'wholesale' ? p.promoOptom : p.promo);
 }
 
+// Optom minimum (har davlatga alohida, 2..99): 0 = cheklov yo'q yoki optom narx kiritilmagan — server ham xuddi shunday
+export function minFor(p, market) {
+  const n = market === 'uz' ? p.minUzOptom : p.minOptom;
+  return priceFor(p, market, 'wholesale') > 0 && n >= 2 && n <= 99 ? n : 0;
+}
+
+// Optom chegirma bosqichlaridan (3 / 5 / 10+) shuncha donaga mos foiz
+export const tierPctFor = (tiers, qty) => (tiers || []).filter((x) => qty >= x.min).reduce((m, x) => Math.max(m, x.pct), 0);
+
 // Birinchi xarid chegirmasi (server ham qayta tekshiradi): faqat dona, yangi mijoz, summa chegaradan oshsa
 export function firstOrderInfo(user, marketCfg, mode) {
   const f = marketCfg?.firstOrder;

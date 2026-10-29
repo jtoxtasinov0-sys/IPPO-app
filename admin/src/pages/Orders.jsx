@@ -154,7 +154,7 @@ export default function Orders({ meta }) {
                       <div className="muted small">
                         {it.article}
                         {it.variant ? ` · ${it.variant}` : ''} · {it.qty} × {money(it.unitPrice, o.market)}
-                        {it.discountPct ? ` (−${it.discountPct}%)` : ''}
+                        {it.discountPct ? ` (−${it.discountPct}%)` : it.optomFrom ? ` (optom narx, ${it.optomFrom}+ ta)` : ''}
                         {it.freeQty ? ` · 🎁 ${it.promo}: ${it.freeQty} tasi bepul` : ''}
                       </div>
                     </div>

@@ -6,6 +6,7 @@ import { cart } from '../lib/store';
 import { haptic } from '../lib/telegram';
 import { toast } from './Toast';
 import { flyToCart } from '../lib/flyToCart';
+import { money } from '../lib/format';
 
 export default function ProductCard({ p, tags, onOpen }) {
   const { t, pick, label } = useI18n();
@@ -15,11 +16,14 @@ export default function ProductCard({ p, tags, onOpen }) {
 
   function quickAdd(e) {
     e.stopPropagation();
-    if (!canQuickAdd) return onOpen(p);
-    cart.add(p.id, p.variants?.[0] || null, 1);
+    // Optomda birinchi qo'shishda — birdaniga eng kam miqdor (masalan 5 ta)
+    const inCart = cart.qtyOf(p.id);
+    const n = Math.max(1, (p.minQty || 1) - inCart);
+    if (!canQuickAdd || (p.stock != null && inCart + n > p.stock)) return onOpen(p);
+    cart.add(p.id, p.variants?.[0] || null, n);
     haptic('light');
     flyToCart(e.currentTarget.closest('.pcard')?.querySelector('.pcard-media img'));
-    toast(t.added);
+    toast(n > 1 ? t.addedN(n) : t.added);
   }
 
   return (
@@ -41,6 +45,16 @@ export default function ProductCard({ p, tags, onOpen }) {
         <h3 className="pcard-name">{pick(p, 'name')}</h3>
         {p.volume && <div className="pcard-vol">{p.volume}</div>}
         <PriceTag price={p.price} oldPrice={p.oldPrice} size="sm" />
+        {p.packPrice > 0 && (
+          <div className="pcard-pack">
+            <Icon name="box" size={13} stroke={2.2} /> {t.packLabel(p.minQty)} <span className="nw">{money(p.packPrice)}</span>
+          </div>
+        )}
+        {p.bulk && (
+          <div className="pcard-bulk">
+            {t.bulkLabel(p.bulk.min)} <span className="nw">{money(p.bulk.price)}</span>
+          </div>
+        )}
       </div>
     </article>
   );
