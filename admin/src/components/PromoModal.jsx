@@ -21,7 +21,8 @@ export default function PromoModal({ product: p, meta, onChange, onClose }) {
         <span className="muted">{p.article}</span> {p.name}
       </div>
       <p className="muted small pm-hint">
-        Aksiya — N ta olsa, yana M tasi bepul. Kamida — optomda bitta mahsulotdan shuncha dona olinadi. Tanlov darhol saqlanadi.
+        Aksiya — donada N ta olsa, yana M tasi bepul. Kamida — optomda bitta mahsulotdan shuncha dona olinadi. Tanlov darhol
+        saqlanadi.
       </p>
       {['kr', 'uz'].map((m) => (
         <section className="pm-market" key={m}>
@@ -37,8 +38,12 @@ export default function PromoModal({ product: p, meta, onChange, onClose }) {
                     <b>{x.kind}</b>
                     {p[x.key] ? <span>{money(p[x.key], m)}</span> : <span className="warn-text">narx yo‘q</span>}
                   </div>
-                  <div className="form-label">Aksiya</div>
-                  <PromoPicker withNone value={p[x.promo]} presets={meta?.promos} onChange={(v) => onChange(x.promo, v)} />
+                  {x.promo && (
+                    <>
+                      <div className="form-label">Aksiya</div>
+                      <PromoPicker withNone value={p[x.promo]} presets={meta?.promos} onChange={(v) => onChange(x.promo, v)} />
+                    </>
+                  )}
                   {min && meta?.optomMins?.length > 0 && !!p[x.key] && (
                     <>
                       <div className="form-label">Kamida (dona)</div>

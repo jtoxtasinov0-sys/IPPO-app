@@ -51,9 +51,9 @@ model Product {
   priceUzOptom  Int      @default(0) // O'zbekiston, optom (so'm)
   oldPrice      Int? // chizilgan eski narx
   promo         String? // aksiya "N+M" (1+1, 2+1 ...) — N ta olsa, M tasi bepul. Koreya, dona
-  promoOptom    String? // aksiya, Koreya, optom
+  promoOptom    String? // ishlatilmaydi — optomda aksiya yo'q (eski ma'lumot seed'da tozalanadi)
   promoUz       String? // aksiya, O'zbekiston, dona
-  promoUzOptom  String? // aksiya, O'zbekiston, optom
+  promoUzOptom  String? // ishlatilmaydi — optomda aksiya yo'q
   minOptom      Int? // optomda eng kam miqdor (5, 6, 10 ...), Koreya; null = cheklov yo'q
   minUzOptom    Int? // optomda eng kam miqdor, O'zbekiston
   stock         Int? // null = cheklanmagan

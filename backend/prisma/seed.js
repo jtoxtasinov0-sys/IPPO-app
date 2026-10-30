@@ -535,11 +535,24 @@ async function splitPromos() {
   console.log(`✅ Seed: ${list.length} ta mahsulot aksiyasi 🇺🇿 donaga ham ko‘chirildi`);
 }
 
+// Bir marta: aksiya endi faqat donaga — optomga qo'yilgan eski aksiyalar o'chiriladi
+async function dropOptomPromos() {
+  const done = await prisma.setting.findUnique({ where: { key: 'promoOptomDropped' } });
+  if (done) return;
+  const r = await prisma.product.updateMany({
+    where: { OR: [{ promoOptom: { not: null } }, { promoUzOptom: { not: null } }] },
+    data: { promoOptom: null, promoUzOptom: null },
+  });
+  await setVersion('promoOptomDropped', '1');
+  console.log(`✅ Seed: ${r.count} ta mahsulotning optom aksiyasi o‘chirildi`);
+}
+
 async function main() {
   await fillTestCards();
   await replaceCatalog();
   await addNewProducts();
   await splitPromos();
+  await dropOptomPromos();
   const n = await warmThumbs();
   console.log(`✅ Seed: ${n} ta rasmning kichik nusxalari tayyor`);
 }

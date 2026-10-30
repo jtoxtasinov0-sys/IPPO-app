@@ -30,10 +30,10 @@ export function promoFree(promo, qty) {
   return Math.floor(qty / group) * promo.free + Math.max(0, (qty % group) - promo.buy);
 }
 
-// Davlat va savdo turiga mos aksiya (har biriga alohida yoqiladi): {key, buy, free} yoki null
+// Davlatga mos aksiya: {key, buy, free} yoki null; aksiya faqat donaga — optomda yo'q (server ham xuddi shunday)
 export function promoFor(p, market, mode) {
-  if (market === 'uz') return parsePromo(mode === 'wholesale' ? p.promoUzOptom : p.promoUz);
-  return parsePromo(mode === 'wholesale' ? p.promoOptom : p.promo);
+  if (mode === 'wholesale') return null;
+  return parsePromo(market === 'uz' ? p.promoUz : p.promo);
 }
 
 // Optom minimum (har davlatga alohida, 2..99): 0 = cheklov yo'q yoki optom narx kiritilmagan — server ham xuddi shunday
