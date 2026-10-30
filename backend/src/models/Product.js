@@ -21,12 +21,9 @@ function priceFor(p, market, mode) {
   return p[field] || 0;
 }
 
-// Aksiya ham har davlat va savdo turi uchun alohida yoqiladi
-const PROMO_FIELD = {
-  kr: { retail: 'promo', wholesale: 'promoOptom' },
-  uz: { retail: 'promoUz', wholesale: 'promoUzOptom' },
-};
-const PROMO_FIELDS = Object.values(PROMO_FIELD).flatMap(Object.values);
+// Aksiya faqat donaga (optomda yo'q) — har davlatga alohida yoqiladi
+const PROMO_FIELD = { kr: 'promo', uz: 'promoUz' };
+const PROMO_FIELDS = Object.values(PROMO_FIELD);
 
 // Aksiya "N+M" (1+1, 2+1, 4+2 ...): {key, buy, free} yoki null
 function parsePromo(s) {
@@ -45,9 +42,10 @@ function promoFree(promo, qty) {
   return Math.floor(qty / group) * promo.free + Math.max(0, (qty % group) - promo.buy);
 }
 
-// Davlat va savdo turiga mos aksiya: {key, buy, free} yoki null
+// Davlatga mos aksiya: {key, buy, free} yoki null; optomda aksiya yo'q
 function promoFor(p, market, mode) {
-  return parsePromo(p[(PROMO_FIELD[market] || PROMO_FIELD.kr)[mode] || 'promo']);
+  if (mode === 'wholesale') return null;
+  return parsePromo(p[PROMO_FIELD[market] || PROMO_FIELD.kr]);
 }
 
 // Optomda eng kam miqdor (bitta mahsulotdan, barcha turlari birga) — har davlatga alohida
@@ -90,9 +88,7 @@ function toPublic(p) {
     priceUzOptom: p.priceUzOptom,
     oldPrice: p.oldPrice,
     promo: p.promo,
-    promoOptom: p.promoOptom,
     promoUz: p.promoUz,
-    promoUzOptom: p.promoUzOptom,
     minOptom: p.minOptom,
     minUzOptom: p.minUzOptom,
     stock: p.stock,

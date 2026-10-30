@@ -207,7 +207,7 @@ async function updateProduct(req, res) {
   }
 }
 
-// Tez o'zgartirish: faol/nofaol, ombor, narx, aksiya (1+1, 2+1 yoki qo'lda N+M — har davlat/tur uchun alohida),
+// Tez o'zgartirish: faol/nofaol, ombor, narx, aksiya (1+1, 2+1 yoki qo'lda N+M — faqat donaga, har davlatga alohida),
 // optom minimum (5, 6, 10 yoki qo'lda — har davlatga alohida)
 async function patchProduct(req, res) {
   const b = req.body || {};

@@ -4,7 +4,7 @@ import Modal from './Modal';
 import ImagePicker from './ImagePicker';
 import PromoPicker from './PromoPicker';
 import MinPicker from './MinPicker';
-import { api, PRICE_FIELDS, MIN_FIELDS } from '../lib/api';
+import { api, PRICE_FIELDS, PROMO_FIELDS, MIN_FIELDS } from '../lib/api';
 
 const EMPTY = {
   article: '',
@@ -20,9 +20,7 @@ const EMPTY = {
   priceUzOptom: '',
   oldPrice: '',
   promo: '',
-  promoOptom: '',
   promoUz: '',
-  promoUzOptom: '',
   minOptom: null,
   minUzOptom: null,
   stock: '',
@@ -48,7 +46,7 @@ export default function ProductForm({ product, meta, nextArticle, onClose, onSav
           priceUz: product.priceUz || '',
           priceUzOptom: product.priceUzOptom || '',
           oldPrice: product.oldPrice ?? '',
-          ...Object.fromEntries(PRICE_FIELDS.map((x) => [x.promo, product[x.promo] || ''])),
+          ...Object.fromEntries(PROMO_FIELDS.map((x) => [x.promo, product[x.promo] || ''])),
           stock: product.stock ?? '',
           tag: product.tag || '',
           imageFrames: product.imageFrames || [],
@@ -80,7 +78,7 @@ export default function ProductForm({ product, meta, nextArticle, onClose, onSav
     setBusy(true);
     setError('');
     try {
-      const body = { ...f, tag: f.tag || null, ...Object.fromEntries(PRICE_FIELDS.map((x) => [x.promo, f[x.promo] || null])) };
+      const body = { ...f, tag: f.tag || null, ...Object.fromEntries(PROMO_FIELDS.map((x) => [x.promo, f[x.promo] || null])) };
       const saved = product ? await api.updateProduct(product.id, body) : await api.createProduct(body);
       onSaved(saved);
     } catch (e) {
@@ -166,8 +164,8 @@ export default function ProductForm({ product, meta, nextArticle, onClose, onSav
             <input className="input" inputMode="numeric" value={f[x.key]} onChange={set(x.key)} placeholder="0" />
           </label>
         ))}
-        <div className="span2 muted small">Aksiya — N ta olsa, yana M tasi bepul. Har davlatning optom va donasiga alohida yoqiladi; boshqasini qo‘lda yozing: 4+1, 2+2 …</div>
-        {PRICE_FIELDS.map((x) => (
+        <div className="span2 muted small">Aksiya — N ta olsa, yana M tasi bepul. Faqat dona narxiga, har davlatga alohida; boshqasini qo‘lda yozing: 4+1, 2+2 …</div>
+        {PROMO_FIELDS.map((x) => (
           <div key={x.promo}>
             <div className="form-label">Aksiya {x.label.replace(/ (₩|so‘m)$/, '')}</div>
             <PromoPicker

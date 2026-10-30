@@ -39,7 +39,7 @@ export default function Products({ meta }) {
     await api.patchProduct(p.id, { [field]: !p[field] }).catch((e) => (alert(e.message), load()));
   }
 
-  // Aksiya 1+1 / 2+1 / qo'lda N+M — har davlat/tur uchun alohida: bir bosishda yoqiladi, shu tugmani qayta bossa o'chadi.
+  // Aksiya 1+1 / 2+1 / qo'lda N+M — faqat donaga, har davlatga alohida: bir bosishda yoqiladi, shu tugmani qayta bossa o'chadi.
   // Optom minimum (5 / 6 / 10 / qo'lda) ham shunday saqlanadi
   async function setPromo(p, field, promo) {
     setList((l) => l.map((x) => (x.id === p.id ? { ...x, [field]: promo } : x)));
@@ -118,9 +118,9 @@ export default function Products({ meta }) {
                       return (
                         <span className="pt-cell" key={x.key}>
                           {p[x.key] ? <b>{amount(p[x.key], m)}</b> : <span className="warn-text">—</span>}
-                          {(p[x.promo] || (min && p[min.key])) && (
+                          {((x.promo && p[x.promo]) || (min && p[min.key])) && (
                             <span className="pt-tags">
-                              {p[x.promo] && <i className="pt-tag promo">{p[x.promo]}</i>}
+                              {x.promo && p[x.promo] && <i className="pt-tag promo">{p[x.promo]}</i>}
                               {min && p[min.key] && <i className="pt-tag min">≥{p[min.key]}</i>}
                             </span>
                           )}
