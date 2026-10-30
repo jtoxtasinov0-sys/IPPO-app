@@ -123,41 +123,47 @@ export default function Products({ meta }) {
                   <span /> Mashhur
                 </label>
               </div>
-              {meta?.promos?.length > 0 && (
-                <div className="pc-promos" title="Bitta mahsulotdan N ta olsa, yana M tasi bepul — har davlatning optom va donasiga alohida">
-                  <span className="muted small">Aksiya:</span>
-                  {PRICE_FIELDS.map((x) => (
-                    <div className="pc-promo" key={x.promo}>
-                      <span className="muted small">{x.label.replace(/ (₩|so‘m)$/, '')}</span>
-                      <PromoPicker compact value={p[x.promo]} presets={meta.promos} onChange={(promo) => setPromo(p, x.promo, promo)} />
+              {/* Aksiya va optom minimum yig'ilgan turadi — kartochka qisqa bo'lsin; tanlangani rasm ustida ko'rinadi */}
+              {(meta?.promos?.length > 0 || meta?.optomMins?.length > 0) && (
+                <details className="pc-extra">
+                  <summary>🎁 Aksiya · Minimum</summary>
+                  {meta?.promos?.length > 0 && (
+                    <div className="pc-promos" title="Bitta mahsulotdan N ta olsa, yana M tasi bepul — har davlatning optom va donasiga alohida">
+                      <span className="muted small">Aksiya:</span>
+                      {PRICE_FIELDS.map((x) => (
+                        <div className="pc-promo" key={x.promo}>
+                          <span className="muted small">{x.label.replace(/ (₩|so‘m)$/, '')}</span>
+                          <PromoPicker compact value={p[x.promo]} presets={meta.promos} onChange={(promo) => setPromo(p, x.promo, promo)} />
+                        </div>
+                      ))}
                     </div>
-                  ))}
-                </div>
-              )}
-              {meta?.optomMins?.length > 0 && (
-                <div
-                  className="pc-promos pc-mins"
-                  title="Optomda bitta mahsulotdan kamida shuncha dona olinadi. Donada shuncha va ko‘p olsa — optom narxda hisoblanadi"
-                >
-                  <span className="muted small">Optom — kamida (dona):</span>
-                  {MIN_FIELDS.map((x) => (
-                    <div className="pc-promo" key={x.key}>
-                      <span className="muted small">{x.label}</span>
-                      {p[x.price] ? (
-                        <MinPicker compact value={p[x.key]} presets={meta.optomMins} onChange={(n) => setPromo(p, x.key, n)} />
-                      ) : (
-                        <span className="muted small">optom narx yo‘q</span>
-                      )}
+                  )}
+                  {meta?.optomMins?.length > 0 && (
+                    <div
+                      className="pc-promos"
+                      title="Optomda bitta mahsulotdan kamida shuncha dona olinadi. Donada shuncha va ko‘p olsa — optom narxda hisoblanadi"
+                    >
+                      <span className="muted small">Optom — kamida (dona):</span>
+                      {MIN_FIELDS.map((x) => (
+                        <div className="pc-promo" key={x.key}>
+                          <span className="muted small">{x.label}</span>
+                          {p[x.price] ? (
+                            <MinPicker compact value={p[x.key]} presets={meta.optomMins} onChange={(n) => setPromo(p, x.key, n)} />
+                          ) : (
+                            <span className="muted small">optom narx yo‘q</span>
+                          )}
+                        </div>
+                      ))}
                     </div>
-                  ))}
-                </div>
+                  )}
+                </details>
               )}
               <div className="pc-actions">
                 <button className="btn ghost sm" onClick={() => setEditing(p)}>
                   ✎ Tahrirlash
                 </button>
-                <button className="btn text sm" onClick={() => remove(p)}>
-                  O‘chirish
+                <button className="btn text sm" title="O‘chirish" aria-label="O‘chirish" onClick={() => remove(p)}>
+                  🗑
                 </button>
               </div>
             </div>
