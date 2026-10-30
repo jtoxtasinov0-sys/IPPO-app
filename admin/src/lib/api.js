@@ -123,10 +123,10 @@ export const money = (n, market = 'kr') => {
 // Mahsulotning 4 ta narxi: davlat × savdo turi
 // promo — shu davlat va savdo turining aksiyasi (har biriga alohida yoqiladi)
 export const PRICE_FIELDS = [
-  { key: 'priceOptom', promo: 'promoOptom', market: 'kr', label: '🇰🇷 Optom ₩' },
-  { key: 'price', promo: 'promo', market: 'kr', label: '🇰🇷 Dona ₩' },
-  { key: 'priceUzOptom', promo: 'promoUzOptom', market: 'uz', label: '🇺🇿 Optom so‘m' },
-  { key: 'priceUz', promo: 'promoUz', market: 'uz', label: '🇺🇿 Dona so‘m' },
+  { key: 'priceOptom', promo: 'promoOptom', market: 'kr', kind: 'Optom', label: '🇰🇷 Optom ₩' },
+  { key: 'price', promo: 'promo', market: 'kr', kind: 'Dona', label: '🇰🇷 Dona ₩' },
+  { key: 'priceUzOptom', promo: 'promoUzOptom', market: 'uz', kind: 'Optom', label: '🇺🇿 Optom so‘m' },
+  { key: 'priceUz', promo: 'promoUz', market: 'uz', kind: 'Dona', label: '🇺🇿 Dona so‘m' },
 ];
 
 // Optom minimum (bitta mahsulotdan kamida shuncha dona) — har davlatga alohida; price — shu davlatning optom narxi

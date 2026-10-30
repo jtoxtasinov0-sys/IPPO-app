@@ -762,17 +762,12 @@ select.ps-rejected {
   background: var(--red);
   color: #fff;
 }
-.pc-flag.promo {
+.pc-flag.stock {
   top: auto;
   bottom: 8px;
-  background: var(--green);
-}
-.pc-flag.min {
-  top: auto;
-  left: auto;
-  bottom: 8px;
-  right: 8px;
-  background: var(--blue);
+  background: rgba(30, 16, 6, 0.62);
+  font-weight: 700;
+  backdrop-filter: blur(4px);
 }
 .pc-body {
   padding: 10px 12px 12px;
@@ -785,6 +780,10 @@ select.ps-rejected {
   font-weight: 700;
   line-height: 1.3;
   cursor: pointer;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 .pc-price {
   font-weight: 800;
@@ -796,59 +795,91 @@ select.ps-rejected {
   margin-top: 6px;
   flex-wrap: wrap;
 }
-/* Aksiya va minimum — bosilganda ochiladi */
-.pc-extra {
-  margin-top: 8px;
+/* Narx jadvali: davlat × optom/dona, aksiya va minimum — narx tagida kichik belgi */
+.pc-table {
+  container-type: inline-size;
+  display: grid;
+  grid-template-columns: auto 1fr 1fr;
+  align-items: start;
+  gap: 5px 7px;
+  margin: 6px 0 2px;
+  padding: 8px 9px 0;
   border: 1px solid var(--line);
   border-radius: 10px;
-}
-.pc-extra summary {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 6px;
-  padding: 6px 8px;
-  font-size: 12px;
-  font-weight: 700;
-  white-space: nowrap;
-  color: var(--ink-2);
+  background: var(--bg);
+  text-align: left;
+  font: inherit;
+  color: var(--ink);
   cursor: pointer;
-  list-style: none;
-  user-select: none;
+  transition: border-color 0.15s;
 }
-.pc-extra summary::-webkit-details-marker {
-  display: none;
+.pc-table:hover {
+  border-color: var(--gold-light);
 }
-.pc-extra summary::after {
-  content: '▾';
+.pt-head {
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
   color: var(--muted);
-  transition: transform 0.15s;
 }
-.pc-extra[open] summary::after {
-  transform: rotate(180deg);
+.pt-flag {
+  font-size: 13px;
+  line-height: 18px;
 }
-.pc-extra > .pc-promos {
-  margin: 0;
-  padding: 6px 6px 8px;
-  border-top: 1px dashed var(--line);
-}
-.pc-promos {
+.pt-cell {
   display: flex;
   flex-direction: column;
-  gap: 5px;
-  margin-top: 6px;
+  align-items: flex-start;
+  gap: 3px;
+  min-width: 0;
 }
-/* Keng kartochkada nom va tugmalar bir qatorda, torida — tugmalar pastki qatorga tushadi */
-.pc-promo {
+.pt-cell b {
+  font-size: 13px;
+  /* Tor kartochkada (kichik telefon) raqamlar kichrayadi — sig'masdan chiqib ketmasin */
+  font-size: clamp(11px, 9.4cqi, 13.5px);
+  line-height: 18px;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+.pt-tags {
   display: flex;
   flex-wrap: wrap;
-  align-items: center;
-  gap: 3px 8px;
+  gap: 3px;
 }
-.pc-promo > span {
-  min-width: 70px;
+.pt-tag {
+  font-style: normal;
+  font-size: 10.5px;
+  font-weight: 800;
+  line-height: 16px;
+  padding: 0 5px;
+  border-radius: 5px;
 }
-.pc-promo .promo-picker {
+.pt-tag.promo {
+  background: var(--green-soft);
+  color: var(--green);
+}
+.pt-tag.min {
+  background: var(--blue-soft);
+  color: var(--blue);
+}
+.pt-foot {
+  grid-column: 1 / -1;
+  display: flex;
+  justify-content: space-between;
+  margin: 2px -9px 0;
+  padding: 6px 9px;
+  border-top: 1px solid var(--line);
+  font-size: 11.5px;
+  font-weight: 700;
+  color: var(--gold-deep);
+}
+.pt-foot::after {
+  content: '›';
+  font-size: 14px;
+  line-height: 1;
+}
+.promo-picker {
   flex: 0 0 auto;
   max-width: 100%;
 }
@@ -871,7 +902,7 @@ select.ps-rejected {
   color: var(--ink);
 }
 .promo-picker input {
-  width: 78px;
+  width: 88px;
   text-align: center;
   outline: none;
 }
@@ -990,6 +1021,46 @@ select.ps-rejected {
   .pc-toggles .switch input:checked + span::after {
     transform: translateX(12px);
   }
+}
+
+/* Aksiya va minimum oynasi */
+.pm-product {
+  font-weight: 700;
+}
+.pm-hint {
+  margin: 4px 0 14px;
+}
+.pm-market + .pm-market {
+  margin-top: 16px;
+}
+.pm-market h3 {
+  font-size: 14px;
+  font-weight: 800;
+  margin-bottom: 8px;
+}
+.pm-box {
+  border: 1px solid var(--line);
+  border-radius: 12px;
+}
+.pm-row {
+  padding: 12px 14px 14px;
+}
+.pm-row + .pm-row {
+  border-top: 1px solid var(--line);
+}
+.pm-row-head {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 8px;
+}
+.pm-row-head span {
+  font-weight: 700;
+  color: var(--ink-2);
+}
+.pm-row .form-label {
+  margin: 8px 0 6px;
+  color: var(--muted);
 }
 
 /* Modal */
@@ -1514,21 +1585,6 @@ code {
   border-radius: 6px;
 }
 
-/* ——— 4 ta narx (davlat × optom/dona) ——— */
-.pc-prices {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 2px 10px;
-  font-size: 12px;
-  margin: 2px 0 4px;
-}
-.pc-prices > div {
-  display: flex;
-  flex-direction: column;
-}
-.pc-prices b {
-  font-size: 13.5px;
-}
 .stock-prices {
   display: grid;
   grid-template-columns: repeat(4, auto);
